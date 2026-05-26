@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, memo } from "react";
+import { useState, useEffect, useCallback, useRef, memo, Component } from "react";
 import { sGet, sSet, sList, onValue, ref, db } from "./firebase";
 
 // ─── DESIGN SYSTEM ────────────────────────────────────────────────────────────
@@ -491,14 +491,18 @@ const BudgetTab = memo(({user}) => {
     const unsubBudget = onValue(ref(db, "budget"), snap => {
       if (snap.exists()) {
         const val = snap.val();
-        if (val.households) {
-          val.households = toArr(val.households).map(hh => ({
-            ...hh,
-            members: toArr(hh.members),
-            subRows: toArr(hh.subRows),
-          }));
-        }
-        setD(val);
+        // Merge with defaults so partial Firebase data never crashes the render
+        const merged = {
+          ...BUDGET_DEFAULT,
+          ...val,
+          totals: { ...BUDGET_DEFAULT.totals, ...(val.totals || {}) },
+        };
+        merged.households = toArr(merged.households).map(hh => ({
+          ...hh,
+          members: toArr(hh.members),
+          subRows: toArr(hh.subRows),
+        }));
+        setD(merged);
         setSyncedAt(new Date());
       }
     });
@@ -1029,6 +1033,29 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
   );
 });
 
+// ─── ERROR BOUNDARY ───────────────────────────────────────────────────────────
+class ErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { error: null }; }
+  static getDerivedStateFromError(e) { return { error: e }; }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{minHeight:"100vh",background:"#f3ede4",display:"flex",alignItems:"center",justifyContent:"center",padding:"40px 24px"}}>
+          <div style={{maxWidth:"600px",width:"100%"}}>
+            <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:"#9c8e82",marginBottom:"16px"}}>Terjadi Kesalahan</p>
+            <h2 style={{fontFamily:"Georgia,serif",fontSize:"24px",color:"#1a1512",marginBottom:"24px"}}>App crashed — detail untuk koordinator:</h2>
+            <pre style={{background:"#fff",padding:"20px",fontSize:"11px",color:"#7a2e20",overflowX:"auto",border:"1px solid #e0d5c8",whiteSpace:"pre-wrap",wordBreak:"break-all"}}>
+              {this.state.error.toString()}{"\n\n"}{this.state.error.stack}
+            </pre>
+            <button onClick={()=>window.location.reload()} style={{marginTop:"24px",background:"none",border:"1px solid #243d30",padding:"10px 24px",cursor:"pointer",fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:"#243d30"}}>Muat Ulang</button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 // ─── ROOT ─────────────────────────────────────────────────────────────────────
 export default function App() {
   const [screen,setScreen] = useState("password");
@@ -1038,10 +1065,12 @@ export default function App() {
   if(screen==="password") return <PasswordScreen onSuccess={()=>setScreen("name")}/>;
   if(screen==="name") return <NameScreen onSuccess={n=>{setUser(n);setScreen("main");}}/>;
   return (
-    <Shell user={user} tab={tab} setTab={setTab}>
-      {tab==="budget"    && <BudgetTab user={user}/>}
-      {tab==="itinerary" && <ItineraryTab/>}
-      {tab==="food"      && <FoodOrderTab user={user}/>}
-    </Shell>
+    <ErrorBoundary>
+      <Shell user={user} tab={tab} setTab={setTab}>
+        {tab==="budget"    && <BudgetTab user={user}/>}
+        {tab==="itinerary" && <ItineraryTab/>}
+        {tab==="food"      && <FoodOrderTab user={user}/>}
+      </Shell>
+    </ErrorBoundary>
   );
 }
