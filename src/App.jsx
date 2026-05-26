@@ -484,12 +484,19 @@ const BudgetTab = memo(({user}) => {
   const myHH = ALL_PAX.find(p=>p.name===user)?.hh;
   const [d, setD] = useState(BUDGET_DEFAULT);
   const [syncedAt, setSyncedAt] = useState(null);
+  const [ledger, setLedger] = useState([]);
 
   useEffect(() => {
-    const unsub = onValue(ref(db, "budget"), snap => {
+    const unsubBudget = onValue(ref(db, "budget"), snap => {
       if (snap.exists()) { setD(snap.val()); setSyncedAt(new Date()); }
     });
-    return () => unsub();
+    const unsubLedger = onValue(ref(db, "ledger"), snap => {
+      if (snap.exists()) {
+        const val = snap.val();
+        setLedger(Array.isArray(val) ? val : Object.values(val));
+      }
+    });
+    return () => { unsubBudget(); unsubLedger(); };
   }, []);
 
   const collection = pct(d.totals.deposit, d.totals.gross);
@@ -591,6 +598,60 @@ const BudgetTab = memo(({user}) => {
             );
           })}
         </div>
+      </div>
+
+      {/* ── LIVE LEDGER ── */}
+      <div style={{marginBottom:"64px"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:"32px"}}>
+          <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted}}>Riwayat Transaksi</p>
+          {syncedAt&&<p style={{fontSize:"10px",color:T.ghost}}>Live · {syncedAt.toLocaleTimeString("id-ID")}</p>}
+        </div>
+        {ledger.length===0
+          ? <p style={{fontSize:"12px",color:T.muted,fontStyle:"italic"}}>Memuat data transaksi…</p>
+          : <>
+            {/* Column headers */}
+            <div style={{display:"grid",gridTemplateColumns:"32px 100px 80px 1fr 120px 120px 130px",gap:"0 16px",padding:"0 0 10px",borderBottom:`2px solid ${T.line}`}}>
+              {["No","Tanggal","Tipe","Keterangan","Deposit (+)","Refund (−)","Saldo"].map(h=>(
+                <p key={h} style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,textAlign:["Deposit (+)","Refund (−)","Saldo"].includes(h)?"right":"left"}}>{h}</p>
+              ))}
+            </div>
+            {ledger.map((row,i)=>{
+              const isDeposit = row.tipe==="Deposit";
+              const isRefund  = row.tipe==="Refund";
+              const typeColor = isDeposit ? T.settled : isRefund ? T.warn : T.danger;
+              return (
+                <div key={i} style={{display:"grid",gridTemplateColumns:"32px 100px 80px 1fr 120px 120px 130px",gap:"0 16px",padding:"13px 0",borderBottom:`1px solid ${T.line}`,alignItems:"center"}}>
+                  <p style={{fontSize:"11px",color:T.ghost}}>{row.no}</p>
+                  <p style={{fontSize:"11px",color:T.muted}}>{row.tanggal}</p>
+                  <p style={{fontSize:"10px",letterSpacing:"1px",textTransform:"uppercase",color:typeColor,fontWeight:500}}>{row.tipe}</p>
+                  <div>
+                    <p style={{fontSize:"12px",color:T.ink}}>{row.keterangan}</p>
+                    {row.note&&<p style={{fontSize:"10px",color:T.ghost,marginTop:"2px",fontStyle:"italic"}}>{row.note}</p>}
+                  </div>
+                  <p style={{fontSize:"12px",color:row.deposit>0?T.settled:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>
+                    {row.deposit>0?`+${fmt(row.deposit)}`:"—"}
+                  </p>
+                  <p style={{fontSize:"12px",color:row.refund>0?T.warn:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>
+                    {row.refund>0?`−${fmt(row.refund)}`:"—"}
+                  </p>
+                  <p style={{fontSize:"13px",color:T.ink,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif",fontWeight:i===ledger.length-1?500:400}}>
+                    {fmt(row.saldo)}
+                  </p>
+                </div>
+              );
+            })}
+            {/* Running total row */}
+            <div style={{display:"grid",gridTemplateColumns:"32px 100px 80px 1fr 120px 120px 130px",gap:"0 16px",padding:"16px 0 0",borderTop:`2px solid ${T.lineD}`,marginTop:"4px"}}>
+              <span/><span/><span/>
+              <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Saldo Kas</p>
+              <span/>
+              <span/>
+              <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:T.forest,textAlign:"right",fontWeight:500}}>
+                {ledger.length>0?fmt(ledger[ledger.length-1].saldo):"—"}
+              </p>
+            </div>
+          </>
+        }
       </div>
 
       <div style={{borderTop:`1px solid ${T.line}`,paddingTop:"32px"}}>
