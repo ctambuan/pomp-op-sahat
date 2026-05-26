@@ -487,8 +487,20 @@ const BudgetTab = memo(({user}) => {
   const [ledger, setLedger] = useState([]);
 
   useEffect(() => {
+    const toArr = v => !v ? [] : Array.isArray(v) ? v : Object.values(v);
     const unsubBudget = onValue(ref(db, "budget"), snap => {
-      if (snap.exists()) { setD(snap.val()); setSyncedAt(new Date()); }
+      if (snap.exists()) {
+        const val = snap.val();
+        if (val.households) {
+          val.households = toArr(val.households).map(hh => ({
+            ...hh,
+            members: toArr(hh.members),
+            subRows: toArr(hh.subRows),
+          }));
+        }
+        setD(val);
+        setSyncedAt(new Date());
+      }
     });
     const unsubLedger = onValue(ref(db, "ledger"), snap => {
       if (snap.exists()) {
