@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef, memo } from "react";
-import { sGet, sSet, sList } from "./firebase";
+import { sGet, sSet, sList, onValue, ref, db } from "./firebase";
 
 // ─── DESIGN SYSTEM ────────────────────────────────────────────────────────────
 const T = {
@@ -39,24 +39,24 @@ const ALL_PAX = [
   {name:"Mariana Tambunan",hh:"HH5"},{name:"Olive Tambunan",hh:"HH5"},{name:"Nadia Tambunan",hh:"HH5"},
 ];
 
-// ─── DATA ─────────────────────────────────────────────────────────────────────
-const BUDGET = {
-  perPax:3150000, lastSync:"20 Mei 2026",
-  totals:{pax:20,gross:85904001,deposit:85646600,balance:-257401},
+// ─── DATA — fallback while Firebase loads ────────────────────────────────────
+const BUDGET_DEFAULT = {
+  perPax:3150000, lastSync:"21 Mei 2026",
+  totals:{pax:20,gross:85904001,deposit:91142600,balance:5238599},
   households:[
     {id:"HH1",lead:"Christine Tambunan",members:["Christine Tambunan","Agustianto Batubara","Alexander Batubara"],
      pax:3,gross:9450000,deposit:13148850,balance:3698850,absorbed:false,subRows:[]},
     {id:"HH2",lead:"Agustinus Tambunan",members:["Agustinus Tambunan","Linda Napitupulu","Adolf Tambunan","Intan Tambunan"],
-     pax:4,gross:21084667,deposit:15693000,balance:-5391667,absorbed:false,subRows:[]},
+     pax:4,gross:21084667,deposit:21189000,balance:104333,absorbed:false,subRows:[]},
     {id:"HH3",lead:"Monang Panjaitan",members:["Monang Panjaitan","Rohana Tambunan","Nhaomy Panjaitan"],
      pax:3,gross:17934667,deposit:18020000,balance:85333,absorbed:false,subRows:[]},
     {id:"HH4",lead:"Gerard Sahat Pardomuan",members:["Gerard Sahat","Diana Pardede","Ferdiana Sondang","Ronald Daniel","Ivana Panjaitan","Leandro Ratu","Rany Yamemia","Arlo Ratu","Alora Ratu","Lusiana"],
      pax:10,gross:37434667,deposit:38784750,balance:1350083,absorbed:false,
      subRows:[
-       {members:"Gerard Sahat & Diana Pardede",pax:2,deposit:14821500,balance:36833},
-       {members:"Ferdiana, Ronald, Ivana",pax:3,deposit:8600000,balance:0},
-       {members:"Leandro, Rany, Arlo, Alora",pax:4,deposit:10900000,balance:0},
-       {members:"Lusiana",pax:1,deposit:4463250,balance:1313250},
+       {members:"Gerard Sahat & Diana Pardede",pax:2,gross:14784667,deposit:14821500,balance:36833},
+       {members:"Ferdiana, Ronald, Ivana",pax:3,gross:8600000,deposit:8600000,balance:0},
+       {members:"Leandro, Rany, Arlo, Alora",pax:4,gross:10900000,deposit:10900000,balance:0},
+       {members:"Lusiana",pax:1,gross:3150000,deposit:4463250,balance:1313250},
      ]},
     {id:"HH5",lead:"Mariana Tambunan",members:["Mariana Tambunan","Olive Tambunan","Nadia Tambunan"],
      pax:3,gross:0,deposit:0,balance:0,absorbed:true,subRows:[],
@@ -482,7 +482,16 @@ const Shell = ({user,tab,setTab,children}) => {
 const BudgetTab = memo(({user}) => {
   const isCoord = COORDINATORS.includes(user);
   const myHH = ALL_PAX.find(p=>p.name===user)?.hh;
-  const d = BUDGET;
+  const [d, setD] = useState(BUDGET_DEFAULT);
+  const [syncedAt, setSyncedAt] = useState(null);
+
+  useEffect(() => {
+    const unsub = onValue(ref(db, "budget"), snap => {
+      if (snap.exists()) { setD(snap.val()); setSyncedAt(new Date()); }
+    });
+    return () => unsub();
+  }, []);
+
   const collection = pct(d.totals.deposit, d.totals.gross);
 
   return (
@@ -490,7 +499,7 @@ const BudgetTab = memo(({user}) => {
       <div style={{marginBottom:"56px"}}>
         <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Dana Bersama</p>
         <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink,marginBottom:"8px"}}>Ringkasan Keuangan</h2>
-        <p style={{fontSize:"12px",color:T.muted}}>Per {d.lastSync} · Data dari Lusiana</p>
+        <p style={{fontSize:"12px",color:T.muted}}>Per {d.lastSync} · Data dari Lusiana{syncedAt && <span style={{color:T.ghost}}> · Live {syncedAt.toLocaleTimeString("id-ID")}</span>}</p>
       </div>
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"1px",background:T.line,marginBottom:"64px"}}>
