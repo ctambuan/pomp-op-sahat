@@ -949,6 +949,144 @@ const ItineraryTab = memo(() => {
   );
 });
 
+// ─── OLEH-OLEH SUMMARY ───────────────────────────────────────────────────────
+const TRANSFER_INFO = {
+  name:"Christine Tambunan",
+  bank:"Bank Jago",
+  account:"102816180854",
+};
+
+const OlehOlehSummary = memo(({user,isCoord}) => {
+  const takeawayRestos = RESTAURANTS.filter(r=>r.isTakeaway);
+  const [myOrders,setMyOrders]   = useState({});
+  const [allPaxOrders,setAllPaxOrders] = useState({});
+  const [loading,setLoading]     = useState(true);
+
+  useEffect(()=>{
+    (async()=>{
+      // Fetch current user's orders
+      const mine = {};
+      for(const r of takeawayRestos){
+        const key = `order.${r.id}.${user.replace(/\s+/g,"_")}`;
+        try{
+          const v = await sGet(key);
+          if(v){
+            const p = JSON.parse(v);
+            if(p.totalIDR>0) mine[r.id]={name:r.name,totalIDR:p.totalIDR,items:p.items||[]};
+          }
+        }catch{}
+      }
+      setMyOrders(mine);
+
+      // If coordinator, fetch all pax orders
+      if(isCoord){
+        const all = {};
+        for(const r of takeawayRestos){
+          try{
+            const keys = await sList(`order.${r.id}.`);
+            for(const k of keys){
+              const v = await sGet(k);
+              if(v){
+                const p = JSON.parse(v);
+                const pName = k.replace(`order.${r.id}.`,"").replace(/_/g," ");
+                if(!all[pName]) all[pName]={};
+                if(p.totalIDR>0) all[pName][r.id]={name:r.name,totalIDR:p.totalIDR};
+              }
+            }
+          }catch{}
+        }
+        setAllPaxOrders(all);
+      }
+      setLoading(false);
+    })();
+  },[user,isCoord]);
+
+  const myStores  = Object.values(myOrders);
+  const myTotal   = myStores.reduce((s,o)=>s+Number(o.totalIDR),0);
+  const paxWithOrders = Object.entries(allPaxOrders).filter(([,stores])=>Object.keys(stores).length>0);
+
+  if(loading) return null;
+  if(!isCoord && myStores.length===0) return null;
+
+  return (
+    <div style={{marginBottom:"56px"}}>
+      {/* ── PARTICIPANT CARD ── */}
+      {myStores.length>0&&(
+        <div style={{border:`1px solid ${T.gold}`,marginBottom:"40px"}}>
+          <div style={{background:T.gold,padding:"14px 24px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <p style={{fontSize:"9px",letterSpacing:"3px",textTransform:"uppercase",color:"white",fontWeight:500}}>Tagihan Oleh-Oleh · 5 Juli 2026</p>
+            <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:"rgba(255,255,255,0.8)"}}>Satu Transfer</p>
+          </div>
+          <div style={{background:T.cream,padding:"24px"}}>
+            {myStores.map(o=>(
+              <div key={o.name} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:`1px solid ${T.line}`}}>
+                <span style={{fontSize:"13px",color:T.ink}}>{o.name}</span>
+                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"15px",color:T.settled}}>IDR {Number(o.totalIDR).toLocaleString("id-ID")}</span>
+              </div>
+            ))}
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"16px 0 0"}}>
+              <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Total Transfer</span>
+              <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"24px",color:T.forest,fontWeight:500}}>IDR {myTotal.toLocaleString("id-ID")}</span>
+            </div>
+            <div style={{marginTop:"20px",padding:"16px",background:T.stone,borderLeft:`3px solid ${T.gold}`}}>
+              <p style={{fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Transfer ke</p>
+              <p style={{fontSize:"14px",color:T.ink,fontWeight:500,marginBottom:"2px"}}>{TRANSFER_INFO.name}</p>
+              <p style={{fontSize:"13px",color:T.mid}}>{TRANSFER_INFO.bank} · {TRANSFER_INFO.account}</p>
+              <p style={{fontSize:"11px",color:T.muted,marginTop:"8px"}}>Berita: <span style={{color:T.ink,fontWeight:500}}>OLEHOLEH {user}</span></p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── COORDINATOR TABLE ── */}
+      {isCoord&&paxWithOrders.length>0&&(
+        <div>
+          <p style={{fontSize:"9px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Rekap Oleh-Oleh Per Peserta</p>
+          <div style={{overflowX:"auto"}}>
+            <table style={{width:"100%",borderCollapse:"collapse",fontSize:"11px"}}>
+              <thead>
+                <tr style={{borderBottom:`2px solid ${T.line}`}}>
+                  <th style={{textAlign:"left",padding:"8px 12px 8px 0",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"9px"}}>Peserta</th>
+                  {takeawayRestos.map(r=><th key={r.id} style={{textAlign:"right",padding:"8px 12px",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"9px",whiteSpace:"nowrap"}}>{r.name}</th>)}
+                  <th style={{textAlign:"right",padding:"8px 0 8px 12px",color:T.forest,fontWeight:500,letterSpacing:"1px",textTransform:"uppercase",fontSize:"9px"}}>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paxWithOrders.sort((a,b)=>a[0].localeCompare(b[0])).map(([pName,stores])=>{
+                  const rowTotal = Object.values(stores).reduce((s,o)=>s+Number(o.totalIDR),0);
+                  return (
+                    <tr key={pName} style={{borderBottom:`1px solid ${T.line}`}}>
+                      <td style={{padding:"10px 12px 10px 0",color:T.ink}}>{pName}</td>
+                      {takeawayRestos.map(r=>(
+                        <td key={r.id} style={{textAlign:"right",padding:"10px 12px",color:stores[r.id]?T.settled:T.ghost,fontFamily:"'Playfair Display',Georgia,serif"}}>
+                          {stores[r.id]?`IDR ${Number(stores[r.id].totalIDR).toLocaleString("id-ID")}`:"—"}
+                        </td>
+                      ))}
+                      <td style={{textAlign:"right",padding:"10px 0 10px 12px",color:T.forest,fontFamily:"'Playfair Display',Georgia,serif",fontWeight:500}}>IDR {rowTotal.toLocaleString("id-ID")}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+              <tfoot>
+                <tr style={{borderTop:`2px solid ${T.lineD}`}}>
+                  <td style={{padding:"12px 12px 4px 0",fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Total</td>
+                  {takeawayRestos.map(r=>{
+                    const storeTotal = paxWithOrders.reduce((s,[,stores])=>s+Number(stores[r.id]?.totalIDR||0),0);
+                    return <td key={r.id} style={{textAlign:"right",padding:"12px 12px 4px",color:T.forest,fontFamily:"'Playfair Display',Georgia,serif",fontWeight:500}}>{storeTotal>0?`IDR ${storeTotal.toLocaleString("id-ID")}`:"—"}</td>;
+                  })}
+                  <td style={{textAlign:"right",padding:"12px 0 4px 12px",fontFamily:"'Playfair Display',Georgia,serif",fontSize:"16px",color:T.forest,fontWeight:500}}>
+                    IDR {paxWithOrders.reduce((s,[,stores])=>s+Object.values(stores).reduce((ss,o)=>ss+Number(o.totalIDR),0),0).toLocaleString("id-ID")}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+});
+
 const FoodOrderTab = memo(({user}) => {
   const [view,setView] = useState("list");
   const [activeResto,setActiveResto] = useState(null);
@@ -963,6 +1101,7 @@ const FoodOrderTab = memo(({user}) => {
         <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Pre-Order F&B</h2>
         <p style={{fontSize:"12px",color:T.muted,marginTop:"8px"}}>Pilih restoran untuk melihat menu dan melakukan pemesanan</p>
       </div>
+      <OlehOlehSummary user={user} isCoord={isCoord}/>
       <div style={{marginBottom:"56px"}}>
         <p style={{fontSize:"9px",letterSpacing:"3px",textTransform:"uppercase",color:T.forest,marginBottom:"24px",fontWeight:500}}>Pre-Order Tersedia</p>
         <div style={{borderTop:`1px solid ${T.line}`}}>
