@@ -557,6 +557,26 @@ const RESTAURANTS = [
       ]},
     ]
   },
+,
+  // ─── WAHYU AUSTIN PASTRY ──────────────────────────────────────────────────────
+  {
+    id:"wahyu-austin",name:"Wahyu Austin Pastry",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
+    note:"Roll Cake 4×30 cm · 23 pax · Dikoordinir, bayar langsung 5 Juli",
+    deadline:"30 Juni 2026",
+    isTakeaway:true,
+    participants: ALL_PAX,
+    categories:[
+      {id:"wa-rollcake",name:"Roll Cake — IDR 100.000 / roll (4×30 cm)",items:[
+        {id:"wa-rc-blueberry",  name:"Blueberry",  desc:"Roll Cake · 4×30 cm · Wahyu Austin Pastry", price:100000},
+        {id:"wa-rc-cheese",     name:"Cheese",     desc:"Roll Cake · 4×30 cm · Wahyu Austin Pastry", price:100000},
+        {id:"wa-rc-chocolate",  name:"Chocolate",  desc:"Roll Cake · 4×30 cm · Wahyu Austin Pastry", price:100000},
+        {id:"wa-rc-greentea",   name:"Green Tea",  desc:"Roll Cake · 4×30 cm · Wahyu Austin Pastry", price:100000},
+        {id:"wa-rc-nougat",     name:"Nougat",     desc:"Roll Cake · 4×30 cm · Wahyu Austin Pastry", price:100000},
+        {id:"wa-rc-opera",      name:"Opera",      desc:"Roll Cake · 4×30 cm · Wahyu Austin Pastry", price:100000},
+        {id:"wa-rc-orange",     name:"Orange",     desc:"Roll Cake · 4×30 cm · Wahyu Austin Pastry", price:100000},
+      ]},
+    ]
+  },
 ];
 
 // ── PATCH 1: Tentrem Summer Palace removed from UPCOMING_FB ─────────────────
