@@ -723,7 +723,7 @@ const BudgetTab = memo(({user}) => {
               <span/><span/><span/>
               <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Saldo Kas</p>
               <span/><span/>
-              <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:T.forest,textAlign:"right",fontWeight:500}}>{ledger.length>0?fmt(ledger[ledger.length-1].saldo):"—"}</p>
+              <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest,textAlign:"right",fontWeight:500}}>{ledger.length>0?fmt(ledger[ledger.length-1].saldo):"—"}</p>
             </div>
           </>
         }
@@ -824,7 +824,7 @@ const FoodOrderTab = memo(({user}) => {
                 <p style={{fontSize:"15px",color:T.muted}}>{r.subtitle}</p>
                 <p style={{fontSize:"15px",color:T.muted,fontStyle:"italic",marginTop:"2px"}}>{r.note}</p>
               </div>
-              <span style={{fontSize:"18px",color:T.muted}}>→</span>
+              <span style={{fontSize:"20px",color:T.muted}}>→</span>
             </div>
           ))}
         </div>
@@ -1013,8 +1013,8 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                   </div>
                   <div style={{display:"flex",alignItems:"center",gap:"16px"}}>
                     {inCart&&!isDisabled&&<>
-                      <button onClick={()=>rem(item.id)} style={{background:"none",border:"none",cursor:"pointer",fontSize:"18px",color:T.muted,lineHeight:1,fontFamily:"serif",padding:"4px 8px"}}>−</button>
-                      <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:T.ink,minWidth:"24px",textAlign:"center"}}>{inCart.qty}</span>
+                      <button onClick={()=>rem(item.id)} style={{background:"none",border:"none",cursor:"pointer",fontSize:"20px",color:T.muted,lineHeight:1,fontFamily:"serif",padding:"4px 8px"}}>−</button>
+                      <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.ink,minWidth:"24px",textAlign:"center"}}>{inCart.qty}</span>
                     </>}
                     {isDisabled
                       ? <span style={{fontSize:"15px",color:T.ghost,fontStyle:"italic",padding:"4px 10px",minWidth:"32px",textAlign:"center"}}>N/A</span>
