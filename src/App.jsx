@@ -490,6 +490,73 @@ const RESTAURANTS = [
       ]},
     ]
   },
+,
+  // ─── JUWARA SATOE ─────────────────────────────────────────────────────────────
+  {
+    id:"juwara",name:"Juwara Satoe",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
+    note:"Bakpia Juwara Satoe, Yogyakarta · 23 pax · Dikoordinir, bayar langsung 5 Juli",
+    deadline:"30 Juni 2026",
+    isTakeaway:true,
+    participants: ALL_PAX,
+    categories:[
+      {id:"js-bb",name:"Bakpia Basah",items:[
+        {id:"js-bb-kh",    name:"Kacang Hijau",    desc:"Bakpia Basah · isi 15 pcs",           price:20000},
+        {id:"js-bb-kumbu", name:"Kumbu Hitam",     desc:"Bakpia Basah · isi 15 pcs",           price:20000},
+        {id:"js-bb-cok",   name:"Coklat",          desc:"Bakpia Basah · isi 15 pcs",           price:25000},
+        {id:"js-bb-keju",  name:"Keju",            desc:"Bakpia Basah · isi 15 pcs",           price:25000},
+        {id:"js-bb-kk",    name:"Kit Kat",         desc:"Bakpia Basah · isi 5 pcs",            price:25000},
+        {id:"js-bb-dur",   name:"Durian",          desc:"Bakpia Basah · isi 15 pcs",           price:30000},
+        {id:"js-bb-cokkeju",name:"Coklat Keju",   desc:"Bakpia Basah · isi 15 pcs",           price:30000},
+        {id:"js-bb-nas",   name:"Nanas",           desc:"Bakpia Basah · isi 15 pcs",           price:30000},
+        {id:"js-bb-mix",   name:"Mix",             desc:"Bakpia Basah · isi 24 pcs",           price:45000},
+      ]},
+      {id:"js-premium",name:"Premium Series ★",items:[
+        {id:"js-pr-pb",  name:"Peanut Butter ★ NEW", desc:"Bakpia Basah Premium · isi 15 pcs", price:39000},
+        {id:"js-pr-ovo", name:"Ovomaltine ★ NEW",    desc:"Bakpia Basah Premium · isi 12 pcs", price:45000},
+      ]},
+      {id:"js-bk",name:"Bakpia Kering",items:[
+        {id:"js-bk-khori", name:"Kacang Hijau Ori",  desc:"Bakpia Kering · isi 10 pcs",        price:20000},
+        {id:"js-bk-khasin",name:"Kacang Hijau Asin", desc:"Bakpia Kering · isi 10 pcs",        price:25000},
+        {id:"js-bk-pan",   name:"Pandan",             desc:"Bakpia Kering · isi 10 pcs",        price:25000},
+        {id:"js-bk-keju",  name:"Keju",               desc:"Bakpia Kering · isi 10 pcs",        price:30000},
+        {id:"js-bk-gula",  name:"Gula Tarik",         desc:"Bakpia Kering · isi 10 pcs",        price:30000},
+        {id:"js-bk-cok",   name:"Coklat",             desc:"Bakpia Kering · isi 10 pcs",        price:30000},
+        {id:"js-bk-sambal",name:"Mini Sambal",        desc:"Bakpia Kering · isi 16 pcs",        price:30000},
+        {id:"js-bk-nastar",name:"Nastar",             desc:"Bakpia Kering · isi 10 pcs",        price:30000},
+        {id:"js-bk-sesame",name:"Black Sesame",       desc:"Bakpia Kering · isi 10 pcs",        price:30000},
+        {id:"js-bk-happy", name:"Happy Package",      desc:"Bakpia Kering · isi 20 pcs",        price:45000},
+      ]},
+      {id:"js-bln",name:"Bakpia Bulan",items:[
+        {id:"js-bln-khori",  name:"Kacang Hijau Ori",          desc:"Bakpia Bulan · isi 6 pcs",  price:30000},
+        {id:"js-bln-kumbu",  name:"Kumbu Hitam Ori",           desc:"Bakpia Bulan · isi 6 pcs",  price:30000},
+        {id:"js-bln-mix",    name:"Mix",                       desc:"Bakpia Bulan · isi 6 pcs",  price:35000},
+        {id:"js-bln-cokkeju",name:"Coklat Kacang Keju ★ NEW",desc:"Bakpia Bulan · isi 6 pcs",price:40000},
+        {id:"js-bln-khts",   name:"Kacang Hijau Telur Asin",   desc:"Bakpia Bulan · isi 6 pcs",  price:40000},
+        {id:"js-bln-kumts",  name:"Kumbu Hitam Telur Asin",    desc:"Bakpia Bulan · isi 6 pcs",  price:40000},
+      ]},
+      {id:"js-nr",name:"Nastar Roll ★ Premium Quality",items:[
+        {id:"js-nr-ori15", name:"Original (15 pcs)",         desc:"Nastar Roll · isi 15 pcs",   price:45000},
+        {id:"js-nr-ori30", name:"Original (30 pcs)",         desc:"Nastar Roll · isi 30 pcs",   price:85000},
+        {id:"js-nr-cok15", name:"Coklat (15 pcs)",           desc:"Nastar Roll · isi 15 pcs",   price:45000},
+        {id:"js-nr-cok30", name:"Coklat (30 pcs)",           desc:"Nastar Roll · isi 30 pcs",   price:85000},
+        {id:"js-nr-kj15",  name:"Keju Kastengel (15 pcs)",   desc:"Nastar Roll · isi 15 pcs",   price:52000},
+        {id:"js-nr-kj30",  name:"Keju Kastengel (30 pcs)",   desc:"Nastar Roll · isi 30 pcs",   price:95000},
+        {id:"js-nr-jumbo", name:"Nastar Jumbo",              desc:"Nastar Roll · isi 5 pcs",    price:30000},
+      ]},
+      {id:"js-ck",name:"Cookies",items:[
+        {id:"js-ck-kacang",name:"Kue Kacang",        desc:"Cookies · isi 6 pcs",               price:15000},
+        {id:"js-ck-choco", name:"Choco Mete Cookies",desc:"Cookies · isi 6 pcs",               price:20000},
+      ]},
+      {id:"js-bl",name:"Bluder Butter",items:[
+        {id:"js-bl-ori",   name:"Ori",               desc:"Bluder Butter · per pcs",            price:10000},
+        {id:"js-bl-kismis",name:"Kismis",            desc:"Bluder Butter · per pcs",            price:12000},
+        {id:"js-bl-keju",  name:"Keju",              desc:"Bluder Butter · per pcs",            price:12000},
+        {id:"js-bl-cok",   name:"Coklat",            desc:"Bluder Butter · per pcs",            price:12000},
+        {id:"js-bl-kh",    name:"Kacang Hijau ★ NEW",desc:"Bluder Butter · per pcs",       price:12000},
+        {id:"js-bl-lotus", name:"Lotus Biscoff",     desc:"Bluder Butter · per pcs",            price:16000},
+      ]},
+    ]
+  },
 ];
 
 // ── PATCH 1: Tentrem Summer Palace removed from UPCOMING_FB ─────────────────
