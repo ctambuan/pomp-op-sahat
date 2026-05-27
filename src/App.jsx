@@ -346,116 +346,117 @@ const RESTAURANTS = [
   {
     id:"summer-palace",name:"Summer Palace",subtitle:"D4 · Makan Siang · 5 Juli 2026, 12.00",
     note:"Hotel Tentrem, Jl. A.M. Sangaji No.72A, Yogyakarta · 23 pax · Sponsor: HH1 Agustianto",
+    taxRate:0.21,
     deadline:"18 Juni 2026",
     participants: ALL_PAX,
     categories:[
       {id:"sp-appetizer",name:"Appetizer 开胃菜",items:[
-        {id:"sp-app-01",name:"Cumi Goreng Madu Wijen Cabai",desc:"Deep fried baby squid, honey sesame chili sauce",price:68,disabled:false},
-        {id:"sp-app-02",name:"Kulit Ikan Jagung Manis Telur Asin",desc:"Deep fried fish skin & sweet corn in salted egg",price:58,disabled:false},
-        {id:"sp-app-03",name:"Ikan Teri Jepang Goreng Kemangi",desc:"Deep fried white bait fish, chili salt pepper, local basil",price:68,disabled:false},
-        {id:"sp-app-04",name:"Kepiting Gembos Goreng Telur Asin",desc:"Deep fried soft shell crab with chili salted egg yolk",price:108,disabled:false},
-        {id:"sp-app-05",name:"Terong Goreng Telur Asin Pedas",desc:"Deep fried egg plant with spicy salted egg",price:48,disabled:false},
-        {id:"sp-app-06",name:"Salad Ubur-ubur Chinese Style",desc:"Jelly fish salad Chinese style",price:58,disabled:false},
+        {id:"sp-app-01",name:"Cumi Goreng Madu Wijen Cabai",desc:"Deep fried baby squid, honey sesame chili sauce",price:68000,disabled:false},
+        {id:"sp-app-02",name:"Kulit Ikan Jagung Manis Telur Asin",desc:"Deep fried fish skin & sweet corn in salted egg",price:58000,disabled:false},
+        {id:"sp-app-03",name:"Ikan Teri Jepang Goreng Kemangi",desc:"Deep fried white bait fish, chili salt pepper, local basil",price:68000,disabled:false},
+        {id:"sp-app-04",name:"Kepiting Gembos Goreng Telur Asin",desc:"Deep fried soft shell crab with chili salted egg yolk",price:108000,disabled:false},
+        {id:"sp-app-05",name:"Terong Goreng Telur Asin Pedas",desc:"Deep fried egg plant with spicy salted egg",price:48000,disabled:false},
+        {id:"sp-app-06",name:"Salad Ubur-ubur Chinese Style",desc:"Jelly fish salad Chinese style",price:58000,disabled:false},
       ]},
       {id:"sp-barbeque",name:"Barbeque 烧烤",items:[
-        {id:"sp-bbq-01",name:"Aneka Panggangan Kanton ★",desc:"Cantonese assorted barbeque meat combination",price:388,disabled:true},
-        {id:"sp-bbq-02a",name:"Peking Duck ½ Ekor ★",desc:"Peking duck with lettuce, half bird",price:188,disabled:true},
-        {id:"sp-bbq-03",name:"Casio Ayam Madu (Chicken Leg)",desc:"BBQ honey roasted chicken leg",price:78,disabled:false},
-        {id:"sp-bbq-04c",name:"Bebek Panggang Hoisin (¼ Ekor)",desc:"Roasted duck with hoisin sauce, quarter bird",price:98,disabled:false},
-        {id:"sp-bbq-05a",name:"Ayam Hainan Saus Jahe (1 Ekor)",desc:"Poached Hainan chicken with ginger sauce, whole",price:198,disabled:false},
-        {id:"sp-bbq-05b",name:"Ayam Hainan Saus Jahe (½ Ekor)",desc:"Poached Hainan chicken with ginger sauce, half",price:108,disabled:false},
+        {id:"sp-bbq-01",name:"Aneka Panggangan Kanton ★",desc:"Cantonese assorted barbeque meat combination",price:388000,disabled:true},
+        {id:"sp-bbq-02a",name:"Peking Duck ½ Ekor ★",desc:"Peking duck with lettuce, half bird",price:188000,disabled:true},
+        {id:"sp-bbq-03",name:"Casio Ayam Madu (Chicken Leg)",desc:"BBQ honey roasted chicken leg",price:78000,disabled:false},
+        {id:"sp-bbq-04c",name:"Bebek Panggang Hoisin (¼ Ekor)",desc:"Roasted duck with hoisin sauce, quarter bird",price:98000,disabled:false},
+        {id:"sp-bbq-05a",name:"Ayam Hainan Saus Jahe (1 Ekor)",desc:"Poached Hainan chicken with ginger sauce, whole",price:198000,disabled:false},
+        {id:"sp-bbq-05b",name:"Ayam Hainan Saus Jahe (½ Ekor)",desc:"Poached Hainan chicken with ginger sauce, half",price:108000,disabled:false},
       ]},
       {id:"sp-bird-nest",name:"Sarang Burung & Sari Laut Kering 燕窝",items:[
-        {id:"sp-bn-01",name:"Angsio Sarang Burung Superior ★",desc:"Braised superior bird nest",price:398,disabled:true},
-        {id:"sp-bn-02",name:"Sarang Burung Kepiting & Telur Kepiting ★",desc:"Braised bird nest with fresh crab meat, crab roe and coriander leaf",price:258,disabled:true},
-        {id:"sp-bn-03",name:"Sarang Burung Kuah Beijing Ging Tong ★",desc:"Braised bird nest soup with dried seafood in Beijing Ging Tong",price:268,disabled:true},
-        {id:"sp-bn-04",name:"Kerang Abalone F3, Hoisam & Brokoli ★",desc:"Braised whole abalone (F3) with sea cucumber and broccoli in oyster sauce",price:448,disabled:true},
+        {id:"sp-bn-01",name:"Angsio Sarang Burung Superior ★",desc:"Braised superior bird nest",price:398000,disabled:true},
+        {id:"sp-bn-02",name:"Sarang Burung Kepiting & Telur Kepiting ★",desc:"Braised bird nest with fresh crab meat, crab roe and coriander leaf",price:258000,disabled:true},
+        {id:"sp-bn-03",name:"Sarang Burung Kuah Beijing Ging Tong ★",desc:"Braised bird nest soup with dried seafood in Beijing Ging Tong",price:268000,disabled:true},
+        {id:"sp-bn-04",name:"Kerang Abalone F3, Hoisam & Brokoli ★",desc:"Braised whole abalone (F3) with sea cucumber and broccoli in oyster sauce",price:448000,disabled:true},
       ]},
       {id:"sp-soup",name:"Sup 汤",items:[
-        {id:"sp-soup-01",name:"Sup Maca, Kerang & Ayam (Double Boil)",desc:"Double boiled Peru maca root with sea conch and chicken",price:68,disabled:false},
-        {id:"sp-soup-02",name:"Sup Bunga Cordyceps & Ayam (Double Boil)",desc:"Double boiled cordyceps flower with chicken soup",price:118,disabled:false},
-        {id:"sp-soup-03",name:"Sup Kerang Abalone F10, Perut Ikan & Ginseng",desc:"Double boiled abalone (F10) with fish maw and ginseng root",price:148,disabled:false},
-        {id:"sp-soup-04",name:"Sup Bibir Ikan & Jamur",desc:"Fish lip soup combination with mushroom",price:48,disabled:false},
-        {id:"sp-soup-05",name:"Sup Asparagus Kepiting Segar",desc:"Asparagus soup with fresh crab meat",price:48,disabled:false},
-        {id:"sp-soup-06",name:"Sup Hisit Summer Palace ★",desc:"Summer Palace shark's fin soup",price:338,disabled:true},
-        {id:"sp-soup-07",name:"Sup Ayam Rempah China (Double Boil)",desc:"Double boiled chicken village with Chinese herb",price:98,disabled:false},
-        {id:"sp-soup-08",name:"Sup Shanghai",desc:"Soup Shanghai",price:48,disabled:false},
+        {id:"sp-soup-01",name:"Sup Maca, Kerang & Ayam (Double Boil)",desc:"Double boiled Peru maca root with sea conch and chicken",price:68000,disabled:false},
+        {id:"sp-soup-02",name:"Sup Bunga Cordyceps & Ayam (Double Boil)",desc:"Double boiled cordyceps flower with chicken soup",price:118000,disabled:false},
+        {id:"sp-soup-03",name:"Sup Kerang Abalone F10, Perut Ikan & Ginseng",desc:"Double boiled abalone (F10) with fish maw and ginseng root",price:148000,disabled:false},
+        {id:"sp-soup-04",name:"Sup Bibir Ikan & Jamur",desc:"Fish lip soup combination with mushroom",price:48000,disabled:false},
+        {id:"sp-soup-05",name:"Sup Asparagus Kepiting Segar",desc:"Asparagus soup with fresh crab meat",price:48000,disabled:false},
+        {id:"sp-soup-06",name:"Sup Hisit Summer Palace ★",desc:"Summer Palace shark's fin soup",price:338000,disabled:true},
+        {id:"sp-soup-07",name:"Sup Ayam Rempah China (Double Boil)",desc:"Double boiled chicken village with Chinese herb",price:98000,disabled:false},
+        {id:"sp-soup-08",name:"Sup Shanghai",desc:"Soup Shanghai",price:48000,disabled:false},
       ]},
       {id:"sp-live-seafood",name:"Sari Laut Hidup 活海鲜 ⚠️",items:[
-        {id:"sp-ls-01",name:"Lobster (per 100g) ★",desc:"Cold salad / steam garlic / baked cheese / superior stock / ginger onion / salted egg — harga pasar",price:158,disabled:true},
-        {id:"sp-ls-02",name:"Ikan Kerapu Macan (per 100g) ★",desc:"Steam garlic / Hong Kong / lotus leaf chicken / Teo Chiew / deep fried / claypot — harga pasar",price:78,disabled:true},
-        {id:"sp-ls-03",name:"Ikan Malas / Pelangi (per 100g) ★",desc:"Steam garlic / Hong Kong / lotus leaf chicken / Teo Chiew / deep fried / claypot — harga pasar",price:88,disabled:true},
-        {id:"sp-ls-04",name:"Ikan Gurame (per 100g) ★",desc:"Steam garlic / Hong Kong / Thailand style / deep fried / Thai chili — harga pasar",price:28,disabled:true},
+        {id:"sp-ls-01",name:"Lobster (per 100g) ★",desc:"Cold salad / steam garlic / baked cheese / superior stock / ginger onion / salted egg — harga pasar",price:158000,disabled:true},
+        {id:"sp-ls-02",name:"Ikan Kerapu Macan (per 100g) ★",desc:"Steam garlic / Hong Kong / lotus leaf chicken / Teo Chiew / deep fried / claypot — harga pasar",price:78000,disabled:true},
+        {id:"sp-ls-03",name:"Ikan Malas / Pelangi (per 100g) ★",desc:"Steam garlic / Hong Kong / lotus leaf chicken / Teo Chiew / deep fried / claypot — harga pasar",price:88000,disabled:true},
+        {id:"sp-ls-04",name:"Ikan Gurame (per 100g) ★",desc:"Steam garlic / Hong Kong / Thailand style / deep fried / Thai chili — harga pasar",price:28000,disabled:true},
       ]},
       {id:"sp-fresh-seafood",name:"Sari Laut Segar 海鲜",items:[
-        {id:"sp-fs-01",name:"Ikan Halibut Panggang Putih Telur & Telur Asin",desc:"Oven baked halibut fillet topped with egg white, served with salted egg fish skin",price:78,disabled:false},
-        {id:"sp-fs-02",name:"Kepiting Soka Goreng Thai",desc:"Deep fried soft shell crab with Thai chili sauce topped with garnish",price:118,disabled:false},
-        {id:"sp-fs-03",name:"Udang Goreng Wasabi Mayo & Salsa Mangga",desc:"Crispy prawn with wasabi mayonnaise and mango salsa, served in a basket",price:118,disabled:false},
-        {id:"sp-fs-04",name:"Udang Windu Goreng Oatmeal & Daun Kari",desc:"Deep fried king prawn with oatmeal & curry leaf",price:138,disabled:false},
-        {id:"sp-fs-05",name:"Udang Goreng Telur Emas",desc:"Deep fried butter prawn with a golden egg",price:138,disabled:false},
-        {id:"sp-fs-06",name:"Udang Goreng Mayo & Kerupuk Jagung",desc:"Deep fried prawn meat with sweet mayonnaise topped with corn flakes",price:118,disabled:false},
-        {id:"sp-fs-07",name:"Bistik Skalop Isi Udang & Ayam Saus Singapore",desc:"Pan fried scallop stuffed with prawn chicken meat with Singapore chili sauce",price:198,disabled:false},
-        {id:"sp-fs-08",name:"Tumis Skalop Brokoli Saus XO ★",desc:"Sauteed scallop with broccoli and XO sauce",price:228,disabled:true},
+        {id:"sp-fs-01",name:"Ikan Halibut Panggang Putih Telur & Telur Asin",desc:"Oven baked halibut fillet topped with egg white, served with salted egg fish skin",price:78000,disabled:false},
+        {id:"sp-fs-02",name:"Kepiting Soka Goreng Thai",desc:"Deep fried soft shell crab with Thai chili sauce topped with garnish",price:118000,disabled:false},
+        {id:"sp-fs-03",name:"Udang Goreng Wasabi Mayo & Salsa Mangga",desc:"Crispy prawn with wasabi mayonnaise and mango salsa, served in a basket",price:118000,disabled:false},
+        {id:"sp-fs-04",name:"Udang Windu Goreng Oatmeal & Daun Kari",desc:"Deep fried king prawn with oatmeal & curry leaf",price:138000,disabled:false},
+        {id:"sp-fs-05",name:"Udang Goreng Telur Emas",desc:"Deep fried butter prawn with a golden egg",price:138000,disabled:false},
+        {id:"sp-fs-06",name:"Udang Goreng Mayo & Kerupuk Jagung",desc:"Deep fried prawn meat with sweet mayonnaise topped with corn flakes",price:118000,disabled:false},
+        {id:"sp-fs-07",name:"Bistik Skalop Isi Udang & Ayam Saus Singapore",desc:"Pan fried scallop stuffed with prawn chicken meat with Singapore chili sauce",price:198000,disabled:false},
+        {id:"sp-fs-08",name:"Tumis Skalop Brokoli Saus XO ★",desc:"Sauteed scallop with broccoli and XO sauce",price:228000,disabled:true},
       ]},
       {id:"sp-claypot",name:"Claypot / Hot Plate / Hot Stone 沙煲",items:[
-        {id:"sp-cp-01",name:"Sapo Kari Udang & Mantau Goreng",desc:"Claypot curry prawn with Chinese fried bun",price:138,disabled:false},
-        {id:"sp-cp-02",name:"Sapo Terong, Tofu & Ayam Cincang Cabai",desc:"Stewed eggplant and Japanese beancurd with minced chicken in spicy chili sauce, claypot",price:88,disabled:false},
-        {id:"sp-cp-03",name:"Sapo Ikan Halibut Bawang Bombay Teriyaki",desc:"Pan fried halibut fillet with white onion in teriyaki sauce, served in claypot",price:118,disabled:false},
-        {id:"sp-cp-04",name:"Hot Plate Pocay Tofu Siram Udang Cincang",desc:"Hot plate/hot stone Horenso beancurd braised with minced prawn",price:98,disabled:false},
-        {id:"sp-cp-05",name:"Sapo Angsio Hoisom, Hipio & Jamur Hitam",desc:"Braised sea cucumber Hipio, black mushroom & seasonal vegetables, claypot",price:108,disabled:false},
-        {id:"sp-cp-06",name:"Sapo Tahu Sari Laut Saus XO",desc:"Stewed beancurd with seafood and XO sauce in claypot",price:108,disabled:false},
+        {id:"sp-cp-01",name:"Sapo Kari Udang & Mantau Goreng",desc:"Claypot curry prawn with Chinese fried bun",price:138000,disabled:false},
+        {id:"sp-cp-02",name:"Sapo Terong, Tofu & Ayam Cincang Cabai",desc:"Stewed eggplant and Japanese beancurd with minced chicken in spicy chili sauce, claypot",price:88000,disabled:false},
+        {id:"sp-cp-03",name:"Sapo Ikan Halibut Bawang Bombay Teriyaki",desc:"Pan fried halibut fillet with white onion in teriyaki sauce, served in claypot",price:118000,disabled:false},
+        {id:"sp-cp-04",name:"Hot Plate Pocay Tofu Siram Udang Cincang",desc:"Hot plate/hot stone Horenso beancurd braised with minced prawn",price:98000,disabled:false},
+        {id:"sp-cp-05",name:"Sapo Angsio Hoisom, Hipio & Jamur Hitam",desc:"Braised sea cucumber Hipio, black mushroom & seasonal vegetables, claypot",price:108000,disabled:false},
+        {id:"sp-cp-06",name:"Sapo Tahu Sari Laut Saus XO",desc:"Stewed beancurd with seafood and XO sauce in claypot",price:108000,disabled:false},
       ]},
       {id:"sp-meat",name:"Sapi / Ayam / Bebek / Kambing 牛-雞-鸭-羊",items:[
-        {id:"sp-m-01",name:"Bistik Sapi Impor & Skalop Lada Hitam (Perorangan)",desc:"Pan fried premium beef and crispy scallop in black pepper sauce",price:118,disabled:false},
-        {id:"sp-m-02",name:"Bistik Sapi Impor Saus Kanton & Bawang Bombay",desc:"Pan fried Aust slice beef with white onion in Cantonese style",price:108,disabled:false},
-        {id:"sp-m-03",name:"Sapi Impor Tenderloin Lada Hitam & Paprika",desc:"Pan fried premium beef tenderloin, mixed capsicum, black pepper sauce",price:118,disabled:false},
-        {id:"sp-m-04",name:"Ayam Goreng Tanpa Tulang Madu Jahe & Jeruk Bali",desc:"Honey glazed boneless chicken topped with crispy ginger flakes and pomelo",price:78,disabled:false},
-        {id:"sp-m-05",name:"Ayam Goreng Saus Cabai Sichuan",desc:"Fried chicken village with Sichuan chili",price:98,disabled:false},
-        {id:"sp-m-06",name:"Ayam Goreng Saus Asam Manis & Nanas",desc:"Deep fried chicken fillet with pineapple in sweet and sour sauce",price:78,disabled:false},
-        {id:"sp-m-07",name:"Ayam Goreng Sereh A la Summer Palace",desc:"Summer Palace deep fried crispy chicken with lemongrass",price:178,disabled:false},
-        {id:"sp-m-08",name:"Ayam Goreng Saus Lemon",desc:"Deep fried old style lemon chicken fillet",price:78,disabled:false},
-        {id:"sp-m-09",name:"Ayam Kungpao",desc:"Chicken Gunpao / Kungpao",price:78,disabled:false},
-        {id:"sp-m-10",name:"Ayam Teriyaki Bawang Jepang",desc:"Chicken teriyaki with Japanese onion sauce",price:78,disabled:false},
+        {id:"sp-m-01",name:"Bistik Sapi Impor & Skalop Lada Hitam (Perorangan)",desc:"Pan fried premium beef and crispy scallop in black pepper sauce",price:118000,disabled:false},
+        {id:"sp-m-02",name:"Bistik Sapi Impor Saus Kanton & Bawang Bombay",desc:"Pan fried Aust slice beef with white onion in Cantonese style",price:108000,disabled:false},
+        {id:"sp-m-03",name:"Sapi Impor Tenderloin Lada Hitam & Paprika",desc:"Pan fried premium beef tenderloin, mixed capsicum, black pepper sauce",price:118000,disabled:false},
+        {id:"sp-m-04",name:"Ayam Goreng Tanpa Tulang Madu Jahe & Jeruk Bali",desc:"Honey glazed boneless chicken topped with crispy ginger flakes and pomelo",price:78000,disabled:false},
+        {id:"sp-m-05",name:"Ayam Goreng Saus Cabai Sichuan",desc:"Fried chicken village with Sichuan chili",price:98000,disabled:false},
+        {id:"sp-m-06",name:"Ayam Goreng Saus Asam Manis & Nanas",desc:"Deep fried chicken fillet with pineapple in sweet and sour sauce",price:78000,disabled:false},
+        {id:"sp-m-07",name:"Ayam Goreng Sereh A la Summer Palace",desc:"Summer Palace deep fried crispy chicken with lemongrass",price:178000,disabled:false},
+        {id:"sp-m-08",name:"Ayam Goreng Saus Lemon",desc:"Deep fried old style lemon chicken fillet",price:78000,disabled:false},
+        {id:"sp-m-09",name:"Ayam Kungpao",desc:"Chicken Gunpao / Kungpao",price:78000,disabled:false},
+        {id:"sp-m-10",name:"Ayam Teriyaki Bawang Jepang",desc:"Chicken teriyaki with Japanese onion sauce",price:78000,disabled:false},
       ]},
       {id:"sp-vegetables",name:"Sayuran 蔬菜",items:[
-        {id:"sp-veg-01",name:"Tumis Buncis Sapi Cincang & Ebi",desc:"Sauteed baby French bean with dry shrimp and minced beef",price:68,disabled:false},
-        {id:"sp-veg-02",name:"Kailan Hong Kong Dua Rasa",desc:"Hong Kong Kailan 2 flavors (garlic / salt & pepper)",price:68,disabled:false},
-        {id:"sp-veg-03",name:"Pocay Tiga Macam Telur, Ikan Teri Perak & Skalop Kering",desc:"Boiled Horenso with three kinds egg, fried silverfish Perak and dry scallop",price:78,disabled:false},
-        {id:"sp-veg-04",name:"Brokoli / Bayam Jepang / Sawi Tumis Bawang Putih",desc:"Sauteed broccoli/horenso/pok choy with golden garlic",price:58,disabled:false},
-        {id:"sp-veg-05",name:"Asparagus Tumis Saus XO & Jamur Shimeji",desc:"Sauteed asparagus with XO sauce and Shimeji mushroom",price:78,disabled:false},
-        {id:"sp-veg-06",name:"Baby Kailan Tumis Ebi & Sambal Belacan",desc:"Sauteed balachan with dry shrimp and baby kailan",price:58,disabled:false},
-        {id:"sp-veg-07",name:"Tumis Bayam Jepang (Horenso) Bawang Putih",desc:"Stir fry Horenso with minced garlic",price:58,disabled:false},
-        {id:"sp-veg-08",name:"Tumis Brokoli Bawang Putih",desc:"Stir fry broccoli with minced garlic",price:58,disabled:false},
+        {id:"sp-veg-01",name:"Tumis Buncis Sapi Cincang & Ebi",desc:"Sauteed baby French bean with dry shrimp and minced beef",price:68000,disabled:false},
+        {id:"sp-veg-02",name:"Kailan Hong Kong Dua Rasa",desc:"Hong Kong Kailan 2 flavors (garlic / salt & pepper)",price:68000,disabled:false},
+        {id:"sp-veg-03",name:"Pocay Tiga Macam Telur, Ikan Teri Perak & Skalop Kering",desc:"Boiled Horenso with three kinds egg, fried silverfish Perak and dry scallop",price:78000,disabled:false},
+        {id:"sp-veg-04",name:"Brokoli / Bayam Jepang / Sawi Tumis Bawang Putih",desc:"Sauteed broccoli/horenso/pok choy with golden garlic",price:58000,disabled:false},
+        {id:"sp-veg-05",name:"Asparagus Tumis Saus XO & Jamur Shimeji",desc:"Sauteed asparagus with XO sauce and Shimeji mushroom",price:78000,disabled:false},
+        {id:"sp-veg-06",name:"Baby Kailan Tumis Ebi & Sambal Belacan",desc:"Sauteed balachan with dry shrimp and baby kailan",price:58000,disabled:false},
+        {id:"sp-veg-07",name:"Tumis Bayam Jepang (Horenso) Bawang Putih",desc:"Stir fry Horenso with minced garlic",price:58000,disabled:false},
+        {id:"sp-veg-08",name:"Tumis Brokoli Bawang Putih",desc:"Stir fry broccoli with minced garlic",price:58000,disabled:false},
       ]},
       {id:"sp-tofu",name:"Tahu / Bean Curd 豆腐",items:[
-        {id:"sp-tf-01",name:"Tahu Isi Udang Saus Tiram",desc:"Tofu filled with shrimp served with oyster sauce",price:78,disabled:false},
-        {id:"sp-tf-02",name:"Kepiting & Jamur Shimeji Siram Tahu Bayam Jepang",desc:"Braised homemade beancurd Horenso with crab meat & Shimeji mushroom",price:78,disabled:false},
-        {id:"sp-tf-03",name:"Mapo Tofu Sapi Cincang Sichuan",desc:"Braised Mapo beancurd with minced beef in Sichuan style",price:68,disabled:false},
+        {id:"sp-tf-01",name:"Tahu Isi Udang Saus Tiram",desc:"Tofu filled with shrimp served with oyster sauce",price:78000,disabled:false},
+        {id:"sp-tf-02",name:"Kepiting & Jamur Shimeji Siram Tahu Bayam Jepang",desc:"Braised homemade beancurd Horenso with crab meat & Shimeji mushroom",price:78000,disabled:false},
+        {id:"sp-tf-03",name:"Mapo Tofu Sapi Cincang Sichuan",desc:"Braised Mapo beancurd with minced beef in Sichuan style",price:68000,disabled:false},
       ]},
       {id:"sp-noodle-rice",name:"Mie / Nasi 面-饭",items:[
-        {id:"sp-nr-01",name:"Kwetiau Arang Goreng Sapi & Saus XO",desc:"Wok fried charcoal rice noodle with XO sauce & shredded beef",price:88,disabled:false},
-        {id:"sp-nr-02",name:"Mie Kuning Hokkian Udang & Ayam",desc:"Home style Hokkian yellow noodle with prawn & chicken",price:88,disabled:false},
-        {id:"sp-nr-03",name:"Ifu Mie Siram Sari Laut & Telur Puyuh",desc:"Braised Ifu noodle seafood with vegetables & quail eggs",price:98,disabled:false},
-        {id:"sp-nr-04",name:"Mie Kuah Hong Kong Shui Kwie Udang",desc:"Hong Kong noodle soup with shrimp dumpling and vegetables",price:88,disabled:false},
-        {id:"sp-nr-05",name:"Mie Hong Kong Siram Ayam & Sayuran",desc:"Deep fried Hong Kong noodle with chicken & vegetables",price:88,disabled:false},
-        {id:"sp-nr-06",name:"Kwetiaw Goreng Sapi Saus XO",desc:"Wok fried rice noodles with XO sauce, shredded beef",price:88,disabled:false},
-        {id:"sp-nr-07",name:"Mie Goreng Chinese Ayam & Udang",desc:"Chinese fried noodles with chicken and shrimps",price:88,disabled:false},
-        {id:"sp-nr-08",name:"Suun Goreng Sari Laut",desc:"Wok fried glass noodle (suún) with seafood",price:88,disabled:false},
-        {id:"sp-nr-09",name:"I Fu Mie Goreng Sari Laut & Telur Puyuh",desc:"Wok fried E-Fu noodles with seafood and quail egg",price:88,disabled:false},
-        {id:"sp-nr-10",name:"Nasi Goreng Hati Angsa & Kepiting A la Summer Palace",desc:"Summer Palace diced goose liver fried rice with crab meat and spring onion",price:128,disabled:false},
-        {id:"sp-nr-11",name:"Nasi Goreng Yong Zhou",desc:"\"Yong Zhou\" fried rice",price:78,disabled:false},
-        {id:"sp-nr-12",name:"Nasi Goreng Ayam Ikan Asin & Ikan Teri",desc:"Chicken fried rice with salted fish and silver fish",price:78,disabled:false},
-        {id:"sp-nr-13",name:"Nasi Kriuk Sari Laut Kaldu Lobster",desc:"Poached seafood rice in lobster broth served with crispy rice",price:128,disabled:false},
-        {id:"sp-nr-14",name:"Nasi Goreng Kepiting, Skalop Kering & Putih Telur",desc:"Crab meat fried rice with dried scallop & egg white",price:118,disabled:false},
-        {id:"sp-nr-15",name:"Nasi Goreng Sari Laut Saus XO",desc:"Seafood fried rice with XO sauce",price:88,disabled:false},
+        {id:"sp-nr-01",name:"Kwetiau Arang Goreng Sapi & Saus XO",desc:"Wok fried charcoal rice noodle with XO sauce & shredded beef",price:88000,disabled:false},
+        {id:"sp-nr-02",name:"Mie Kuning Hokkian Udang & Ayam",desc:"Home style Hokkian yellow noodle with prawn & chicken",price:88000,disabled:false},
+        {id:"sp-nr-03",name:"Ifu Mie Siram Sari Laut & Telur Puyuh",desc:"Braised Ifu noodle seafood with vegetables & quail eggs",price:98000,disabled:false},
+        {id:"sp-nr-04",name:"Mie Kuah Hong Kong Shui Kwie Udang",desc:"Hong Kong noodle soup with shrimp dumpling and vegetables",price:88000,disabled:false},
+        {id:"sp-nr-05",name:"Mie Hong Kong Siram Ayam & Sayuran",desc:"Deep fried Hong Kong noodle with chicken & vegetables",price:88000,disabled:false},
+        {id:"sp-nr-06",name:"Kwetiaw Goreng Sapi Saus XO",desc:"Wok fried rice noodles with XO sauce, shredded beef",price:88000,disabled:false},
+        {id:"sp-nr-07",name:"Mie Goreng Chinese Ayam & Udang",desc:"Chinese fried noodles with chicken and shrimps",price:88000,disabled:false},
+        {id:"sp-nr-08",name:"Suun Goreng Sari Laut",desc:"Wok fried glass noodle (suún) with seafood",price:88000,disabled:false},
+        {id:"sp-nr-09",name:"I Fu Mie Goreng Sari Laut & Telur Puyuh",desc:"Wok fried E-Fu noodles with seafood and quail egg",price:88000,disabled:false},
+        {id:"sp-nr-10",name:"Nasi Goreng Hati Angsa & Kepiting A la Summer Palace",desc:"Summer Palace diced goose liver fried rice with crab meat and spring onion",price:128000,disabled:false},
+        {id:"sp-nr-11",name:"Nasi Goreng Yong Zhou",desc:"\"Yong Zhou\" fried rice",price:78000,disabled:false},
+        {id:"sp-nr-12",name:"Nasi Goreng Ayam Ikan Asin & Ikan Teri",desc:"Chicken fried rice with salted fish and silver fish",price:78000,disabled:false},
+        {id:"sp-nr-13",name:"Nasi Kriuk Sari Laut Kaldu Lobster",desc:"Poached seafood rice in lobster broth served with crispy rice",price:128000,disabled:false},
+        {id:"sp-nr-14",name:"Nasi Goreng Kepiting, Skalop Kering & Putih Telur",desc:"Crab meat fried rice with dried scallop & egg white",price:118000,disabled:false},
+        {id:"sp-nr-15",name:"Nasi Goreng Sari Laut Saus XO",desc:"Seafood fried rice with XO sauce",price:88000,disabled:false},
       ]},
       {id:"sp-dessert",name:"Hidangan Penutup 甜点",items:[
-        {id:"sp-des-01",name:"Krim Mangga Sago, Lidah Buaya & Es Puter Stroberi",desc:"Chilled mango sago cream with aloe vera strawberry sorbet",price:33.8,disabled:false},
-        {id:"sp-des-02",name:"Krim Kacang Almond & Ronde (Panas)",desc:"Hot almond cream with glutinous rice ball",price:33.8,disabled:false},
-        {id:"sp-des-03",name:"Gui Ling Gao dengan Madu",desc:"Chilled Gui Ling Gao with wild honey",price:33.8,disabled:false},
-        {id:"sp-des-04",name:"Puding Pepaya",desc:"Papaya pudding",price:33.8,disabled:false},
-        {id:"sp-des-05",name:"Puding Kelapa, Saus Vanila & Daun Mint",desc:"Chilled coconut pudding with vanilla ice cream topped with mint leaf",price:33.8,disabled:false},
-        {id:"sp-des-06",name:"Onde-onde Hitam (Goreng Wijen)",desc:"Deep fried glutinous rice ball with black sesame",price:35.8,disabled:false},
+        {id:"sp-des-01",name:"Krim Mangga Sago, Lidah Buaya & Es Puter Stroberi",desc:"Chilled mango sago cream with aloe vera strawberry sorbet",price:33800,disabled:false},
+        {id:"sp-des-02",name:"Krim Kacang Almond & Ronde (Panas)",desc:"Hot almond cream with glutinous rice ball",price:33800,disabled:false},
+        {id:"sp-des-03",name:"Gui Ling Gao dengan Madu",desc:"Chilled Gui Ling Gao with wild honey",price:33800,disabled:false},
+        {id:"sp-des-04",name:"Puding Pepaya",desc:"Papaya pudding",price:33800,disabled:false},
+        {id:"sp-des-05",name:"Puding Kelapa, Saus Vanila & Daun Mint",desc:"Chilled coconut pudding with vanilla ice cream topped with mint leaf",price:33800,disabled:false},
+        {id:"sp-des-06",name:"Onde-onde Hitam (Goreng Wijen)",desc:"Deep fried glutinous rice ball with black sesame",price:35800,disabled:false},
       ]},
     ]
   },
@@ -948,7 +949,8 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
     setSaving(true); setSyncError(null);
     try {
       const items = Object.values(cart).map(i=>({name:i.name,qty:i.qty,notes:i.notes||"",price:i.price||0}));
-      const totalIDR = items.reduce((s,i)=>s+(i.price||0)*i.qty,0);
+      const nettIDR  = items.reduce((s,i)=>s+(i.price||0)*i.qty,0);
+      const totalIDR = resto.taxRate ? Math.round(nettIDR*(1+resto.taxRate)) : nettIDR;
       const key = `order.${resto.id}.${user.replace(/\s+/g,"_")}`;
       const ok = await sSet(key, JSON.stringify({peserta:user,hh:ALL_PAX.find(p=>p.name===user)?.hh||"",items,totalIDR,submittedAt:new Date().toISOString()}));
       if(ok){ setSubmitted(true); await refresh(); setTab("recap"); }
@@ -992,6 +994,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
             </div>
             <p style={{fontSize:"11px",color:T.muted}}>{resto.subtitle} · {resto.note}</p>
             {resto.deadline&&<p style={{fontSize:"10px",color:T.warn,marginTop:"4px",letterSpacing:"0.5px"}}>Deadline pre-order: {resto.deadline}</p>}
+            {resto.taxRate&&<p style={{fontSize:"10px",color:T.muted,marginTop:"4px"}}>Harga nett · +11% pajak pemerintah & +10% service charge ditambahkan saat checkout</p>}
             {lastSync&&<p style={{fontSize:"10px",color:T.ghost,marginTop:"4px"}}>Tersimpan: {lastSync.toLocaleTimeString("id-ID")} · Auto-refresh 30 dtk</p>}
           </div>
           <div style={{display:"flex",gap:"12px",alignItems:"center",flexWrap:"wrap"}}>
@@ -1040,7 +1043,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                       <p style={{fontSize:"14px",color:isDisabled?T.muted:T.ink,fontWeight:inCart?500:300,margin:0}}>{item.name}</p>
                       {hasPrice&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.gold,border:`1px solid ${T.goldL}`,padding:"1px 7px",fontWeight:500,whiteSpace:"nowrap"}}>IDR {item.price.toLocaleString("id-ID")}</span>}
                     </div>
-                    {isDisabled&&<p style={{fontSize:"10px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — IDR ${item.price}k melebihi batas IDR 200k`:"Harga pasar — hubungi koordinator"}</p>}
+                    {isDisabled&&<p style={{fontSize:"10px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — IDR ${(item.price/1000).toLocaleString("id-ID")}k melebihi batas IDR 200k`:"Harga pasar — hubungi koordinator"}</p>}
                     {item.desc&&<p style={{fontSize:"11px",color:isDisabled?T.ghost:T.muted,fontStyle:"italic"}}>{item.desc}</p>}
                     {inCart&&!isDisabled&&<input value={notes[item.id]||inCart.notes||""} onChange={e=>{setNotes(n=>({...n,[item.id]:e.target.value}));setNote(item.id,e.target.value);}}
                       placeholder="Catatan khusus (opsional)"
@@ -1067,21 +1070,33 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
           {(()=>{
             const cartEntries = Object.entries(cart);
             const hasPrices = cartEntries.some(([,item])=>item.price!=null);
-            const grandTotal = hasPrices ? cartEntries.reduce((s,[,item])=>s+(item.price||0)*item.qty,0) : 0;
+            const nettTotal = hasPrices ? cartEntries.reduce((s,[,item])=>s+(item.price||0)*item.qty,0) : 0;
+            const taxAmt    = resto.taxRate ? Math.round(nettTotal * resto.taxRate) : 0;
+            const grandTotal = nettTotal + taxAmt;
             return <>
               {cartEntries.map(([id,item])=>(
                 <div key={id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${T.line}`,gap:"12px"}}>
                   <span style={{fontSize:"13px",color:T.ink,flex:1}}>{item.name}{item.notes&&<span style={{color:T.muted,fontStyle:"italic"}}> · {item.notes}</span>}</span>
                   <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"15px",color:T.ink,minWidth:"32px",textAlign:"right"}}>×{item.qty}</span>
-                  {hasPrices&&item.price&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"14px",color:T.settled,minWidth:"110px",textAlign:"right"}}>IDR {(item.price*item.qty).toLocaleString("id-ID")}</span>}
+                  {hasPrices&&item.price&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"14px",color:T.settled,minWidth:"120px",textAlign:"right"}}>IDR {(item.price*item.qty).toLocaleString("id-ID")}</span>}
                 </div>
               ))}
-              {hasPrices&&grandTotal>0&&(
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"16px 0 0",borderTop:`2px solid ${T.lineD}`,marginTop:"8px"}}>
+              {hasPrices&&nettTotal>0&&<>
+                {resto.taxRate&&<>
+                  <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0 4px",borderTop:`1px solid ${T.line}`,marginTop:"8px"}}>
+                    <span style={{fontSize:"11px",color:T.muted}}>Subtotal (nett)</span>
+                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"14px",color:T.ink}}>IDR {nettTotal.toLocaleString("id-ID")}</span>
+                  </div>
+                  <div style={{display:"flex",justifyContent:"space-between",padding:"4px 0 8px"}}>
+                    <span style={{fontSize:"11px",color:T.muted}}>Pajak 11% + Service 10%</span>
+                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"14px",color:T.muted}}>IDR {taxAmt.toLocaleString("id-ID")}</span>
+                  </div>
+                </>}
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 0 0",borderTop:`2px solid ${T.lineD}`}}>
                   <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Total Bayar</span>
                   <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.forest,fontWeight:500}}>IDR {grandTotal.toLocaleString("id-ID")}</span>
                 </div>
-              )}
+              </>}
             </>;
           })()}
           <button onClick={submit} disabled={saving||locked} style={{marginTop:"24px",width:"100%",padding:"14px",background:locked?T.muted:T.forest,color:"white",border:"none",cursor:locked?"not-allowed":"pointer",fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500,transition:"background 0.2s"}}>
