@@ -56,10 +56,10 @@ const ITINERARY = [
       carAssignment:[
         {car:"Mobil 1",passengers:["Monang Panjaitan","Rohana Tambunan","Agustinus Tambunan","Linda Napitupulu"],baggage:"Koper"},
         {car:"Mobil 2",passengers:["Ronald Daniel","Ferdiana Sondang","Ivana Panjaitan","Mariana Tambunan"],baggage:"Koper"},
-        {car:"Mobil 3",passengers:["Leandro Ratu","Rany Yamemia","Olive Tambunan"],baggage:"Tas"},
+        {car:"Mobil 3",passengers:["Leandro Ratu","Rany Yamemia","Olive Tambunan"],baggage:"Koper"},
         {car:"Mobil 4",passengers:["Agustianto Batubara","Christine Tambunan","Alexander Batubara"],baggage:"Koper"},
         {car:"Mobil 5",passengers:["Gerard Sahat","Diana Pardede","Arlo Ratu","Alora Ratu"],baggage:"Tas"},
-        {car:"Mobil 6",passengers:["Lusiana","Intan Tambunan","Nhaomy Panjaitan","Adolf Tambunan"],baggage:"Koper"},
+        {car:"Mobil 6",passengers:["Lusiana","Intan Tambunan","Nhaomy Panjaitan","Adolf Tambunan"],baggage:"Tas"},
       ]},
     {time:"19.00",act:"Welcome Dinner",loc:"Kemangi Restaurant",type:"dining",sponsor:"HH4 · Gerard",note:"Smart casual"},
   ]},
