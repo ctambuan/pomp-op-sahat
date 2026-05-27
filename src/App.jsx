@@ -1152,6 +1152,8 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
   const [allOrders,setAllOrders] = useState({});
   const [loading,setLoading] = useState(true);
   const [saving,setSaving] = useState(false);
+  const [deleting,setDeleting] = useState(false);
+  const [deleteConfirm,setDeleteConfirm] = useState(false);
   const [notes,setNotes] = useState({});
   const [lastSync,setLastSync] = useState(null);
   const [syncError,setSyncError] = useState(null);
@@ -1222,6 +1224,20 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
     setSaving(false);
   },[cart,cartCount,resto.id,user,refresh,saving]);
 
+  const deleteOrder = useCallback(async () => {
+    setDeleting(true);
+    try {
+      const key = `order.${resto.id}.${user.replace(/\s+/g,"_")}`;
+      await sSet(key, "");
+      setCart({});
+      setNotes({});
+      setSubmitted(false);
+      setDeleteConfirm(false);
+      await refresh();
+    } catch { }
+    setDeleting(false);
+  },[resto.id,user,refresh]);
+
   const toggleLock = async () => { const nl=!locked; await sSet(`lock.${resto.id}`,String(nl)); setLocked(nl); };
 
   const exportCSV = () => {
@@ -1277,10 +1293,29 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
 
       {tab==="order"&&<div>
         {locked&&!isCoord&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"16px 20px",marginBottom:"24px"}}><p style={{fontSize:"11px",color:T.danger}}>Pre-order telah ditutup. Hubungi koordinator untuk perubahan.</p></div>}
-        {submitted&&<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",background:T.settledBg,padding:"14px 20px",marginBottom:"24px"}}>
-          <p style={{fontSize:"11px",color:T.settled}}>✓ Order Anda sudah terkirim ke Firebase.</p>
-          {!locked&&<button onClick={()=>{setSubmitted(false);setTab("order");}} style={{background:"none",border:`1px solid ${T.settled}`,padding:"5px 14px",cursor:"pointer",fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.settled}}>Edit</button>}
-        </div>}
+        {submitted&&!deleteConfirm&&(
+          <div style={{background:T.settledBg,border:`1px solid ${T.settled}`,padding:"14px 20px",marginBottom:"24px"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+              <p style={{fontSize:"11px",color:T.settled}}>✓ Order Anda sudah terkirim.</p>
+              {!locked&&<div style={{display:"flex",gap:"10px"}}>
+                <button onClick={()=>{setSubmitted(false);setTab("order");}} style={{background:"none",border:`1px solid ${T.settled}`,padding:"5px 14px",cursor:"pointer",fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.settled}}>Edit</button>
+                <button onClick={()=>setDeleteConfirm(true)} style={{background:"none",border:`1px solid ${T.danger}`,padding:"5px 14px",cursor:"pointer",fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.danger}}>× Batalkan</button>
+              </div>}
+            </div>
+          </div>
+        )}
+        {deleteConfirm&&(
+          <div style={{background:T.dangerBg,border:`1px solid ${T.danger}`,padding:"18px 20px",marginBottom:"24px"}}>
+            <p style={{fontSize:"13px",color:T.danger,fontWeight:500,marginBottom:"4px"}}>Hapus seluruh pesanan ini?</p>
+            <p style={{fontSize:"11px",color:T.muted,marginBottom:"16px"}}>Tindakan ini tidak dapat dibatalkan.</p>
+            <div style={{display:"flex",gap:"10px"}}>
+              <button onClick={()=>setDeleteConfirm(false)} style={{background:"none",border:`1px solid ${T.lineD}`,padding:"8px 20px",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.mid}}>Tidak</button>
+              <button onClick={deleteOrder} disabled={deleting} style={{background:T.danger,border:"none",padding:"8px 20px",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:"white",fontWeight:500}}>
+                {deleting?"Menghapus…":"Ya, Hapus"}
+              </button>
+            </div>
+          </div>
+        )}
 
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"28px",paddingBottom:"16px",borderBottom:`1px solid ${T.line}`}}>
           <p style={{fontSize:"11px",color:T.muted}}>Pemesanan sebagai <span style={{color:T.ink,fontWeight:500}}>{user}</span></p>
