@@ -738,7 +738,7 @@ const BudgetTab = memo(({user}) => {
             "HH5 (Mariana, Olive, Nadia) diserap oleh HH2 + HH3 + HH4.",
           ].map((n,i)=><p key={i} style={{fontSize:"11px",color:T.muted,lineHeight:"1.7"}}>— {n}</p>)}
         </div>
-        {isCoord&&<p style={{marginTop:"24px",fontSize:"11px"}}><a href="https://docs.google.com/spreadsheets/d/19vHRDue6attrpewZcFNBSq3g3UvxbalaWCog6v5x0d4/edit" target="_blank" rel="noopener noreferrer" style={{color:T.forest,textDecoration:"none",borderBottom:`1px solid ${T.forest}`}}>Buka Google Sheets Lusiana ↗</a></p>}
+        {isCoord&&<p style={{marginTop:"24px",fontSize:"11px"}}><a href="https://docs.google.com/spreadsheets/d/19vHRDue6attrpewZcFNBSq3g3UvxbalaWCog6v5x0d4/edit?usp=sharing" target="_blank" rel="noopener noreferrer" style={{color:T.forest,textDecoration:"none",borderBottom:`1px solid ${T.forest}`}}>Buka Google Sheets Lusiana ↗</a></p>}
       </div>
     </div>
   );
