@@ -51,6 +51,15 @@ const ITINERARY = [
     {time:"09.00",act:"Kumpul Priority Lounge",loc:"Stasiun Gambir, Jakarta",type:"assembly",note:"Boarding pukul 10.00"},
     {time:"10.30",act:"KAI Manahan Panoramic",loc:"Gambir → Tugu",type:"train",note:"22 pax. Solaria pre-order aktif."},
     {time:"17.23",act:"Tiba Yogyakarta",loc:"Stasiun Tugu",type:"arrival"},
+    {time:"17.30",act:"Transfer ke Hyatt Regency Palagan",loc:"Stasiun Tugu → Jl. Palagan Tentara Pelajar",type:"transport",
+      note:"5 × Toyota Innova · Golden Bird. Pengemudi seragam biru navy, papan logo Hyatt di pintu kedatangan. Estimasi ~45–60 menit.",
+      carAssignment:[
+        {car:"Mobil 1",passengers:["Monang Panjaitan","Rohana Tambunan","Agustinus Tambunan","Linda Napitupulu"],baggage:"Koper"},
+        {car:"Mobil 2",passengers:["Ronald Daniel","Ferdiana Sondang","Ivana Panjaitan","Lusiana"],baggage:"Koper"},
+        {car:"Mobil 3",passengers:["Leandro Ratu","Rany Yamemia","Intan Tambunan","Nhaomy Panjaitan"],baggage:"Tas"},
+        {car:"Mobil 4",passengers:["Adolf Tambunan","Agustianto Batubara","Christine Tambunan","Alexander Batubara"],baggage:"Koper"},
+        {car:"Mobil 5",passengers:["Gerard Sahat","Diana Pardede","Arlo Ratu","Alora Ratu"],baggage:"Tas"},
+      ]},
     {time:"19.00",act:"Welcome Dinner",loc:"Kemangi Restaurant",type:"dining",sponsor:"HH4 · Gerard",note:"Smart casual"},
   ]},
   {day:2,date:"Jumat, 3 Juli 2026",label:"Merapi & Ayom",events:[
@@ -754,7 +763,7 @@ const ItineraryTab = memo(() => {
     <div className="fade-up">
       <div style={{marginBottom:"56px"}}>
         <p style={{fontSize:"17px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Jadwal Perjalanan</p>
-        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Itinerary v18</h2>
+        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Itinerary v20</h2>
         <p style={{fontSize:"17px",color:T.muted,marginTop:"8px"}}>2–5 Juli 2026 · 23 Peserta · Hyatt Regency Yogyakarta</p>
       </div>
       <div style={{display:"flex",borderBottom:`1px solid ${T.line}`,marginBottom:"48px"}}>
@@ -785,6 +794,20 @@ const ItineraryTab = memo(() => {
                 </div>
                 <p style={{fontSize:"15px",color:T.muted,marginTop:"4px"}}>{ev.loc}</p>
                 {ev.note&&<p style={{fontSize:"15px",color:T.muted,marginTop:"6px",fontStyle:"italic"}}>{ev.note}</p>}
+                {ev.carAssignment&&(
+                  <div style={{marginTop:"20px",borderTop:`1px solid ${T.line}`,paddingTop:"16px"}}>
+                    <p style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,marginBottom:"12px",fontWeight:500}}>Penugasan Kendaraan</p>
+                    <div style={{display:"flex",flexDirection:"column",gap:"8px"}}>
+                      {ev.carAssignment.map((c,ci)=>(
+                        <div key={ci} style={{display:"grid",gridTemplateColumns:"72px 1fr auto",gap:"0 16px",alignItems:"start",padding:"10px 14px",background:T.cream,borderRadius:"4px",border:`1px solid ${T.line}`}}>
+                          <p style={{fontSize:"13px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.forest,fontWeight:600,paddingTop:"2px"}}>{c.car}</p>
+                          <p style={{fontSize:"15px",color:T.ink,lineHeight:"1.5"}}>{c.passengers.join(" · ")}</p>
+                          <p style={{fontSize:"13px",color:T.muted,whiteSpace:"nowrap",paddingTop:"2px"}}>🧳 {c.baggage}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ))}
