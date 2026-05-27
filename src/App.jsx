@@ -491,16 +491,16 @@ const PasswordScreen = memo(({onSuccess}) => {
     <div style={{minHeight:"100vh",background:T.stone,display:"flex",alignItems:"center",justifyContent:"center",padding:"40px 24px"}}>
       <GlobalStyles/>
       <div className="fade-up" style={{width:"100%",maxWidth:"400px",textAlign:"center"}}>
-        <p style={{fontSize:"10px",letterSpacing:"4px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Yogyakarta · 2–5 Juli 2026</p>
+        <p style={{fontSize:"17px",letterSpacing:"4px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Yogyakarta · 2–5 Juli 2026</p>
         <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"42px",fontWeight:400,color:T.ink,marginBottom:"8px",letterSpacing:"-0.5px",lineHeight:1.1}}>Pomp Op Sahat</h1>
-        <p style={{fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"56px"}}>Hyatt Regency Yogyakarta</p>
+        <p style={{fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"56px"}}>Hyatt Regency Yogyakarta</p>
         <div style={{marginBottom:err?"8px":"24px"}}>
           <input ref={inputRef} type="password" value={val} onChange={e=>{setVal(e.target.value);setErr(false);}} onKeyDown={e=>e.key==="Enter"&&submit()}
-            placeholder="Kata sandi" style={{width:"100%",padding:"16px 0",borderTop:"none",borderLeft:"none",borderRight:"none",borderBottom:`1px solid ${err?T.danger:T.lineD}`,background:"transparent",fontSize:"14px",letterSpacing:"1px",color:T.ink,outline:"none",textAlign:"center"}} />
+            placeholder="Kata sandi" style={{width:"100%",padding:"16px 0",borderTop:"none",borderLeft:"none",borderRight:"none",borderBottom:`1px solid ${err?T.danger:T.lineD}`,background:"transparent",fontSize:"17px",letterSpacing:"1px",color:T.ink,outline:"none",textAlign:"center"}} />
         </div>
-        {err && <p style={{fontSize:"11px",color:T.danger,letterSpacing:"1px",marginBottom:"16px",textTransform:"uppercase"}}>Kata sandi tidak tepat</p>}
-        <button onClick={submit} style={{background:"none",border:"none",cursor:"pointer",fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.forest,padding:"12px 0",fontWeight:500,borderBottom:`1px solid ${T.forest}`}}>Masuk</button>
-        <p style={{marginTop:"48px",fontSize:"10px",color:T.ghost,letterSpacing:"1px"}}>Hubungi koordinator untuk kata sandi</p>
+        {err && <p style={{fontSize:"15px",color:T.danger,letterSpacing:"1px",marginBottom:"16px",textTransform:"uppercase"}}>Kata sandi tidak tepat</p>}
+        <button onClick={submit} style={{background:"none",border:"none",cursor:"pointer",fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:T.forest,padding:"12px 0",fontWeight:500,borderBottom:`1px solid ${T.forest}`}}>Masuk</button>
+        <p style={{marginTop:"48px",fontSize:"17px",color:T.ghost,letterSpacing:"1px"}}>Hubungi koordinator untuk kata sandi</p>
       </div>
     </div>
   );
@@ -512,14 +512,14 @@ const NameScreen = memo(({onSuccess}) => {
     <div style={{minHeight:"100vh",background:T.stone,display:"flex",alignItems:"center",justifyContent:"center",padding:"40px 24px"}}>
       <GlobalStyles/>
       <div className="fade-up" style={{width:"100%",maxWidth:"400px",textAlign:"center"}}>
-        <p style={{fontSize:"10px",letterSpacing:"4px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Selamat datang</p>
+        <p style={{fontSize:"17px",letterSpacing:"4px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Selamat datang</p>
         <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"36px",fontWeight:400,color:T.ink,marginBottom:"48px"}}>Siapa Anda?</h2>
-        <select value={sel} onChange={e=>setSel(e.target.value)} style={{width:"100%",padding:"16px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"14px",color:sel?T.ink:T.muted,outline:"none",cursor:"pointer",appearance:"none",textAlign:"center"}}>
+        <select value={sel} onChange={e=>setSel(e.target.value)} style={{width:"100%",padding:"16px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"17px",color:sel?T.ink:T.muted,outline:"none",cursor:"pointer",appearance:"none",textAlign:"center"}}>
           <option value="">Pilih nama Anda</option>
           {ALL_PAX.map(p=><option key={p.name} value={p.name}>{p.name} — {p.hh}</option>)}
         </select>
         <div style={{marginTop:"40px"}}>
-          <button onClick={()=>sel&&onSuccess(sel)} disabled={!sel} style={{background:"none",border:"none",cursor:sel?"pointer":"default",fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:sel?T.forest:T.ghost,padding:"12px 0",fontWeight:500,borderBottom:`1px solid ${sel?T.forest:T.ghost}`,transition:"all 0.2s"}}>Lanjutkan</button>
+          <button onClick={()=>sel&&onSuccess(sel)} disabled={!sel} style={{background:"none",border:"none",cursor:sel?"pointer":"default",fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:sel?T.forest:T.ghost,padding:"12px 0",fontWeight:500,borderBottom:`1px solid ${sel?T.forest:T.ghost}`,transition:"all 0.2s"}}>Lanjutkan</button>
         </div>
       </div>
     </div>
@@ -536,20 +536,20 @@ const Shell = ({user,tab,setTab,children}) => {
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"20px 0 16px",borderBottom:`1px solid ${T.line}`}}>
             <div>
               <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",fontWeight:400,color:T.ink,letterSpacing:"-0.3px"}}>Pomp Op Sahat</h1>
-              <p style={{fontSize:"10px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted,marginTop:"3px"}}>Yogyakarta · Hyatt Regency · 2–5 Juli 2026 · 23 Peserta</p>
+              <p style={{fontSize:"17px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted,marginTop:"3px"}}>Yogyakarta · Hyatt Regency · 2–5 Juli 2026 · 23 Peserta</p>
             </div>
-            <p style={{fontSize:"11px",color:T.muted}}>Halo, <span style={{color:T.ink,fontWeight:500}}>{user}</span></p>
+            <p style={{fontSize:"15px",color:T.muted}}>Halo, <span style={{color:T.ink,fontWeight:500}}>{user}</span></p>
           </div>
           <nav style={{display:"flex"}}>
             {TABS.map(t=>(
-              <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",padding:"16px 28px 14px",cursor:"pointer",fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:tab===t.id?500:300,color:tab===t.id?T.forest:T.muted,borderBottom:tab===t.id?`2px solid ${T.forest}`:"2px solid transparent",transition:"all 0.2s",marginBottom:"-1px"}}>{t.label}</button>
+              <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",padding:"16px 28px 14px",cursor:"pointer",fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:tab===t.id?500:300,color:tab===t.id?T.forest:T.muted,borderBottom:tab===t.id?`2px solid ${T.forest}`:"2px solid transparent",transition:"all 0.2s",marginBottom:"-1px"}}>{t.label}</button>
             ))}
           </nav>
         </div>
       </header>
       <main style={{maxWidth:"960px",margin:"0 auto",padding:"60px 40px"}}>{children}</main>
       <footer style={{borderTop:`1px solid ${T.line}`,padding:"32px 40px",textAlign:"center"}}>
-        <p style={{fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.ghost}}>Konfidensial · Pomp Op Sahat 2026 · Yogyakarta</p>
+        <p style={{fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:T.ghost}}>Konfidensial · Pomp Op Sahat 2026 · Yogyakarta</p>
       </footer>
     </div>
   );
@@ -595,9 +595,9 @@ const BudgetTab = memo(({user}) => {
   return (
     <div className="fade-up">
       <div style={{marginBottom:"56px"}}>
-        <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Dana Bersama</p>
+        <p style={{fontSize:"17px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Dana Bersama</p>
         <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink,marginBottom:"8px"}}>Ringkasan Keuangan</h2>
-        <p style={{fontSize:"12px",color:T.muted}}>Per {d.lastSync} · Data dari Lusiana{syncedAt && <span style={{color:T.ghost}}> · Live {syncedAt.toLocaleTimeString("id-ID")}</span>}</p>
+        <p style={{fontSize:"17px",color:T.muted}}>Per {d.lastSync} · Data dari Lusiana{syncedAt && <span style={{color:T.ghost}}> · Live {syncedAt.toLocaleTimeString("id-ID")}</span>}</p>
       </div>
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"1px",background:T.line,marginBottom:"64px"}}>
@@ -608,29 +608,29 @@ const BudgetTab = memo(({user}) => {
           {label:"Belum Lunas",val:fmt(Math.max(0,-d.totals.balance)),sub:"Outstanding",hi:d.totals.balance<0?T.danger:T.settled},
         ].map(k=>(
           <div key={k.label} style={{background:T.cream,padding:"32px 28px"}}>
-            <p style={{fontSize:"10px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>{k.label}</p>
+            <p style={{fontSize:"17px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>{k.label}</p>
             <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"26px",fontWeight:400,color:k.hi||T.ink,lineHeight:1,marginBottom:"8px"}}>{k.val}</p>
-            <p style={{fontSize:"11px",color:T.muted}}>{k.sub}</p>
+            <p style={{fontSize:"15px",color:T.muted}}>{k.sub}</p>
           </div>
         ))}
       </div>
 
       <div style={{marginBottom:"64px"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:"12px"}}>
-          <p style={{fontSize:"10px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted}}>Tingkat Pelunasan</p>
+          <p style={{fontSize:"17px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted}}>Tingkat Pelunasan</p>
           <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.ink}}>{collection}%</p>
         </div>
         <div style={{height:"1px",background:T.line,position:"relative"}}>
           <div style={{position:"absolute",top:0,left:0,height:"2px",width:`${collection}%`,background:T.forest,marginTop:"-0.5px",transition:"width 1s ease"}}/>
         </div>
         <div style={{display:"flex",justifyContent:"space-between",marginTop:"8px"}}>
-          <p style={{fontSize:"10px",color:T.muted}}>Terkumpul: {fmt(d.totals.deposit)}</p>
-          <p style={{fontSize:"10px",color:T.muted}}>Target: {fmt(d.totals.gross)}</p>
+          <p style={{fontSize:"17px",color:T.muted}}>Terkumpul: {fmt(d.totals.deposit)}</p>
+          <p style={{fontSize:"17px",color:T.muted}}>Target: {fmt(d.totals.gross)}</p>
         </div>
       </div>
 
       <div style={{marginBottom:"64px"}}>
-        <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Posisi Per Household</p>
+        <p style={{fontSize:"17px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Posisi Per Household</p>
         <div style={{borderTop:`1px solid ${T.line}`}}>
           {d.households.map(hh=>{
             const isOwn=hh.id===myHH, absorbed=hh.absorbed;
@@ -645,9 +645,9 @@ const BudgetTab = memo(({user}) => {
                   <div>
                     <div style={{display:"flex",alignItems:"center",gap:"16px",marginBottom:"6px",flexWrap:"wrap"}}>
                       <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{hh.lead}</h3>
-                      {isOwn&&<span style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.gold}`,padding:"2px 8px"}}>Anda</span>}
+                      {isOwn&&<span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.gold}`,padding:"2px 8px"}}>Anda</span>}
                     </div>
-                    <p style={{fontSize:"11px",color:T.muted,marginBottom:show&&!absorbed?"20px":"0"}}>{hh.id} · {hh.pax} peserta · {hh.members.join(", ")}</p>
+                    <p style={{fontSize:"15px",color:T.muted,marginBottom:show&&!absorbed?"20px":"0"}}>{hh.id} · {hh.pax} peserta · {hh.members.join(", ")}</p>
                     {show&&!absorbed&&(
                       <div style={{display:"grid",gridTemplateColumns:"repeat(3,160px)",gap:"24px"}}>
                         {[
@@ -656,7 +656,7 @@ const BudgetTab = memo(({user}) => {
                           {l:hh.balance>=0?"Credit":"Sisa Bayar",v:fmt(Math.abs(hh.balance)),c:hh.balance>=0?T.settled:T.danger},
                         ].map(f=>(
                           <div key={f.l}>
-                            <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{f.l}</p>
+                            <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{f.l}</p>
                             <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:f.c,fontWeight:400}}>{f.v}</p>
                             {hh.gross>0&&f.l==="Dibayar"&&<div style={{marginTop:"6px",height:"1px",background:T.line}}><div style={{height:"1px",width:`${pct(hh.deposit,hh.gross)}%`,background:T.settled}}/></div>}
                           </div>
@@ -665,9 +665,9 @@ const BudgetTab = memo(({user}) => {
                     )}
                     {isCoord&&hh.id==="HH4"&&hh.subRows?.length>0&&(
                       <div style={{marginTop:"20px",borderTop:`1px solid ${T.line}`,paddingTop:"16px"}}>
-                        <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Sub-unit HH4</p>
+                        <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Sub-unit HH4</p>
                         {hh.subRows.map((s,i)=>(
-                          <div key={i} style={{display:"grid",gridTemplateColumns:"1fr 60px 120px 100px",gap:"16px",padding:"8px 0",borderBottom:`1px solid ${T.line}`,fontSize:"12px",alignItems:"center"}}>
+                          <div key={i} style={{display:"grid",gridTemplateColumns:"1fr 60px 120px 100px",gap:"16px",padding:"8px 0",borderBottom:`1px solid ${T.line}`,fontSize:"17px",alignItems:"center"}}>
                             <span style={{color:T.mid}}>{s.members}</span>
                             <span style={{color:T.muted,textAlign:"right"}}>{s.pax}px</span>
                             <span style={{color:T.settled,textAlign:"right"}}>{fmt(s.deposit)}</span>
@@ -676,10 +676,10 @@ const BudgetTab = memo(({user}) => {
                         ))}
                       </div>
                     )}
-                    {absorbed&&<p style={{fontSize:"11px",color:T.abs,fontStyle:"italic",marginTop:"4px"}}>{hh.note}</p>}
-                    {!show&&!absorbed&&<p style={{fontSize:"11px",color:T.muted,fontStyle:"italic",marginTop:"4px"}}>Detail hanya tersedia untuk household Anda.</p>}
+                    {absorbed&&<p style={{fontSize:"15px",color:T.abs,fontStyle:"italic",marginTop:"4px"}}>{hh.note}</p>}
+                    {!show&&!absorbed&&<p style={{fontSize:"15px",color:T.muted,fontStyle:"italic",marginTop:"4px"}}>Detail hanya tersedia untuk household Anda.</p>}
                   </div>
-                  <p style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:statusColor,fontWeight:500,marginTop:"4px",whiteSpace:"nowrap"}}>{statusLabel}</p>
+                  <p style={{fontSize:"17px",letterSpacing:"1.5px",textTransform:"uppercase",color:statusColor,fontWeight:500,marginTop:"4px",whiteSpace:"nowrap"}}>{statusLabel}</p>
                 </div>
               </div>
             );
@@ -689,15 +689,15 @@ const BudgetTab = memo(({user}) => {
 
       <div style={{marginBottom:"64px"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:"32px"}}>
-          <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted}}>Riwayat Transaksi</p>
-          {syncedAt&&<p style={{fontSize:"10px",color:T.ghost}}>Live · {syncedAt.toLocaleTimeString("id-ID")}</p>}
+          <p style={{fontSize:"17px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted}}>Riwayat Transaksi</p>
+          {syncedAt&&<p style={{fontSize:"17px",color:T.ghost}}>Live · {syncedAt.toLocaleTimeString("id-ID")}</p>}
         </div>
         {ledger.length===0
-          ? <p style={{fontSize:"12px",color:T.muted,fontStyle:"italic"}}>Memuat data transaksi…</p>
+          ? <p style={{fontSize:"17px",color:T.muted,fontStyle:"italic"}}>Memuat data transaksi…</p>
           : <>
             <div style={{display:"grid",gridTemplateColumns:"32px 100px 80px 1fr 120px 120px 130px",gap:"0 16px",padding:"0 0 10px",borderBottom:`2px solid ${T.line}`}}>
               {["No","Tanggal","Tipe","Keterangan","Deposit (+)","Refund (−)","Saldo"].map(h=>(
-                <p key={h} style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,textAlign:["Deposit (+)","Refund (−)","Saldo"].includes(h)?"right":"left"}}>{h}</p>
+                <p key={h} style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,textAlign:["Deposit (+)","Refund (−)","Saldo"].includes(h)?"right":"left"}}>{h}</p>
               ))}
             </div>
             {ledger.map((row,i)=>{
@@ -706,22 +706,22 @@ const BudgetTab = memo(({user}) => {
               const typeColor = isDeposit ? T.settled : isRefund ? T.warn : T.danger;
               return (
                 <div key={i} style={{display:"grid",gridTemplateColumns:"32px 100px 80px 1fr 120px 120px 130px",gap:"0 16px",padding:"13px 0",borderBottom:`1px solid ${T.line}`,alignItems:"center"}}>
-                  <p style={{fontSize:"11px",color:T.ghost}}>{row.no}</p>
-                  <p style={{fontSize:"11px",color:T.muted}}>{row.tanggal}</p>
-                  <p style={{fontSize:"10px",letterSpacing:"1px",textTransform:"uppercase",color:typeColor,fontWeight:500}}>{row.tipe}</p>
+                  <p style={{fontSize:"15px",color:T.ghost}}>{row.no}</p>
+                  <p style={{fontSize:"15px",color:T.muted}}>{row.tanggal}</p>
+                  <p style={{fontSize:"17px",letterSpacing:"1px",textTransform:"uppercase",color:typeColor,fontWeight:500}}>{row.tipe}</p>
                   <div>
-                    <p style={{fontSize:"12px",color:T.ink}}>{row.keterangan}</p>
-                    {row.note&&<p style={{fontSize:"10px",color:T.ghost,marginTop:"2px",fontStyle:"italic"}}>{row.note}</p>}
+                    <p style={{fontSize:"17px",color:T.ink}}>{row.keterangan}</p>
+                    {row.note&&<p style={{fontSize:"17px",color:T.ghost,marginTop:"2px",fontStyle:"italic"}}>{row.note}</p>}
                   </div>
-                  <p style={{fontSize:"12px",color:row.deposit>0?T.settled:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.deposit>0?`+${fmt(row.deposit)}`:"—"}</p>
-                  <p style={{fontSize:"12px",color:row.refund>0?T.warn:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.refund>0?`−${fmt(row.refund)}`:"—"}</p>
-                  <p style={{fontSize:"13px",color:T.ink,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif",fontWeight:i===ledger.length-1?500:400}}>{fmt(row.saldo)}</p>
+                  <p style={{fontSize:"17px",color:row.deposit>0?T.settled:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.deposit>0?`+${fmt(row.deposit)}`:"—"}</p>
+                  <p style={{fontSize:"17px",color:row.refund>0?T.warn:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.refund>0?`−${fmt(row.refund)}`:"—"}</p>
+                  <p style={{fontSize:"15px",color:T.ink,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif",fontWeight:i===ledger.length-1?500:400}}>{fmt(row.saldo)}</p>
                 </div>
               );
             })}
             <div style={{display:"grid",gridTemplateColumns:"32px 100px 80px 1fr 120px 120px 130px",gap:"0 16px",padding:"16px 0 0",borderTop:`2px solid ${T.lineD}`,marginTop:"4px"}}>
               <span/><span/><span/>
-              <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Saldo Kas</p>
+              <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Saldo Kas</p>
               <span/><span/>
               <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:T.forest,textAlign:"right",fontWeight:500}}>{ledger.length>0?fmt(ledger[ledger.length-1].saldo):"—"}</p>
             </div>
@@ -730,15 +730,15 @@ const BudgetTab = memo(({user}) => {
       </div>
 
       <div style={{borderTop:`1px solid ${T.line}`,paddingTop:"32px"}}>
-        <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>Catatan</p>
+        <p style={{fontSize:"17px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>Catatan</p>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px 40px"}}>
           {["Dana Bersama mencakup Transportasi, Aktivitas (Jeep, Nuvantara) & Merchandise.",
             "F&B seluruhnya disponsori per household — tidak termasuk di sini.",
             "Hotel & tiket Garuda diselesaikan mandiri per household.",
             "HH5 (Mariana, Olive, Nadia) diserap oleh HH2 + HH3 + HH4.",
-          ].map((n,i)=><p key={i} style={{fontSize:"11px",color:T.muted,lineHeight:"1.7"}}>— {n}</p>)}
+          ].map((n,i)=><p key={i} style={{fontSize:"15px",color:T.muted,lineHeight:"1.7"}}>— {n}</p>)}
         </div>
-        {isCoord&&<p style={{marginTop:"24px",fontSize:"11px"}}><a href="https://docs.google.com/spreadsheets/d/19vHRDue6attrpewZcFNBSq3g3UvxbalaWCog6v5x0d4/edit" target="_blank" rel="noopener noreferrer" style={{color:T.forest,textDecoration:"none",borderBottom:`1px solid ${T.forest}`}}>Buka Google Sheets Lusiana ↗</a></p>}
+        {isCoord&&<p style={{marginTop:"24px",fontSize:"15px"}}><a href="https://docs.google.com/spreadsheets/d/19vHRDue6attrpewZcFNBSq3g3UvxbalaWCog6v5x0d4/edit" target="_blank" rel="noopener noreferrer" style={{color:T.forest,textDecoration:"none",borderBottom:`1px solid ${T.forest}`}}>Buka Google Sheets Lusiana ↗</a></p>}
       </div>
     </div>
   );
@@ -753,38 +753,38 @@ const ItineraryTab = memo(() => {
   return (
     <div className="fade-up">
       <div style={{marginBottom:"56px"}}>
-        <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Jadwal Perjalanan</p>
+        <p style={{fontSize:"17px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Jadwal Perjalanan</p>
         <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Itinerary v18</h2>
-        <p style={{fontSize:"12px",color:T.muted,marginTop:"8px"}}>2–5 Juli 2026 · 23 Peserta · Hyatt Regency Yogyakarta</p>
+        <p style={{fontSize:"17px",color:T.muted,marginTop:"8px"}}>2–5 Juli 2026 · 23 Peserta · Hyatt Regency Yogyakarta</p>
       </div>
       <div style={{display:"flex",borderBottom:`1px solid ${T.line}`,marginBottom:"48px"}}>
         {ITINERARY.map(it=>(
           <button key={it.day} onClick={()=>setDay(it.day)} style={{background:"none",border:"none",padding:"0 32px 16px 0",cursor:"pointer",textAlign:"left"}}>
-            <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:day===it.day?T.forest:T.ghost,marginBottom:"4px"}}>{`Hari ${it.day}`}</p>
+            <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:day===it.day?T.forest:T.ghost,marginBottom:"4px"}}>{`Hari ${it.day}`}</p>
             <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:day===it.day?T.forest:T.muted,fontWeight:day===it.day?500:400}}>{it.label}</p>
             {day===it.day&&<div style={{height:"2px",background:T.forest,marginTop:"14px",marginRight:"32px"}}/>}
           </button>
         ))}
       </div>
       {d&&<>
-        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"14px",fontStyle:"italic",color:T.muted,marginBottom:"40px"}}>{d.date}</p>
+        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"17px",fontStyle:"italic",color:T.muted,marginBottom:"40px"}}>{d.date}</p>
         <div style={{borderTop:`1px solid ${T.line}`}}>
           {d.events.map((ev,i)=>(
             <div key={i} style={{display:"grid",gridTemplateColumns:"80px 20px 1fr",gap:"0 24px",borderBottom:`1px solid ${T.line}`,padding:"28px 0",alignItems:"start"}}>
               <div style={{textAlign:"right",paddingTop:"2px"}}>
-                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"16px",color:T.muted,fontStyle:"italic"}}>{ev.time}</p>
+                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"17px",color:T.muted,fontStyle:"italic"}}>{ev.time}</p>
               </div>
               <div style={{display:"flex",flexDirection:"column",alignItems:"center",paddingTop:"6px"}}>
-                <span style={{fontSize:"14px",color:TYPE_COLOR[ev.type]||T.ghost,lineHeight:1}}>{TYPE_ICON[ev.type]||"◇"}</span>
+                <span style={{fontSize:"17px",color:TYPE_COLOR[ev.type]||T.ghost,lineHeight:1}}>{TYPE_ICON[ev.type]||"◇"}</span>
                 {i<d.events.length-1&&<div style={{flex:1,width:"1px",background:T.line,marginTop:"8px",minHeight:"20px"}}/>}
               </div>
               <div>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"16px",flexWrap:"wrap"}}>
                   <h4 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",fontWeight:400,color:T.ink}}>{ev.act}</h4>
-                  {ev.sponsor&&<span style={{fontSize:"9px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold,whiteSpace:"nowrap",marginTop:"4px"}}>♡ {ev.sponsor}</span>}
+                  {ev.sponsor&&<span style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold,whiteSpace:"nowrap",marginTop:"4px"}}>♡ {ev.sponsor}</span>}
                 </div>
-                <p style={{fontSize:"11px",color:T.muted,marginTop:"4px"}}>{ev.loc}</p>
-                {ev.note&&<p style={{fontSize:"11px",color:T.muted,marginTop:"6px",fontStyle:"italic"}}>{ev.note}</p>}
+                <p style={{fontSize:"15px",color:T.muted,marginTop:"4px"}}>{ev.loc}</p>
+                {ev.note&&<p style={{fontSize:"15px",color:T.muted,marginTop:"6px",fontStyle:"italic"}}>{ev.note}</p>}
               </div>
             </div>
           ))}
@@ -804,12 +804,12 @@ const FoodOrderTab = memo(({user}) => {
   return (
     <div className="fade-up">
       <div style={{marginBottom:"56px"}}>
-        <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pemesanan Makanan</p>
+        <p style={{fontSize:"17px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pemesanan Makanan</p>
         <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Pre-Order F&B</h2>
-        <p style={{fontSize:"12px",color:T.muted,marginTop:"8px"}}>Pilih restoran untuk melihat menu dan melakukan pemesanan</p>
+        <p style={{fontSize:"17px",color:T.muted,marginTop:"8px"}}>Pilih restoran untuk melihat menu dan melakukan pemesanan</p>
       </div>
       <div style={{marginBottom:"56px"}}>
-        <p style={{fontSize:"9px",letterSpacing:"3px",textTransform:"uppercase",color:T.forest,marginBottom:"24px",fontWeight:500}}>Pre-Order Tersedia</p>
+        <p style={{fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:T.forest,marginBottom:"24px",fontWeight:500}}>Pre-Order Tersedia</p>
         <div style={{borderTop:`1px solid ${T.line}`}}>
           {RESTAURANTS.map(r=>(
             <div key={r.id} onClick={()=>{setActiveResto(r);setView("restaurant");}}
@@ -819,10 +819,10 @@ const FoodOrderTab = memo(({user}) => {
               <div>
                 <div style={{display:"flex",alignItems:"center",gap:"16px",marginBottom:"6px"}}>
                   <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{r.name}</h3>
-                  <span style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.settled,borderBottom:`1px solid ${T.settled}`}}>Terbuka</span>
+                  <span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.settled,borderBottom:`1px solid ${T.settled}`}}>Terbuka</span>
                 </div>
-                <p style={{fontSize:"11px",color:T.muted}}>{r.subtitle}</p>
-                <p style={{fontSize:"11px",color:T.muted,fontStyle:"italic",marginTop:"2px"}}>{r.note}</p>
+                <p style={{fontSize:"15px",color:T.muted}}>{r.subtitle}</p>
+                <p style={{fontSize:"15px",color:T.muted,fontStyle:"italic",marginTop:"2px"}}>{r.note}</p>
               </div>
               <span style={{fontSize:"18px",color:T.muted}}>→</span>
             </div>
@@ -830,19 +830,19 @@ const FoodOrderTab = memo(({user}) => {
         </div>
       </div>
       <div>
-        <p style={{fontSize:"9px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>F&B Lainnya</p>
+        <p style={{fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>F&B Lainnya</p>
         <div style={{borderTop:`1px solid ${T.line}`}}>
           {UPCOMING_FB.map(r=>(
             <div key={r.name} style={{display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",borderBottom:`1px solid ${T.line}`,padding:"24px 0"}}>
               <div>
                 <h4 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"17px",fontWeight:400,color:T.muted,marginBottom:"4px"}}>{r.name}</h4>
-                <p style={{fontSize:"11px",color:T.ghost}}>{r.day} · {r.meal} · Sponsor: {r.sponsor}</p>
+                <p style={{fontSize:"15px",color:T.ghost}}>{r.day} · {r.meal} · Sponsor: {r.sponsor}</p>
               </div>
-              <span style={{fontSize:"9px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.ghost}}>Belum Dibuka</span>
+              <span style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.ghost}}>Belum Dibuka</span>
             </div>
           ))}
         </div>
-        <p style={{fontSize:"11px",color:T.muted,marginTop:"20px",fontStyle:"italic"}}>{isCoord?"Menu akan dibuka oleh koordinator masing-masing.":"Koordinator akan membuka pre-order sebelum keberangkatan."}</p>
+        <p style={{fontSize:"15px",color:T.muted,marginTop:"20px",fontStyle:"italic"}}>{isCoord?"Menu akan dibuka oleh koordinator masing-masing.":"Koordinator akan membuka pre-order sebelum keberangkatan."}</p>
       </div>
     </div>
   );
@@ -944,55 +944,55 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
 
   if(loading) return (
     <div style={{textAlign:"center",padding:"80px 0",color:T.muted}}>
-      <p style={{fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase"}}>Memuat data dari Firebase…</p>
+      <p style={{fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase"}}>Memuat data dari Firebase…</p>
     </div>
   );
 
   return (
     <div className="fade-up">
-      <button onClick={onBack} style={{background:"none",border:"none",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,padding:"0 0 32px",display:"flex",alignItems:"center",gap:"8px"}}>← Kembali</button>
+      <button onClick={onBack} style={{background:"none",border:"none",cursor:"pointer",fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,padding:"0 0 32px",display:"flex",alignItems:"center",gap:"8px"}}>← Kembali</button>
 
       <div style={{marginBottom:"48px"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:"16px",marginBottom:"8px"}}>
           <div>
             <div style={{display:"flex",alignItems:"center",gap:"16px",marginBottom:"6px"}}>
               <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"32px",fontWeight:400,color:T.ink}}>{resto.name}</h2>
-              <span style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",padding:"3px 8px",border:`1px solid ${locked?"#c88":T.settled}`,color:locked?T.danger:T.settled}}>{locked?"Ditutup":"Terbuka"}</span>
+              <span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",padding:"3px 8px",border:`1px solid ${locked?"#c88":T.settled}`,color:locked?T.danger:T.settled}}>{locked?"Ditutup":"Terbuka"}</span>
             </div>
-            <p style={{fontSize:"11px",color:T.muted}}>{resto.subtitle} · {resto.note}</p>
-            {resto.deadline&&<p style={{fontSize:"10px",color:T.warn,marginTop:"4px",letterSpacing:"0.5px"}}>Deadline pre-order: {resto.deadline}</p>}
-            {lastSync&&<p style={{fontSize:"10px",color:T.ghost,marginTop:"4px"}}>Tersimpan: {lastSync.toLocaleTimeString("id-ID")} · Auto-refresh 30 dtk</p>}
+            <p style={{fontSize:"15px",color:T.muted}}>{resto.subtitle} · {resto.note}</p>
+            {resto.deadline&&<p style={{fontSize:"17px",color:T.warn,marginTop:"4px",letterSpacing:"0.5px"}}>Deadline pre-order: {resto.deadline}</p>}
+            {lastSync&&<p style={{fontSize:"17px",color:T.ghost,marginTop:"4px"}}>Tersimpan: {lastSync.toLocaleTimeString("id-ID")} · Auto-refresh 30 dtk</p>}
           </div>
           <div style={{display:"flex",gap:"12px",alignItems:"center",flexWrap:"wrap"}}>
-            {isCoord&&<button onClick={toggleLock} style={{background:"none",border:`1px solid ${T.lineD}`,padding:"8px 18px",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:locked?T.settled:T.danger}}>{locked?"Buka Order":"Kunci Order"}</button>}
-            {isCoord&&<button onClick={exportCSV} style={{background:T.forest,border:"none",padding:"8px 18px",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:"white"}}>Export CSV</button>}
-            <button onClick={refresh} style={{background:"none",border:`1px solid ${T.line}`,padding:"8px 18px",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>↻ Refresh</button>
+            {isCoord&&<button onClick={toggleLock} style={{background:"none",border:`1px solid ${T.lineD}`,padding:"8px 18px",cursor:"pointer",fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:locked?T.settled:T.danger}}>{locked?"Buka Order":"Kunci Order"}</button>}
+            {isCoord&&<button onClick={exportCSV} style={{background:T.forest,border:"none",padding:"8px 18px",cursor:"pointer",fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:"white"}}>Export CSV</button>}
+            <button onClick={refresh} style={{background:"none",border:`1px solid ${T.line}`,padding:"8px 18px",cursor:"pointer",fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>↻ Refresh</button>
           </div>
         </div>
-        {syncError&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"10px 16px",marginTop:"8px"}}><p style={{fontSize:"11px",color:T.danger}}>{syncError}</p></div>}
+        {syncError&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"10px 16px",marginTop:"8px"}}><p style={{fontSize:"15px",color:T.danger}}>{syncError}</p></div>}
       </div>
 
       <div style={{display:"flex",borderBottom:`1px solid ${T.line}`,marginBottom:"40px"}}>
         {[{id:"order",label:"Order Saya"},{id:"recap",label:`Rekap Semua — ${ordered}/${total}`}].map(t=>(
-          <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",padding:"0 32px 16px 0",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:tab===t.id?500:300,color:tab===t.id?T.forest:T.muted,borderBottom:tab===t.id?`2px solid ${T.forest}`:"2px solid transparent",marginBottom:"-1px",transition:"all 0.2s"}}>{t.label}</button>
+          <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",padding:"0 32px 16px 0",cursor:"pointer",fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:tab===t.id?500:300,color:tab===t.id?T.forest:T.muted,borderBottom:tab===t.id?`2px solid ${T.forest}`:"2px solid transparent",marginBottom:"-1px",transition:"all 0.2s"}}>{t.label}</button>
         ))}
       </div>
 
       {tab==="order"&&<div>
-        {locked&&!isCoord&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"16px 20px",marginBottom:"24px"}}><p style={{fontSize:"11px",color:T.danger}}>Pre-order telah ditutup. Hubungi koordinator untuk perubahan.</p></div>}
+        {locked&&!isCoord&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"16px 20px",marginBottom:"24px"}}><p style={{fontSize:"15px",color:T.danger}}>Pre-order telah ditutup. Hubungi koordinator untuk perubahan.</p></div>}
         {submitted&&<div style={{display:"flex",justifyContent:"space-between",alignItems:"center",background:T.settledBg,padding:"14px 20px",marginBottom:"24px"}}>
-          <p style={{fontSize:"11px",color:T.settled}}>✓ Order Anda sudah terkirim ke Firebase.</p>
-          {!locked&&<button onClick={()=>{setSubmitted(false);setTab("order");}} style={{background:"none",border:`1px solid ${T.settled}`,padding:"5px 14px",cursor:"pointer",fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.settled}}>Edit</button>}
+          <p style={{fontSize:"15px",color:T.settled}}>✓ Order Anda sudah terkirim ke Firebase.</p>
+          {!locked&&<button onClick={()=>{setSubmitted(false);setTab("order");}} style={{background:"none",border:`1px solid ${T.settled}`,padding:"5px 14px",cursor:"pointer",fontSize:"17px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.settled}}>Edit</button>}
         </div>}
 
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"28px",paddingBottom:"16px",borderBottom:`1px solid ${T.line}`}}>
-          <p style={{fontSize:"11px",color:T.muted}}>Pemesanan sebagai <span style={{color:T.ink,fontWeight:500}}>{user}</span></p>
-          {cartCount>0&&<span style={{fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,fontWeight:500}}>{cartCount} item dipilih</span>}
+          <p style={{fontSize:"15px",color:T.muted}}>Pemesanan sebagai <span style={{color:T.ink,fontWeight:500}}>{user}</span></p>
+          {cartCount>0&&<span style={{fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,fontWeight:500}}>{cartCount} item dipilih</span>}
         </div>
 
         <div style={{display:"flex",flexWrap:"wrap",borderBottom:`1px solid ${T.line}`,marginBottom:"32px"}}>
           {resto.categories.map(c=>(
-            <button key={c.id} onClick={()=>setCat(c.id)} style={{background:"none",border:"none",padding:"10px 20px 10px 0",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:cat===c.id?T.ink:T.muted,fontWeight:cat===c.id?500:300,borderBottom:cat===c.id?`2px solid ${T.ink}`:"2px solid transparent",marginBottom:"-1px",transition:"all 0.2s"}}>{c.name}</button>
+            <button key={c.id} onClick={()=>setCat(c.id)} style={{background:"none",border:"none",padding:"10px 20px 10px 0",cursor:"pointer",fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:cat===c.id?T.ink:T.muted,fontWeight:cat===c.id?500:300,borderBottom:cat===c.id?`2px solid ${T.ink}`:"2px solid transparent",marginBottom:"-1px",transition:"all 0.2s"}}>{c.name}</button>
           ))}
         </div>
 
@@ -1004,12 +1004,12 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
               return (
                 <div key={item.id} style={{display:"grid",gridTemplateColumns:"1fr auto",gap:"24px",alignItems:"center",borderBottom:`1px solid ${T.line}`,padding:"20px",margin:"0 -20px",background:isDisabled?T.stone:inCart?T.cream:"transparent",opacity:isDisabled?0.45:1,transition:"background 0.2s"}}>
                   <div>
-                    <p style={{fontSize:"14px",color:isDisabled?T.muted:T.ink,fontWeight:inCart?500:300,marginBottom:"2px"}}>{item.name}</p>
-                    {isDisabled&&<p style={{fontSize:"10px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — IDR ${item.price}k melebihi batas IDR 200k`:"Harga pasar — hubungi koordinator"}</p>}
-                    {item.desc&&<p style={{fontSize:"11px",color:isDisabled?T.ghost:T.muted,fontStyle:"italic"}}>{item.desc}</p>}
+                    <p style={{fontSize:"17px",color:isDisabled?T.muted:T.ink,fontWeight:inCart?500:300,marginBottom:"2px"}}>{item.name}</p>
+                    {isDisabled&&<p style={{fontSize:"17px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — IDR ${item.price}k melebihi batas IDR 200k`:"Harga pasar — hubungi koordinator"}</p>}
+                    {item.desc&&<p style={{fontSize:"15px",color:isDisabled?T.ghost:T.muted,fontStyle:"italic"}}>{item.desc}</p>}
                     {inCart&&!isDisabled&&<input value={notes[item.id]||inCart.notes||""} onChange={e=>{setNotes(n=>({...n,[item.id]:e.target.value}));setNote(item.id,e.target.value);}}
                       placeholder="Catatan khusus (opsional)"
-                      style={{marginTop:"10px",width:"100%",maxWidth:"360px",padding:"8px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"12px",color:T.mid,outline:"none"}}/>}
+                      style={{marginTop:"10px",width:"100%",maxWidth:"360px",padding:"8px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"17px",color:T.mid,outline:"none"}}/>}
                   </div>
                   <div style={{display:"flex",alignItems:"center",gap:"16px"}}>
                     {inCart&&!isDisabled&&<>
@@ -1017,8 +1017,8 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                       <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:T.ink,minWidth:"24px",textAlign:"center"}}>{inCart.qty}</span>
                     </>}
                     {isDisabled
-                      ? <span style={{fontSize:"11px",color:T.ghost,fontStyle:"italic",padding:"4px 10px",minWidth:"32px",textAlign:"center"}}>N/A</span>
-                      : <button onClick={()=>add(item)} disabled={locked&&!isCoord} style={{background:"none",border:`1px solid ${locked&&!isCoord?T.ghost:T.ink}`,cursor:locked&&!isCoord?"not-allowed":"pointer",fontSize:"16px",color:locked&&!isCoord?T.ghost:T.ink,fontFamily:"serif",padding:"4px 10px",transition:"all 0.2s"}}>+</button>
+                      ? <span style={{fontSize:"15px",color:T.ghost,fontStyle:"italic",padding:"4px 10px",minWidth:"32px",textAlign:"center"}}>N/A</span>
+                      : <button onClick={()=>add(item)} disabled={locked&&!isCoord} style={{background:"none",border:`1px solid ${locked&&!isCoord?T.ghost:T.ink}`,cursor:locked&&!isCoord?"not-allowed":"pointer",fontSize:"17px",color:locked&&!isCoord?T.ghost:T.ink,fontFamily:"serif",padding:"4px 10px",transition:"all 0.2s"}}>+</button>
                     }
                   </div>
                 </div>
@@ -1028,33 +1028,33 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
         ))}
 
         {cartCount>0&&<div style={{marginTop:"40px",padding:"32px",background:T.cream,borderTop:`2px solid ${T.forest}`}}>
-          <p style={{fontSize:"9px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"20px"}}>Ringkasan Pesanan</p>
+          <p style={{fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"20px"}}>Ringkasan Pesanan</p>
           {Object.entries(cart).map(([id,item])=>(
             <div key={id} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:`1px solid ${T.line}`}}>
-              <span style={{fontSize:"13px",color:T.ink}}>{item.name}{item.notes&&<span style={{color:T.muted,fontStyle:"italic"}}> · {item.notes}</span>}</span>
-              <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"16px",color:T.ink}}>×{item.qty}</span>
+              <span style={{fontSize:"15px",color:T.ink}}>{item.name}{item.notes&&<span style={{color:T.muted,fontStyle:"italic"}}> · {item.notes}</span>}</span>
+              <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"17px",color:T.ink}}>×{item.qty}</span>
             </div>
           ))}
-          <button onClick={submit} disabled={saving||locked} style={{marginTop:"24px",width:"100%",padding:"14px",background:locked?T.muted:T.forest,color:"white",border:"none",cursor:locked?"not-allowed":"pointer",fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500,transition:"background 0.2s"}}>
+          <button onClick={submit} disabled={saving||locked} style={{marginTop:"24px",width:"100%",padding:"14px",background:locked?T.muted:T.forest,color:"white",border:"none",cursor:locked?"not-allowed":"pointer",fontSize:"17px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500,transition:"background 0.2s"}}>
             {saving?"Menyimpan ke Firebase…":locked?"Pemesanan Ditutup":"Kirim Pre-Order"}
           </button>
         </div>}
       </div>}
 
       {tab==="recap"&&<div>
-        {!showRecap&&<p style={{fontSize:"12px",color:T.muted,fontStyle:"italic",padding:"20px 0"}}>Submit order Anda terlebih dahulu untuk melihat rekap semua peserta.</p>}
+        {!showRecap&&<p style={{fontSize:"17px",color:T.muted,fontStyle:"italic",padding:"20px 0"}}>Submit order Anda terlebih dahulu untuk melihat rekap semua peserta.</p>}
         {showRecap&&<>
           <div style={{marginBottom:"48px"}}>
-            <p style={{fontSize:"9px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Rekap Per Menu</p>
+            <p style={{fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Rekap Per Menu</p>
             {(()=>{
               const tally={};
               Object.values(allOrders).forEach(o=>(o.items||[]).forEach(i=>{tally[i.name]=(tally[i.name]||0)+Number(i.qty);}));
               const sorted=Object.entries(tally).sort((a,b)=>b[1]-a[1]);
-              if(!sorted.length) return <p style={{fontSize:"12px",color:T.muted,fontStyle:"italic"}}>Belum ada pesanan.</p>;
+              if(!sorted.length) return <p style={{fontSize:"17px",color:T.muted,fontStyle:"italic"}}>Belum ada pesanan.</p>;
               return <div style={{borderTop:`1px solid ${T.line}`}}>
                 {sorted.map(([name,qty])=>(
                   <div key={name} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 0",borderBottom:`1px solid ${T.line}`}}>
-                    <span style={{fontSize:"13px",color:T.ink}}>{name}</span>
+                    <span style={{fontSize:"15px",color:T.ink}}>{name}</span>
                     <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest}}>{qty}×</span>
                   </div>
                 ))}
@@ -1062,7 +1062,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
             })()}
           </div>
           <div>
-            <p style={{fontSize:"9px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Status Per Peserta — {ordered}/{total}</p>
+            <p style={{fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Status Per Peserta — {ordered}/{total}</p>
             <div style={{borderTop:`1px solid ${T.line}`}}>
               {resto.participants.map(p=>{
                 const o=allOrders[p.name];
@@ -1071,15 +1071,15 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                   <div key={p.name} style={{display:"grid",gridTemplateColumns:"1fr auto",gap:"16px",alignItems:"start",borderBottom:`1px solid ${T.line}`,padding:"16px 0",background:isMe?T.cream:"transparent"}}>
                     <div>
                       <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"4px",flexWrap:"wrap"}}>
-                        <span style={{fontSize:"13px",color:T.ink,fontWeight:o?500:300}}>{p.name}</span>
-                        {isMe&&<span style={{fontSize:"9px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>Anda</span>}
-                        <span style={{fontSize:"10px",color:T.muted}}>({p.hh})</span>
+                        <span style={{fontSize:"15px",color:T.ink,fontWeight:o?500:300}}>{p.name}</span>
+                        {isMe&&<span style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>Anda</span>}
+                        <span style={{fontSize:"17px",color:T.muted}}>({p.hh})</span>
                       </div>
                       {o&&<div style={{display:"flex",flexWrap:"wrap",gap:"8px"}}>
-                        {(o.items||[]).map((it,i)=><span key={i} style={{fontSize:"10px",color:T.muted}}>• {it.name} ×{it.qty}{it.notes&&` (${it.notes})`}</span>)}
+                        {(o.items||[]).map((it,i)=><span key={i} style={{fontSize:"17px",color:T.muted}}>• {it.name} ×{it.qty}{it.notes&&` (${it.notes})`}</span>)}
                       </div>}
                     </div>
-                    <p style={{fontSize:"9px",letterSpacing:"1.5px",textTransform:"uppercase",color:o?T.settled:T.ghost,marginTop:"3px",whiteSpace:"nowrap"}}>{o?"✓ Terkirim":"Belum Order"}</p>
+                    <p style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:o?T.settled:T.ghost,marginTop:"3px",whiteSpace:"nowrap"}}>{o?"✓ Terkirim":"Belum Order"}</p>
                   </div>
                 );
               })}
@@ -1099,12 +1099,12 @@ class ErrorBoundary extends Component {
       return (
         <div style={{minHeight:"100vh",background:"#f3ede4",display:"flex",alignItems:"center",justifyContent:"center",padding:"40px 24px"}}>
           <div style={{maxWidth:"600px",width:"100%"}}>
-            <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:"#9c8e82",marginBottom:"16px"}}>Terjadi Kesalahan</p>
+            <p style={{fontSize:"17px",letterSpacing:"3px",textTransform:"uppercase",color:"#9c8e82",marginBottom:"16px"}}>Terjadi Kesalahan</p>
             <h2 style={{fontFamily:"Georgia,serif",fontSize:"24px",color:"#1a1512",marginBottom:"24px"}}>App crashed — detail untuk koordinator:</h2>
-            <pre style={{background:"#fff",padding:"20px",fontSize:"11px",color:"#7a2e20",overflowX:"auto",border:"1px solid #e0d5c8",whiteSpace:"pre-wrap",wordBreak:"break-all"}}>
+            <pre style={{background:"#fff",padding:"20px",fontSize:"15px",color:"#7a2e20",overflowX:"auto",border:"1px solid #e0d5c8",whiteSpace:"pre-wrap",wordBreak:"break-all"}}>
               {this.state.error.toString()}{"\n\n"}{this.state.error.stack}
             </pre>
-            <button onClick={()=>window.location.reload()} style={{marginTop:"24px",background:"none",border:"1px solid #243d30",padding:"10px 24px",cursor:"pointer",fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:"#243d30"}}>Muat Ulang</button>
+            <button onClick={()=>window.location.reload()} style={{marginTop:"24px",background:"none",border:"1px solid #243d30",padding:"10px 24px",cursor:"pointer",fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:"#243d30"}}>Muat Ulang</button>
           </div>
         </div>
       );
