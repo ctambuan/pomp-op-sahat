@@ -577,6 +577,43 @@ const RESTAURANTS = [
       ]},
     ]
   },
+,
+  // ─── PUTU RADJA BOLU PISANG ───────────────────────────────────────────────────
+  {
+    id:"putu-radja",name:"Putu Radja Bolu Pisang",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
+    note:"Putu Radja, Yogyakarta · 23 pax · Dikoordinir, bayar langsung 5 Juli",
+    deadline:"30 Juni 2026",
+    isTakeaway:true,
+    participants: ALL_PAX,
+    categories:[
+      {id:"pr-whole",name:"Bolu Whole",items:[
+        {id:"pr-wh-ori",    name:"Bolu Pisang Original",        desc:"Bolu Whole · 1 loaf",  price:99000},
+        {id:"pr-wh-kelapa", name:"Bolu Pisang Kelapa",          desc:"Bolu Whole · 1 loaf",  price:110000},
+        {id:"pr-wh-cok",    name:"Bolu Pisang Coklat",          desc:"Bolu Whole · 1 loaf",  price:130000},
+        {id:"pr-wh-keju",   name:"Bolu Pisang Keju",            desc:"Bolu Whole · 1 loaf",  price:130000},
+        {id:"pr-wh-straw",  name:"Bolu Pisang Strawberry",      desc:"Bolu Whole · 1 loaf",  price:130000},
+        {id:"pr-wh-cin",    name:"Bolu Pisang Cinnamon",        desc:"Bolu Whole · 1 loaf",  price:145000},
+        {id:"pr-wh-pis",    name:"Bolu Pisang Pistachio Kunafa",desc:"Bolu Whole · 1 loaf",  price:165000},
+      ]},
+      {id:"pr-slice",name:"Bolu Slice",items:[
+        {id:"pr-sl-ori",    name:"Bolu Pisang Original",        desc:"Bolu Slice · per slice", price:20000},
+        {id:"pr-sl-kelapa", name:"Bolu Pisang Kelapa",          desc:"Bolu Slice · per slice", price:20000},
+        {id:"pr-sl-keju",   name:"Bolu Pisang Keju",            desc:"Bolu Slice · per slice", price:25000},
+        {id:"pr-sl-straw",  name:"Bolu Pisang Strawberry",      desc:"Bolu Slice · per slice", price:25000},
+        {id:"pr-sl-cok",    name:"Bolu Pisang Coklat",          desc:"Bolu Slice · per slice", price:27000},
+        {id:"pr-sl-cin",    name:"Bolu Pisang Cinnamon",        desc:"Bolu Slice · per slice", price:27000},
+        {id:"pr-sl-pis",    name:"Bolu Pisang Pistachio Kunafa",desc:"Bolu Slice · per slice", price:30000},
+      ]},
+      {id:"pr-addon",name:"Pilihan Butter Add-Ons — IDR 10.000 / spoon",items:[
+        {id:"pr-ad-cheese",   name:"Butter Cheese",     desc:"Add-on · 1 spoon", price:10000},
+        {id:"pr-ad-choco",    name:"Butter Chocolate",  desc:"Add-on · 1 spoon", price:10000},
+        {id:"pr-ad-cin",      name:"Butter Cinnamon",   desc:"Add-on · 1 spoon", price:10000},
+        {id:"pr-ad-straw",    name:"Butter Strawberry", desc:"Add-on · 1 spoon", price:10000},
+        {id:"pr-ad-coconut",  name:"Butter Coconut",    desc:"Add-on · 1 spoon", price:10000},
+        {id:"pr-ad-pistachio",name:"Butter Pistachio",  desc:"Add-on · 1 spoon", price:10000},
+      ]},
+    ]
+  },
 ];
 
 // ── PATCH 1: Tentrem Summer Palace removed from UPCOMING_FB ─────────────────
