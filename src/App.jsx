@@ -269,11 +269,8 @@ const RESTAURANTS = [
   },
   {
     id:"ayom",name:"Ayom Jogja",subtitle:"D2 · Makan Malam · 3 Juli 2026, 17.00",
-    note:"Restoran tepi sawah, Sukunan Banyuraden Gamping Sleman · 23 pax · Sponsor: HH3 Monang",
-    sponsor:"Monang Panjaitan",
-    sponsorOnly:true,
-    taxRate:0,
-    deadline:"18 Juni 2026",
+    note:"Restoran tepi sawah, Sukunan Banyuraden Gamping Sleman · 23 pax · Sponsor: HH3 Monang · Harga sudah termasuk pajak & service",
+    deadline:"25 Juni 2026",
     participants: ALL_PAX,
     categories:[
       {id:"pembuka",name:"Pembuka",items:[
@@ -432,7 +429,7 @@ const RESTAURANTS = [
     id:"summer-palace",name:"Summer Palace",subtitle:"D4 · Makan Siang · 5 Juli 2026, 12.00",
     note:"Hotel Tentrem, Jl. A.M. Sangaji No.72A, Yogyakarta · 23 pax · Sponsor: HH1 Agustianto",
     taxRate:0.21,
-    deadline:"18 Juni 2026",
+    deadline:"25 Juni 2026",
     participants: ALL_PAX,
     categories:[
       {id:"sp-appetizer",name:"Appetizer",items:[
@@ -550,7 +547,7 @@ const RESTAURANTS = [
   {
     id:"djiwana",name:"Djiwana Cafe & Eatery",subtitle:"D3 · Makan Siang · 4 Juli 2026, 12.00",
     note:"Djiwana Cafe & Eatery · 23 pax · Sponsor: HH2 Agustinus · Harga sudah termasuk pajak & service",
-    deadline:"20 Juni 2026",
+    deadline:"25 Juni 2026",
     participants: ALL_PAX,
     categories:[
       {id:"dj-croissant",name:"Croissants",items:[
@@ -753,7 +750,7 @@ const RESTAURANTS = [
   {
     id:"kemangi",name:"Kemangi Bistro",subtitle:"D1 Welcome Dinner (2 Juli 19.00) & D2 Breakfast (3 Juli 07.00)",
     note:"Kemangi Bistro, Hyatt Regency \u00b7 23 pax \u00b7 Sponsor: HH4 Gerard \u00b7 Harga belum termasuk 21% pajak & service",
-    deadline:"18 Juni 2026",
+    deadline:"25 Juni 2026",
     taxRate:0.21,
     participants: ALL_PAX,
     categories:[
@@ -923,7 +920,7 @@ const RESTAURANTS = [
   {
     id:"bakpia",name:"Bakpia Pathok 25",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
     note:"Bakpia Pathok 25, Yogyakarta · 23 pax · Dikoordinir, bayar langsung 5 Juli",
-    deadline:"30 Juni 2026",
+    deadline:"25 Juni 2026",
     isTakeaway:true,
     participants: ALL_PAX,
     categories:[
@@ -953,7 +950,7 @@ const RESTAURANTS = [
   {
     id:"juwara",name:"Juwara Satoe",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
     note:"Bakpia Juwara Satoe, Yogyakarta · 23 pax · Dikoordinir, bayar langsung 5 Juli",
-    deadline:"30 Juni 2026",
+    deadline:"25 Juni 2026",
     isTakeaway:true,
     participants: ALL_PAX,
     categories:[
@@ -1020,7 +1017,7 @@ const RESTAURANTS = [
   {
     id:"wahyu-austin",name:"Wahyu Austin Pastry",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
     note:"Roll Cake 4×30 cm · 23 pax · Dikoordinir, bayar langsung 5 Juli",
-    deadline:"30 Juni 2026",
+    deadline:"25 Juni 2026",
     isTakeaway:true,
     participants: ALL_PAX,
     categories:[
@@ -1040,7 +1037,7 @@ const RESTAURANTS = [
   {
     id:"putu-radja",name:"Putu Radja Bolu Pisang",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
     note:"Putu Radja, Yogyakarta · 23 pax · Dikoordinir, bayar langsung 5 Juli",
-    deadline:"30 Juni 2026",
+    deadline:"25 Juni 2026",
     isTakeaway:true,
     participants: ALL_PAX,
     categories:[
@@ -1831,7 +1828,6 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
             <p style={{fontSize:"11px",color:T.muted}}>{resto.subtitle} · {resto.note}</p>
             {resto.deadline&&<p style={{fontSize:"10px",color:T.warn,marginTop:"4px",letterSpacing:"0.5px"}}>Deadline pre-order: {resto.deadline}</p>}
             {resto.taxRate&&<p style={{fontSize:"10px",color:T.muted,marginTop:"4px"}}>Harga nett · +11% pajak pemerintah & +10% service charge ditambahkan saat checkout</p>}
-            {resto.sponsorOnly&&<p style={{fontSize:"10px",color:T.forest,marginTop:"4px",letterSpacing:"0.3px"}}>✦ Makan malam ini disponsori · Harga menu tidak ditampilkan · {isCoord?"Biaya terlihat di Rekap":""}</p>}
             {lastSync&&<p style={{fontSize:"10px",color:T.ghost,marginTop:"4px"}}>Tersimpan: {lastSync.toLocaleTimeString("id-ID")} · Auto-refresh 30 dtk</p>}
           </div>
           <div style={{display:"flex",gap:"12px",alignItems:"center",flexWrap:"wrap"}}>
@@ -1903,7 +1899,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                   <div>
                     <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"2px",flexWrap:"wrap"}}>
                       <p style={{fontSize:"14px",color:isDisabled?T.muted:T.ink,fontWeight:inCart?500:300,margin:0}}>{item.name}</p>
-                      {hasPrice&&!resto.sponsorOnly&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.gold,border:`1px solid ${T.goldL}`,padding:"1px 7px",fontWeight:500,whiteSpace:"nowrap"}}>IDR {displayPrice.toLocaleString("id-ID")}</span>}
+                      {hasPrice&&resto.id!=="solaria"&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.gold,border:`1px solid ${T.goldL}`,padding:"1px 7px",fontWeight:500,whiteSpace:"nowrap"}}>IDR {displayPrice.toLocaleString("id-ID")}</span>}
                       {!hasPrice&&priceRange&&!isDisabled&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.muted,border:`1px solid ${T.line}`,padding:"1px 7px",whiteSpace:"nowrap"}}>{priceRange}</span>}
                     </div>
                     {isDisabled&&<p style={{fontSize:"10px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — IDR ${item.price}k melebihi batas IDR 200k`:"Harga pasar — hubungi koordinator"}</p>}
@@ -1964,10 +1960,10 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                 <div key={id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${T.line}`,gap:"12px"}}>
                   <span style={{fontSize:"13px",color:T.ink,flex:1}}>{item.name}{item.config&&<span style={{color:T.gold}}> · {item.config}</span>}{item.notes&&<span style={{color:T.muted,fontStyle:"italic"}}> · {item.notes}</span>}</span>
                   <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"15px",color:T.ink,minWidth:"32px",textAlign:"right"}}>×{item.qty}</span>
-                  {hasPrices&&item.price&&!resto.sponsorOnly&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"14px",color:T.settled,minWidth:"120px",textAlign:"right"}}>IDR {(item.price*item.qty).toLocaleString("id-ID")}</span>}
+                  {hasPrices&&item.price&&resto.id!=="solaria"&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"14px",color:T.settled,minWidth:"120px",textAlign:"right"}}>IDR {(item.price*item.qty).toLocaleString("id-ID")}</span>}
                 </div>
               ))}
-              {hasPrices&&nettTotal>0&&!resto.sponsorOnly&&<>
+              {hasPrices&&nettTotal>0&&resto.id!=="solaria"&&<>
                 {resto.taxRate&&<>
                   <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0 4px",borderTop:`1px solid ${T.line}`,marginTop:"8px"}}>
                     <span style={{fontSize:"11px",color:T.muted}}>Subtotal (nett)</span>
@@ -1979,21 +1975,14 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                   </div>
                 </>}
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 0 0",borderTop:`2px solid ${T.lineD}`}}>
-                  <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Total Bayar</span>
+                  <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Perkiraan Harga (Sponsor)</span>
                   <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.forest,fontWeight:500}}>IDR {grandTotal.toLocaleString("id-ID")}</span>
                 </div>
               </>}
-              {hasPrices&&nettTotal>0&&resto.sponsorOnly&&isCoord&&(
-                <div style={{marginTop:"16px",padding:"14px 16px",background:"#f0f4ef",borderLeft:`3px solid ${T.forest}`}}>
-                  <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,marginBottom:"6px",fontWeight:500}}>Estimasi Biaya Sponsor · Khusus Koordinator</p>
-                  <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest,fontWeight:500}}>IDR {grandTotal.toLocaleString("id-ID")}</p>
-                  <p style={{fontSize:"9px",color:T.muted,marginTop:"4px"}}>Harga sudah termasuk pajak & service · Tidak ditampilkan ke peserta</p>
-                </div>
-              )}
             </>;
           })()}
           <button onClick={submit} disabled={saving||locked} style={{marginTop:"24px",width:"100%",padding:"14px",background:locked?T.muted:T.forest,color:"white",border:"none",cursor:locked?"not-allowed":"pointer",fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500,transition:"background 0.2s"}}>
-            {saving?"Menyimpan ke Firebase…":locked?"Pemesanan Ditutup":"Kirim Pre-Order"}
+            {saving?"Menyimpan ke Firebase…":locked?"Pemesanan Ditutup":"Konfirmasi Pesanan Saya"}
           </button>
         </div>}
       </div>}
@@ -2008,27 +1997,18 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
               const totalBoxes = Object.values(allOrders).reduce((s,o)=>s+(o.items||[]).reduce((ss,i)=>ss+Number(i.qty),0),0);
               if(!grandAllTotal&&!totalBoxes) return null;
               return (
-                <div style={{marginBottom:"32px"}}>
-                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"1px",background:T.line}}>
+                <div style={{display:"grid",gridTemplateColumns:resto.id!=="solaria"?"1fr 1fr":"1fr",gap:"1px",background:T.line,marginBottom:"32px"}}>
                     <div style={{background:T.cream,padding:"20px 24px"}}>
                       <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Total Item Dipesan</p>
                       <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"28px",color:T.ink}}>{totalBoxes} <span style={{fontSize:"13px",color:T.muted}}>item</span></p>
                     </div>
-                    {!resto.sponsorOnly&&(
+                    {resto.id!=="solaria"&&grandAllTotal>0&&(
                       <div style={{background:T.cream,padding:"20px 24px"}}>
-                        <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Total Tagihan Semua</p>
+                        <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Perkiraan Total (Sponsor)</p>
                         <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest}}>IDR {grandAllTotal.toLocaleString("id-ID")}</p>
                       </div>
                     )}
                   </div>
-                  {resto.sponsorOnly&&isCoord&&grandAllTotal>0&&(
-                    <div style={{marginTop:"1px",background:"#f0f4ef",padding:"20px 24px",borderLeft:`3px solid ${T.forest}`}}>
-                      <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,marginBottom:"6px",fontWeight:500}}>Estimasi Biaya Sponsor — {resto.sponsor||"Sponsor"} · Khusus Koordinator</p>
-                      <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"28px",color:T.forest,fontWeight:500}}>IDR {grandAllTotal.toLocaleString("id-ID")}</p>
-                      <p style={{fontSize:"9px",color:T.muted,marginTop:"6px"}}>Harga sudah termasuk pajak & service charge · Tidak ditampilkan ke peserta · Gunakan sebagai referensi saat eksekusi order</p>
-                    </div>
-                  )}
-                </div>
               );
             })()}
             {(()=>{
