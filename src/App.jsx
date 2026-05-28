@@ -2136,6 +2136,8 @@ class ErrorBoundary extends Component {
 // ═══════════════════════════════════════════════════════════════════════════
 // UKURAN PAKAIAN — data & komponen
 // ═══════════════════════════════════════════════════════════════════════════
+const SIZE_DEADLINE = new Date("2026-06-07T23:59:59+07:00"); // 7 Juni 2026, 23:59 WIB
+const SIZE_DEADLINE_LABEL = "7 Juni 2026, 23:59 WIB";
 const SIZE_GARMENTS = [
   {
     id:"baju", label:"Baju (Kaos Unisex)", unit:"cm",
@@ -2291,6 +2293,7 @@ const suggestByBrand = (garment, brand, brandSize) => {
 const SizeTab = memo(({user}) => {
   const isCoord = COORDINATORS.includes(user);
   const myHH = ALL_PAX.find(p=>p.name===user)?.hh;
+  const pastDeadline = new Date() > SIZE_DEADLINE;
   const [tab,setTab] = useState("form");
   const [allSizes,setAllSizes] = useState({});
   const [loading,setLoading] = useState(true);
@@ -2338,6 +2341,7 @@ const SizeTab = memo(({user}) => {
 
   const submit = async () => {
     if(saving) return;
+    if(pastDeadline && !isCoord){ setSyncError("Pengumpulan ukuran telah ditutup. Hubungi koordinator untuk perubahan."); return; }
     if(!draft.baju&&!draft.celana&&!draft.topi&&!draft.sepatu){ setSyncError("Pilih minimal satu ukuran sebelum konfirmasi."); return; }
     setSaving(true); setSyncError(null);
     try {
@@ -2380,6 +2384,7 @@ const SizeTab = memo(({user}) => {
         <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pengumpulan Ukuran</p>
         <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"36px",fontWeight:400,color:T.ink}}>Ukuran Pakaian</h2>
         <p style={{fontSize:"13px",color:T.muted,marginTop:"8px"}}>Baju, celana, topi/blangkon & sepatu untuk seluruh peserta. Orang tua dapat mengisikan untuk anggota keluarga.</p>
+        <p style={{fontSize:"12px",color:pastDeadline?T.danger:T.warn,marginTop:"10px",letterSpacing:"0.3px"}}>{pastDeadline?`Pengumpulan ukuran telah ditutup (deadline ${SIZE_DEADLINE_LABEL}).`:`Deadline pengisian: ${SIZE_DEADLINE_LABEL} · dapat diubah & submit ulang kapan saja sebelum deadline.`}</p>
       </div>
 
       <div style={{display:"flex",borderBottom:`1px solid ${T.line}`,marginBottom:"40px"}}>
@@ -2406,6 +2411,11 @@ const SizeTab = memo(({user}) => {
             })}
           </div>
           {target!==user&&<p style={{fontSize:"11px",color:T.muted,fontStyle:"italic",marginTop:"10px"}}>Anda mengisi untuk {target}. Akan tercatat "diisi oleh {user}".</p>}
+          {allSizes[target]&&(allSizes[target].baju||allSizes[target].celana||allSizes[target].topi||allSizes[target].sepatu)&&(
+            <div style={{background:T.settledBg,border:`1px solid ${T.settled}`,padding:"10px 14px",marginTop:"12px"}}>
+              <p style={{fontSize:"11px",color:T.settled}}>✓ Ukuran {target===user?"Anda":target.split(" ")[0]} sudah tersimpan. Anda dapat mengubah pilihan di bawah lalu konfirmasi ulang — data lama akan ditimpa.</p>
+            </div>
+          )}
         </div>
 
         {/* field tiap garment */}
@@ -2517,9 +2527,16 @@ const SizeTab = memo(({user}) => {
               </div>
             ))}
           </div>
-          <button onClick={submit} disabled={saving} style={{width:"100%",padding:"14px",background:T.forest,color:"white",border:"none",cursor:saving?"wait":"pointer",fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500}}>
-            {saving?"Menyimpan…":`Konfirmasi Ukuran ${target===user?"Saya":target.split(" ")[0]}`}
-          </button>
+          {(()=>{
+            const already = allSizes[target]&&(allSizes[target].baju||allSizes[target].celana||allSizes[target].topi||allSizes[target].sepatu);
+            const blocked = pastDeadline&&!isCoord;
+            const nm = target===user?"Saya":target.split(" ")[0];
+            return (
+              <button onClick={submit} disabled={saving||blocked} style={{width:"100%",padding:"14px",background:blocked?T.muted:T.forest,color:"white",border:"none",cursor:blocked?"not-allowed":saving?"wait":"pointer",fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500}}>
+                {blocked?"Pengumpulan Ditutup":saving?"Menyimpan…":`${already?"Perbarui":"Konfirmasi"} Ukuran ${nm}`}
+              </button>
+            );
+          })()}
         </div>
       </div>}
 
