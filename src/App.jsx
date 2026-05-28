@@ -461,6 +461,214 @@ const RESTAURANTS = [
     ]
   },
 ,
+  // ─── DJIWANA CAFE & EATERY ────────────────────────────────────────────────────
+  {
+    id:"djiwana",name:"Djiwana Cafe & Eatery",subtitle:"D3 \u00b7 Makan Siang \u00b7 4 Juli 2026, 12.00",
+    note:"Djiwana Cafe & Eatery \u00b7 23 pax \u00b7 Sponsor: HH2 Agustinus \u00b7 Harga sudah termasuk pajak & service",
+    deadline:"20 Juni 2026",
+    participants: ALL_PAX,
+    categories:[
+      {id:"dj-croissant",name:"Croissants",items:[
+        {id:"dj-cr-plain",  name:"Plain Croissant",     desc:"",price:32000},
+        {id:"dj-cr-cheese", name:"Cheese Croissant",    desc:"",price:35000},
+        {id:"dj-cr-almond", name:"Almond Croissant",    desc:"",price:35000},
+        {id:"dj-cr-kismis", name:"Kismis Roll",         desc:"",price:35000},
+        {id:"dj-cr-pandan", name:"Pandan Ribbon",       desc:"",price:35000},
+        {id:"dj-cr-choco",  name:"Chocolate Croissant", desc:"",price:35000},
+      ]},
+      {id:"dj-puff",name:"Puff Pastry",items:[
+        {id:"dj-pf-curry",  name:"Curry Puff",      desc:"",price:38000},
+        {id:"dj-pf-berry",  name:"Berry Puff",      desc:"",price:38000},
+        {id:"dj-pf-beef",   name:"Beef Floss Puff", desc:"",price:38000},
+        {id:"dj-pf-salmon", name:"Salmon Puff",     desc:"",price:42000},
+      ]},
+      {id:"dj-light",name:"Light Bites",items:[
+        {id:"dj-lb-corn",    name:"Corn Fritter Balls", desc:"Crispy sweet corn balls, Asian spices, spring onions, special sambal", price:38000},
+        {id:"dj-lb-spring",  name:"Kecombrang Bamboo Shoots Spring Roll", desc:"Minced bamboo shoots, chicken, vegetables, fresh kecombrang, Thai dip", price:38000},
+        {id:"dj-lb-nachos",  name:"Breadfruit Nachos", desc:"Crispy breadfruit crackers, melted cheese, salsa, guacamole, chimichurri", variants:[{label:"Chicken",price:48000},{label:"Beef",price:58000}]},
+        {id:"dj-lb-platter", name:"House Favorite Snack Platter", desc:"Selection of finest light bites, three homemade dipping sauces", price:98000},
+      ]},
+      {id:"dj-sides",name:"Sides",items:[
+        {id:"dj-sd-cassava", name:"Cassava", desc:"Marinated homegrown cassava, fried garlic, sambal kecombrang", price:28000,
+         options:[{id:"style",label:"Pilihan",required:true,choices:["Steamed","Fried"]}]},
+        {id:"dj-sd-enoki",   name:"Crispy Enoki Truffle", desc:"Fried enoki Japanese tempura style, truffle oil, Thai dressing", price:32000},
+        {id:"dj-sd-cajun",   name:"Cajun Potato Wedges",  desc:"Deep fried potato wedges, cajun, herbs, sun-dried parsley", price:32000},
+        {id:"dj-sd-truffle", name:"Truffle Fries",        desc:"Shoestring fries, truffle oil, parmesan, sun-dried parsley", price:36000},
+      ]},
+      {id:"dj-salad",name:"Salads",items:[
+        {id:"dj-sl-yogurt", name:"Yogurt Fruit Salad", desc:"Seasonal fruits, yogurt mint dressing & fruit punch", price:46000},
+        {id:"dj-sl-chef",   name:"Chef Salad",         desc:"Lettuce, cherry tomatoes, cucumbers, poached egg, smoked salmon, cheese sticks", price:48000},
+        {id:"dj-sl-wana",   name:"Wanasekar Salad (V)", desc:"Greens, cherry tomatoes, cucumber, carrots, apple, turi flowers, red onion, kecombrang dressing", price:48000},
+        {id:"dj-sl-caesar", name:"Caesar Salad",       desc:"Romaine, cheese sticks, parmesan, grilled chicken, boiled egg, anchovy-lemon Caesar dressing",
+         variants:[{label:"Plain",price:48000},{label:"+ Chicken",price:66000},{label:"+ Beef",price:68000}]},
+      ]},
+      {id:"dj-soup",name:"Soups",items:[
+        {id:"dj-sp-soto",   name:"Beef Ribs Soto Tangkar Kecombrang", desc:"Beef ribs in spiced coconut milk broth, vegetables, fresh kecombrang", price:110000},
+        {id:"dj-sp-buntut", name:"Sop Buntut Wanasekar", desc:"Oxtail in rich beef broth, bilimbi, carrots, potatoes, tomatoes, steamed rice, sambal, crackers", price:125000},
+        {id:"dj-sp-tomyum", name:"Tom Yum Melinjo", desc:"Thai-inspired sour soup, prawn, squid, bamboo clams, melinjo leaves, lemongrass, lime, steamed rice", price:86000},
+      ]},
+      {id:"dj-rice",name:"Prosperous Rice",items:[
+        {id:"dj-rc-pepper", name:"Peppercrust Beef", desc:"Stir-fried beef, black pepper sauce, onions, bell peppers, steamed rice", price:72000},
+        {id:"dj-rc-nasgor", name:"Nasi Goreng Basmati Kecombrang", desc:"Fried rice, kecombrang paste, egg, sweet soy, braised beef tongue, crackers", price:78000},
+        {id:"dj-rc-indo",   name:"Indonesian Fried Rice with Gulai Gravy", desc:"Fried rice, gulai curry gravy, beef ribs", price:72000},
+        {id:"dj-rc-brisket",name:"Smoked Brisket Dong Kates", desc:"8-hour smoked beef brisket, seasonal vegetables, BBQ sauce, sambal kecombrang",
+         price:98000, options:[{id:"carb",label:"Pilihan Karbo",required:true,choices:["Baby Potatoes","Cassava","Lime Rice"]}]},
+        {id:"dj-rc-iga",    name:"Iga Saus Kacang", desc:"Grilled beef ribs, steamed rice, peanut sauce, beef broth, crackers, sambal ijo, vegetables", price:125000},
+      ]},
+      {id:"dj-pasta",name:"Fusion Pasta",items:[
+        {id:"dj-ps-pesto",  name:"Pesto Grilled Chicken", desc:"Fillet chicken leg, al dente pasta, homemade basil pesto",
+         price:76000, options:[{id:"pasta",label:"Pilihan Pasta",required:true,choices:["Spaghetti","Fettuccine","Penne","Fusilli"]}]},
+        {id:"dj-ps-mushroom",name:"Creamy Mushroom with Onsen Egg", desc:"Wild mushroom cream, shortplate beef, herbs, onsen egg, garlic bread",
+         price:88000, options:[{id:"pasta",label:"Pilihan Pasta",required:true,choices:["Spaghetti","Fettuccine","Penne","Fusilli"]}]},
+        {id:"dj-ps-aglio",  name:"Pasta Aglio Sambal Matah", desc:"Garlic oil, sambal matah, Balinese gereh keranjang, garlic bread",
+         price:68000, options:[{id:"pasta",label:"Pilihan Pasta",required:true,choices:["Spaghetti","Fettuccine","Penne","Fusilli"]}]},
+        {id:"dj-ps-bolo",   name:"Rebung Bolognese", desc:"Minced beef, bamboo shoots, rich tomato sauce, garlic bread",
+         price:78000, options:[{id:"pasta",label:"Pilihan Pasta",required:true,choices:["Spaghetti","Fettuccine","Penne","Fusilli"]}]},
+      ]},
+      {id:"dj-noodle",name:"The OG Javanese Noodle",items:[
+        {id:"dj-nd-bakmi", name:"Bakmi Goreng Jogja", desc:"Wok-fried egg noodles Javanese style, chicken, duck egg, veggies, garlic, sweet soy", price:62000},
+      ]},
+      {id:"dj-poultry",name:"Poultry",items:[
+        {id:"dj-pt-herbs",  name:"Herbs Roasted Chicken", desc:"Oven-roasted boneless half chicken, herbs, mashed potato, asparagus, mushroom sauce", price:88000},
+        {id:"dj-pt-schnitzel",name:"Golden Schnitzel", desc:"Crispy breaded chicken cutlet, baby potato, arugula, balsamic, tartar sauce", price:72000},
+        {id:"dj-pt-bakar",  name:"Ayam Bakar Jeruk Purut", desc:"Charcoal grilled half chicken, kaffir lime, sambal kecombrang, crispy curry leaves, steamed rice", price:78000},
+        {id:"dj-pt-cordon", name:"Cannon Cordon Bleu", desc:"Fried minced chicken balls, smoked beef, melted cheese, creamy spinach, mashed potato, mushroom sauce", price:82000},
+      ]},
+      {id:"dj-sea",name:"From the Sea",items:[
+        {id:"dj-se-charcoal",name:"Salmon Charcoal", desc:"150gr salmon fillet over charcoal, mashed potato, salad greens, lemon vinaigrette", price:178000},
+        {id:"dj-se-seared", name:"Pan-Seared Salmon", desc:"150gr salmon fillet golden crust, sauteed vegetables, creamy mashed potato, light sauce", price:178000},
+        {id:"dj-se-laksa",  name:"Salmon Laksa", desc:"150gr salmon fillet, laksa coconut broth, shirataki noodles, vegetables", price:178000},
+      ]},
+      {id:"dj-beef",name:"Beef",items:[
+        {id:"dj-bf-crispy", name:"Beef Crispy", desc:"Served with choice of side, sauce & vegetable",
+         price:120000, options:[
+           {id:"side",label:"Pilihan Side",required:true,choices:["Fries","Creamy Mashed Potato","Baby Potato","Potato au Gratin","Crispy Belgian Fries"]},
+           {id:"sauce",label:"Pilihan Sauce",required:true,choices:["Mushroom Sauce","Chimichurri","Black Pepper Sauce","BBQ Sauce"]},
+           {id:"veg",label:"Pilihan Sayur",required:true,choices:["Sauteed Veggies","Creamy Spinach","Buttered Corn","Grilled Asparagus"]}]},
+        {id:"dj-bf-nz",     name:"NZ Striploin (200gr)", desc:"Served with choice of side, sauce & vegetable",
+         price:290000, options:[
+           {id:"side",label:"Pilihan Side",required:true,choices:["Fries","Creamy Mashed Potato","Baby Potato","Potato au Gratin","Crispy Belgian Fries"]},
+           {id:"sauce",label:"Pilihan Sauce",required:true,choices:["Mushroom Sauce","Chimichurri","Black Pepper Sauce","BBQ Sauce"]},
+           {id:"veg",label:"Pilihan Sayur",required:true,choices:["Sauteed Veggies","Creamy Spinach","Buttered Corn","Grilled Asparagus"]}]},
+      ]},
+      {id:"dj-skewer",name:"Skewer Selection",items:[
+        {id:"dj-sk-klatak", name:"Sate Klatak Balibul", desc:"Young goat meat, salt seasoning, charcoal grilled iron skewers, steamed rice, spiced gulai", price:98000},
+        {id:"dj-sk-lilit",  name:"Sate Lilit Ayam", desc:"Balinese minced chicken satay, lemongrass sticks, steamed rice, crackers, urap kenikir", price:78000},
+        {id:"dj-sk-maranggi",name:"Sate Maranggi Sapi", desc:"West Javanese marinated beef satay, char-grilled, steamed rice, sambal, shallot pickles", price:120000},
+      ]},
+      {id:"dj-pizza",name:"Pizza \u2014 IDR 88.000",items:[
+        {id:"dj-pz-beef",   name:"Beef Supreme", desc:"Tender beef, caramelized onions, melted mozzarella",
+         price:88000, options:[{id:"style",label:"Pilihan Adonan",required:true,choices:["Sourdough","Italian Thin Crust"]}]},
+        {id:"dj-pz-spinach",name:"Spinach & Cheese", desc:"Homegrown spinach, melted cheese",
+         price:88000, options:[{id:"style",label:"Pilihan Adonan",required:true,choices:["Sourdough","Italian Thin Crust"]}]},
+        {id:"dj-pz-marg",   name:"Cheese Margherita", desc:"Fresh mozzarella, tomato sauce, basil",
+         price:88000, options:[{id:"style",label:"Pilihan Adonan",required:true,choices:["Sourdough","Italian Thin Crust"]}]},
+        {id:"dj-pz-mushroom",name:"Mushroom Mania", desc:"Sauteed mushrooms, mozzarella, basil",
+         price:88000, options:[{id:"style",label:"Pilihan Adonan",required:true,choices:["Sourdough","Italian Thin Crust"]}]},
+      ]},
+      {id:"dj-addon",name:"Add-On Sides",items:[
+        {id:"dj-ad-rice",  name:"Steamed Rice", desc:"", price:18000},
+        {id:"dj-ad-sauce", name:"Extra Sauce", desc:"", price:16000,
+         options:[{id:"sauce",label:"Pilihan Sauce",required:true,choices:["Mushroom Sauce","Chimichurri","Black Pepper Sauce","BBQ Sauce"]}]},
+        {id:"dj-ad-carbs", name:"Extra Carbs", desc:"", price:28000,
+         options:[{id:"carb",label:"Pilihan Karbo",required:true,choices:["Fries","Creamy Mashed Potato","Baby Potato","Potato au Gratin","Crispy Belgian Fries"]}]},
+        {id:"dj-ad-veg",   name:"Extra Veggies", desc:"", price:24000,
+         options:[{id:"veg",label:"Pilihan Sayur",required:true,choices:["Sauteed Veggies","Creamy Spinach","Buttered Corn","Grilled Asparagus"]}]},
+      ]},
+      {id:"dj-dessert",name:"Desserts \u2014 IDR 42.000",items:[
+        {id:"dj-ds-brulee", name:"Honey Sweet Potato Cr\u00e8me Brul\u00e9e", desc:"Vanilla creme brulee, honey sweet potato, caramelized sugar crust", price:42000},
+        {id:"dj-ds-banana", name:"Crispy Banana Cheddar", desc:"Crispy banana, cheddar cheese, choice of syrup, icing sugar", price:42000},
+        {id:"dj-ds-cheese", name:"Frosting Cheese Cake", desc:"Creamy cheesecake, cream cheese frosting, biscuit base", price:42000},
+        {id:"dj-ds-waffle", name:"Waffle & Gelato", desc:"Freshly baked waffle with gelato",
+         price:42000, options:[{id:"gelato",label:"Pilihan Gelato",required:true,choices:["Vanilla","Strawberry","Chocolate"]}]},
+        {id:"dj-ds-tira",   name:"Tira; I Miss U", desc:"Espresso-soaked ladyfingers, mascarpone cream, cocoa powder", price:42000},
+        {id:"dj-ds-kunyit", name:"Kunyit Mousse", desc:"Turmeric-infused mousse, earthy notes, served chilled", price:42000},
+        {id:"dj-ds-klepon", name:"Klepon Pandan Mousse", desc:"Pandan mousse, palm sugar, grated coconut", price:42000},
+        {id:"dj-ds-opera",  name:"Opera Cake", desc:"Almond sponge, Indonesian coffee, chocolate ganache, coffee buttercream, dark chocolate glaze", price:42000},
+      ]},
+      {id:"dj-tea",name:"House of Tea Leaves",items:[
+        {id:"dj-te-house", name:"Signature House Tea", desc:"",price:28000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-te-lemon", name:"Classic Lemon Tea", desc:"",price:32000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-te-lychee",name:"Lychee Infused Tea", desc:"",price:34000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-te-peach", name:"Peach Tea", desc:"",price:36000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-te-spark", name:"Lemonade Lychee Sparkler", desc:"",price:38000},
+      ]},
+      {id:"dj-wellness",name:"Wellness in a Glass \u2014 IDR 38.000",items:[
+        {id:"dj-wl-yellow",name:"Yellow Splash", desc:"Mango, pineapple, orange", price:38000},
+        {id:"dj-wl-berry", name:"Berry Bomb",    desc:"Grape, dragon fruit, strawberry", price:38000},
+        {id:"dj-wl-herbal",name:"Herbal Burst",  desc:"Apple, ambarella, kiwi, mint", price:38000},
+        {id:"dj-wl-green", name:"Green Detox",    desc:"Cucumber, apple, mustard greens", price:38000},
+        {id:"dj-wl-kiwi",  name:"Kiwi Blast",     desc:"Cucumber, pineapple, kiwi, basil", price:38000},
+        {id:"dj-wl-juice", name:"Fresh Juice (Single)", desc:"Pilih buah. Mix max 3 buah \u2014 tulis di catatan.",
+         price:38000, options:[{id:"fruit",label:"Pilihan Buah",required:true,choices:["Mango","Watermelon","Pineapple","Honeydew","Orange","Dragon Fruit"]}]},
+      ]},
+      {id:"dj-coffee",name:"House of Coffee",items:[
+        {id:"dj-cf-espresso", name:"Espresso",     desc:"",price:24000},
+        {id:"dj-cf-americano",name:"Americano",    desc:"",price:32000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-cf-conpanna", name:"Conpanna",     desc:"",price:34000},
+        {id:"dj-cf-caffelatte",name:"Caffe Latte", desc:"",price:34000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-cf-dolce",    name:"Dolce Latte",   desc:"",price:38000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-cf-affogato", name:"Affogato",      desc:"",price:38000},
+        {id:"dj-cf-brownsugar",name:"Brown Sugar Latte", desc:"",price:38000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-cf-caramelmac",name:"Caramel Macchiato Latte", desc:"",price:42000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-cf-cappuccino",name:"Cappuccino",   desc:"",price:42000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-cf-mochaccino",name:"Mochaccino",   desc:"",price:42000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-cf-vanilla",  name:"Vanilla Latte",  desc:"",price:42000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-cf-hazelnut", name:"Hazelnut Latte", desc:"",price:42000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-cf-caramel",  name:"Caramel Latte",  desc:"",price:42000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-cf-geisha",   name:"Geisha Tubruk (Hot)", desc:"",price:85000},
+        {id:"dj-cf-lactose",  name:"Free Lactose Milk (Add-on)", desc:"",price:9000},
+      ]},
+      {id:"dj-milky",name:"Milky Way \u2014 IDR 42.000",items:[
+        {id:"dj-mw-choco", name:"Chocolate Dream",  desc:"",price:42000},
+        {id:"dj-mw-pink",  name:"Pink Potion",       desc:"",price:42000},
+        {id:"dj-mw-velvet",name:"Red Velvet",        desc:"",price:42000},
+        {id:"dj-mw-blue",  name:"Blue Moon Vanilla", desc:"",price:42000},
+      ]},
+      {id:"dj-sparkling",name:"Sparkling Mix \u2014 IDR 36.000",items:[
+        {id:"dj-sm-apple", name:"Apple Mojito",          desc:"",price:36000},
+        {id:"dj-sm-berry", name:"Berry Mojita",          desc:"",price:36000},
+        {id:"dj-sm-pine",  name:"Pineapple Sunrise",     desc:"",price:36000},
+        {id:"dj-sm-mango", name:"Mango Canva",           desc:"",price:36000},
+        {id:"dj-sm-rose",  name:"Rosemary Orange Citrus",desc:"",price:36000},
+        {id:"dj-sm-shirley",name:"Shirley Temple",       desc:"",price:36000},
+      ]},
+      {id:"dj-signature",name:"Djiwana Signature \u2014 IDR 48.000",items:[
+        {id:"dj-sg-ginger",  name:"Daniswara Ginger Hot",   desc:"",price:48000},
+        {id:"dj-sg-hanabi",  name:"Hanabi Latte",           desc:"",price:48000},
+        {id:"dj-sg-javanese",name:"Iced Javanese Ciwana",   desc:"",price:48000},
+        {id:"dj-sg-tropical",name:"Tropical Americano",     desc:"",price:48000},
+      ]},
+      {id:"dj-caffeine",name:"Caffeine Cloud \u2014 IDR 48.000",items:[
+        {id:"dj-cc-velvet", name:"Velvet Rouge",     desc:"",price:48000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-cc-matcha", name:"Matcha Green Tea",  desc:"",price:48000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-cc-belgian",name:"Belgian Chocolate", desc:"",price:48000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"dj-cc-golden", name:"Golden Caramel",    desc:"",price:48000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+      ]},
+      {id:"dj-artisan",name:"Artisan Tea \u2014 IDR 48.000",items:[
+        {id:"dj-at-apple", name:"Apple Citrus",       desc:"Dried apple, strawberry, goji berry", price:48000},
+        {id:"dj-at-citrus",name:"Citrus Mint",        desc:"Green tea, lemongrass, dried mint, dried orange", price:48000},
+        {id:"dj-at-bajakah",name:"Red Bajakah",       desc:"Bajakah wood, green tea, dried mint", price:48000},
+        {id:"dj-at-rose",  name:"Rose Garden",        desc:"Chamomile, rose bud, marigold flower, spearmint leaf", price:48000},
+        {id:"dj-at-mango", name:"Tropical Mango Tea",  desc:"Dried mango, dried mint, black tea", price:48000},
+      ]},
+      {id:"dj-soft",name:"Soft Drinks & Water",items:[
+        {id:"dj-so-coke",  name:"Coca-Cola", desc:"",price:28000,options:[{id:"var",label:"Pilihan",required:true,choices:["Regular","Zero"]}]},
+        {id:"dj-so-fanta", name:"Fanta",     desc:"",price:28000},
+        {id:"dj-so-sprite",name:"Sprite",    desc:"",price:28000},
+        {id:"dj-so-sapa",  name:"Saparella", desc:"",price:28000},
+        {id:"dj-so-ron88", name:"Ron88 Mineral Water (330ml)", desc:"",price:22000},
+        {id:"dj-so-glacier",name:"Glacier Mineral Water (330ml)", desc:"",price:28000},
+        {id:"dj-so-equil", name:"Equil Sparkling Water (330ml)", desc:"",price:36000},
+      ]},
+      {id:"dj-cake",name:"Birthday Cake \u2014 IDR 300.000 (18cm, pre-order H-1)",items:[
+        {id:"dj-ck-klepon",name:"Klepon Mousse",   desc:"Cake 18cm \u00b7 made to order min H-1 \u00b7 incl. hard box & 3 candles", price:300000},
+        {id:"dj-ck-tira",  name:"Tiramisu",         desc:"Cake 18cm \u00b7 made to order min H-1 \u00b7 incl. hard box & 3 candles", price:300000},
+        {id:"dj-ck-choco", name:"Chocolate Herbs",  desc:"Cake 18cm \u00b7 made to order min H-1 \u00b7 incl. hard box & 3 candles", price:300000},
+        {id:"dj-ck-yuzu",  name:"Yuzu Cheese Cake",  desc:"Cake 18cm \u00b7 made to order min H-1 \u00b7 incl. hard box & 3 candles", price:300000},
+      ]},
+    ]
+  },
   // ─── BAKPIA PATHOK 25 ────────────────────────────────────────────────────────
   {
     id:"bakpia",name:"Bakpia Pathok 25",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
@@ -621,7 +829,6 @@ const UPCOMING_FB = [
   {name:"Kemangi",day:"D1",meal:"Welcome Dinner",sponsor:"Gerard Sahat"},
   {name:"Mbah Mo",day:"D2",meal:"Makan Siang",sponsor:"Monang Panjaitan"},
   {name:"Desa Palagan",day:"D3",meal:"Sarapan",sponsor:"Agustinus Tambunan"},
-  {name:"Djiwana",day:"D3",meal:"Makan Siang",sponsor:"Agustinus Tambunan"},
 ];
 
 const fmt = n => "IDR " + Math.abs(Number(n)).toLocaleString("id-ID");
@@ -1155,6 +1362,8 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
   const [deleting,setDeleting] = useState(false);
   const [deleteConfirm,setDeleteConfirm] = useState(false);
   const [notes,setNotes] = useState({});
+  const [itemConfig,setItemConfig] = useState({});
+  const [configError,setConfigError] = useState({});
   const [lastSync,setLastSync] = useState(null);
   const [syncError,setSyncError] = useState(null);
 
@@ -1194,6 +1403,19 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
           const cartById = {};
           resto.categories.forEach(c=>c.items.forEach(item=>{ if(myItems[item.name]) cartById[item.id]=myItems[item.name]; }));
           setCart(cartById);
+          // restore config selections from saved order
+          const cfgById = {};
+          (grouped[user].items||[]).forEach(it=>{
+            const match = resto.categories.flatMap(c=>c.items).find(i=>i.name===it.name);
+            if(match && it.config){
+              const parts = it.config.split(" · ");
+              const cfg = {opts:{}};
+              if(match.variants){ const v=match.variants.find(vv=>parts.includes(vv.label)); if(v) cfg.variant=v.label; }
+              if(match.options){ match.options.forEach(g=>{ const found=g.choices.find(ch=>parts.includes(ch)); if(found) cfg.opts[g.id]=found; }); }
+              cfgById[match.id]=cfg;
+            }
+          });
+          setItemConfig(cfgById);
           setSubmitted(true);
           setTab("recap");
         }
@@ -1204,7 +1426,20 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
 
   useEffect(()=>{ const id=setInterval(refresh,30000); return ()=>clearInterval(id); },[refresh]);
 
-  const add = item => { if(item.disabled) return; setCart(p=>({...p,[item.id]:{name:item.name,qty:(p[item.id]?.qty||0)+1,notes:p[item.id]?.notes||"",price:item.price||null}})); };
+  const setVariant = (id,label) => { setItemConfig(p=>({...p,[id]:{...p[id],variant:label}})); setConfigError(e=>({...e,[id]:false})); };
+  const setOpt = (id,gid,val) => { setItemConfig(p=>({...p,[id]:{...p[id],opts:{...p[id]?.opts,[gid]:val}}})); setConfigError(e=>({...e,[id]:false})); };
+  const add = item => {
+    if(item.disabled) return;
+    const cfg = itemConfig[item.id] || {};
+    if(item.variants && !cfg.variant){ setConfigError(e=>({...e,[item.id]:true})); return; }
+    if(item.options){ for(const g of item.options){ if(g.required && !cfg.opts?.[g.id]){ setConfigError(e=>({...e,[item.id]:true})); return; } } }
+    const price = item.variants ? (item.variants.find(v=>v.label===cfg.variant)?.price||null) : (item.price||null);
+    const parts = [];
+    if(cfg.variant) parts.push(cfg.variant);
+    if(item.options) item.options.forEach(g=>{ if(cfg.opts?.[g.id]) parts.push(cfg.opts[g.id]); });
+    const config = parts.join(" · ");
+    setCart(p=>({...p,[item.id]:{name:item.name,qty:(p[item.id]?.qty||0)+1,notes:p[item.id]?.notes||"",price,config}}));
+  };
   const rem = id  => setCart(p=>{ const n={...p}; if(n[id]?.qty>1) n[id]={...n[id],qty:n[id].qty-1}; else delete n[id]; return n; });
   const setNote = (id,v) => setCart(p=>p[id]?{...p,[id]:{...p[id],notes:v}}:p);
   const cartCount = Object.values(cart).reduce((s,i)=>s+i.qty,0);
@@ -1213,7 +1448,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
     if(!cartCount||saving) return;
     setSaving(true); setSyncError(null);
     try {
-      const items = Object.values(cart).map(i=>({name:i.name,qty:i.qty,notes:i.notes||"",price:i.price||0}));
+      const items = Object.values(cart).map(i=>({name:i.name,qty:i.qty,notes:i.notes||"",price:i.price||0,config:i.config||""}));
       const nettIDR  = items.reduce((s,i)=>s+(i.price||0)*i.qty,0);
       const totalIDR = resto.taxRate ? Math.round(nettIDR*(1+resto.taxRate)) : nettIDR;
       const key = `order.${resto.id}.${user.replace(/\s+/g,"_")}`;
@@ -1231,6 +1466,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
       await sSet(key, "");
       setCart({});
       setNotes({});
+      setItemConfig({});
       setSubmitted(false);
       setDeleteConfirm(false);
       await refresh();
@@ -1333,23 +1569,53 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
             {c.items.map(item=>{
               const inCart=cart[item.id];
               const isDisabled = item.disabled === true;
-              const hasPrice = item.price != null && !isDisabled;
+              const cfg = itemConfig[item.id] || {};
+              const hasVariants = Array.isArray(item.variants);
+              const selVariant = hasVariants ? item.variants.find(v=>v.label===cfg.variant) : null;
+              const displayPrice = hasVariants ? (selVariant?selVariant.price:null) : item.price;
+              const hasPrice = displayPrice != null && !isDisabled;
+              const priceRange = hasVariants ? `IDR ${Math.min(...item.variants.map(v=>v.price)).toLocaleString("id-ID")}\u2013${Math.max(...item.variants.map(v=>v.price)).toLocaleString("id-ID")}` : null;
+              const needsConfig = hasVariants || (item.options&&item.options.some(g=>g.required));
               return (
-                <div key={item.id} style={{display:"grid",gridTemplateColumns:"1fr auto",gap:"24px",alignItems:"center",borderBottom:`1px solid ${T.line}`,padding:"20px",margin:"0 -20px",background:isDisabled?T.stone:inCart?T.cream:"transparent",opacity:isDisabled?0.45:1,transition:"background 0.2s"}}>
+                <div key={item.id} style={{display:"grid",gridTemplateColumns:"1fr auto",gap:"24px",alignItems:"start",borderBottom:`1px solid ${T.line}`,padding:"20px",margin:"0 -20px",background:isDisabled?T.stone:inCart?T.cream:"transparent",opacity:isDisabled?0.45:1,transition:"background 0.2s"}}>
                   <div>
                     <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"2px",flexWrap:"wrap"}}>
                       <p style={{fontSize:"14px",color:isDisabled?T.muted:T.ink,fontWeight:inCart?500:300,margin:0}}>{item.name}</p>
-                      {hasPrice&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.gold,border:`1px solid ${T.goldL}`,padding:"1px 7px",fontWeight:500,whiteSpace:"nowrap"}}>IDR {item.price.toLocaleString("id-ID")}</span>}
+                      {hasPrice&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.gold,border:`1px solid ${T.goldL}`,padding:"1px 7px",fontWeight:500,whiteSpace:"nowrap"}}>IDR {displayPrice.toLocaleString("id-ID")}</span>}
+                      {!hasPrice&&priceRange&&!isDisabled&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.muted,border:`1px solid ${T.line}`,padding:"1px 7px",whiteSpace:"nowrap"}}>{priceRange}</span>}
                     </div>
-                    {isDisabled&&<p style={{fontSize:"10px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — IDR ${(item.price/1000).toLocaleString("id-ID")}k melebihi batas IDR 200k`:"Harga pasar — hubungi koordinator"}</p>}
+                    {isDisabled&&<p style={{fontSize:"10px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia \u2014 IDR ${item.price}k melebihi batas IDR 200k`:"Harga pasar \u2014 hubungi koordinator"}</p>}
                     {item.desc&&<p style={{fontSize:"11px",color:isDisabled?T.ghost:T.muted,fontStyle:"italic"}}>{item.desc}</p>}
+
+                    {hasVariants&&!isDisabled&&(
+                      <div style={{marginTop:"10px"}}>
+                        <p style={{fontSize:"9px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>Pilihan *</p>
+                        <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+                          {item.variants.map(v=>(
+                            <button key={v.label} onClick={()=>setVariant(item.id,v.label)} style={{background:cfg.variant===v.label?T.forest:"transparent",border:`1px solid ${cfg.variant===v.label?T.forest:T.lineD}`,color:cfg.variant===v.label?"white":T.mid,padding:"5px 12px",cursor:"pointer",fontSize:"11px",letterSpacing:"0.5px",transition:"all 0.15s"}}>{v.label} · {(v.price/1000)}k</button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {item.options&&!isDisabled&&item.options.map(g=>(
+                      <div key={g.id} style={{marginTop:"10px"}}>
+                        <p style={{fontSize:"9px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{g.label}{g.required?" *":""}</p>
+                        <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+                          {g.choices.map(ch=>(
+                            <button key={ch} onClick={()=>setOpt(item.id,g.id,ch)} style={{background:cfg.opts?.[g.id]===ch?T.forest:"transparent",border:`1px solid ${cfg.opts?.[g.id]===ch?T.forest:T.lineD}`,color:cfg.opts?.[g.id]===ch?"white":T.mid,padding:"5px 12px",cursor:"pointer",fontSize:"11px",letterSpacing:"0.5px",transition:"all 0.15s"}}>{ch}</button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                    {configError[item.id]&&<p style={{fontSize:"10px",color:T.danger,marginTop:"8px",letterSpacing:"0.5px"}}>Pilih dulu opsi bertanda * sebelum menambah.</p>}
+
                     {inCart&&!isDisabled&&<input value={notes[item.id]||inCart.notes||""} onChange={e=>{setNotes(n=>({...n,[item.id]:e.target.value}));setNote(item.id,e.target.value);}}
                       placeholder="Catatan khusus (opsional)"
                       style={{marginTop:"10px",width:"100%",maxWidth:"360px",padding:"8px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"12px",color:T.mid,outline:"none"}}/>}
                   </div>
-                  <div style={{display:"flex",alignItems:"center",gap:"16px"}}>
+                  <div style={{display:"flex",alignItems:"center",gap:"16px",paddingTop:"2px"}}>
                     {inCart&&!isDisabled&&<>
-                      <button onClick={()=>rem(item.id)} style={{background:"none",border:"none",cursor:"pointer",fontSize:"18px",color:T.muted,lineHeight:1,fontFamily:"serif",padding:"4px 8px"}}>−</button>
+                      <button onClick={()=>rem(item.id)} style={{background:"none",border:"none",cursor:"pointer",fontSize:"18px",color:T.muted,lineHeight:1,fontFamily:"serif",padding:"4px 8px"}}>\u2212</button>
                       <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:T.ink,minWidth:"24px",textAlign:"center"}}>{inCart.qty}</span>
                     </>}
                     {isDisabled
@@ -1374,7 +1640,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
             return <>
               {cartEntries.map(([id,item])=>(
                 <div key={id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${T.line}`,gap:"12px"}}>
-                  <span style={{fontSize:"13px",color:T.ink,flex:1}}>{item.name}{item.notes&&<span style={{color:T.muted,fontStyle:"italic"}}> · {item.notes}</span>}</span>
+                  <span style={{fontSize:"13px",color:T.ink,flex:1}}>{item.name}{item.config&&<span style={{color:T.gold}}> · {item.config}</span>}{item.notes&&<span style={{color:T.muted,fontStyle:"italic"}}> · {item.notes}</span>}</span>
                   <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"15px",color:T.ink,minWidth:"32px",textAlign:"right"}}>×{item.qty}</span>
                   {hasPrices&&item.price&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"14px",color:T.settled,minWidth:"120px",textAlign:"right"}}>IDR {(item.price*item.qty).toLocaleString("id-ID")}</span>}
                 </div>
@@ -1427,7 +1693,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
             })()}
             {(()=>{
               const tally={};
-              Object.values(allOrders).forEach(o=>(o.items||[]).forEach(i=>{tally[i.name]=(tally[i.name]||0)+Number(i.qty);}));
+              Object.values(allOrders).forEach(o=>(o.items||[]).forEach(i=>{const k=i.config?`${i.name} [${i.config}]`:i.name;tally[k]=(tally[k]||0)+Number(i.qty);}));
               const sorted=Object.entries(tally).sort((a,b)=>b[1]-a[1]);
               if(!sorted.length) return <p style={{fontSize:"12px",color:T.muted,fontStyle:"italic"}}>Belum ada pesanan.</p>;
               return <div style={{borderTop:`1px solid ${T.line}`}}>
@@ -1456,7 +1722,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                       </div>
                       {o&&<div>
                         <div style={{display:"flex",flexWrap:"wrap",gap:"8px",marginBottom:"4px"}}>
-                          {(o.items||[]).map((it,i)=><span key={i} style={{fontSize:"10px",color:T.muted}}>• {it.name} ×{it.qty}{it.notes&&` (${it.notes})`}</span>)}
+                          {(o.items||[]).map((it,i)=><span key={i} style={{fontSize:"10px",color:T.muted}}>• {it.name}{it.config&&` [${it.config}]`} ×{it.qty}{it.notes&&` (${it.notes})`}</span>)}
                         </div>
                         {o.totalIDR>0&&<p style={{fontSize:"12px",color:T.settled,fontFamily:"'Playfair Display',Georgia,serif",marginTop:"2px"}}>Total: IDR {Number(o.totalIDR).toLocaleString("id-ID")}</p>}
                       </div>}
