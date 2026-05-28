@@ -822,8 +822,32 @@ const RESTAURANTS = [
 // ── PATCH 1: Tentrem Summer Palace removed from UPCOMING_FB ─────────────────
 const UPCOMING_FB = [
   {name:"Kemangi",day:"D1",meal:"Welcome Dinner",sponsor:"Gerard Sahat"},
-  {name:"Mbah Mo",day:"D2",meal:"Makan Siang",sponsor:"Monang Panjaitan"},
   {name:"Desa Palagan",day:"D3",meal:"Sarapan",sponsor:"Agustinus Tambunan"},
+];
+
+const SET_MENUS = [
+  {
+    id:"mbah-mo", name:"Mbah Mo", subtitle:"D2 \u00b7 Makan Siang \u00b7 3 Juli 2026, 12.00",
+    sponsor:"HH3 \u00b7 Monang", pax:23,
+    note:"Hidangan buffet bersama \u2014 sudah ditentukan, tidak perlu memesan.",
+    sections:[
+      {label:"Welcome Drink", items:["Es Kuwud"]},
+      {label:"Prasmanan", items:[
+        "Nasi Putih (free refill)",
+        "Ayam Kampung 1/4 Panggang",
+        "Lalap Sambal",
+        "Pecel Madiun",
+        "Oseng Tahu Tempe",
+        "Garang Asem",
+        "Sayur Sop",
+        "Oseng Daun Pepaya",
+        "Mendoan",
+        "Pisang Goreng",
+        "Kerupuk + Buah Potong",
+      ]},
+      {label:"Minuman", items:["Teh / Es Teh (free refill)"]},
+    ]
+  },
 ];
 
 const fmt = n => "IDR " + Math.abs(Number(n)).toLocaleString("id-ID");
@@ -1325,6 +1349,36 @@ const FoodOrderTab = memo(({user}) => {
           ))}
         </div>
       </div>
+      <div style={{marginBottom:"56px"}}>
+        <p style={{fontSize:"9px",letterSpacing:"3px",textTransform:"uppercase",color:T.gold,marginBottom:"24px",fontWeight:500}}>Menu Buffet</p>
+        {SET_MENUS.map(m=>(
+          <div key={m.id} style={{border:`1px solid ${T.line}`,marginBottom:"24px"}}>
+            <div style={{background:T.cream,padding:"20px 24px",borderBottom:`1px solid ${T.line}`}}>
+              <div style={{display:"flex",alignItems:"center",gap:"14px",flexWrap:"wrap",marginBottom:"4px"}}>
+                <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{m.name}</h3>
+                <span style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.goldL}`,padding:"2px 8px"}}>Buffet</span>
+                {m.sponsor&&<span style={{fontSize:"9px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>\u2661 {m.sponsor}</span>}
+              </div>
+              <p style={{fontSize:"11px",color:T.muted}}>{m.subtitle}</p>
+              <p style={{fontSize:"11px",color:T.muted,fontStyle:"italic",marginTop:"4px"}}>{m.note}</p>
+            </div>
+            <div style={{padding:"8px 24px 24px"}}>
+              {m.sections.map(sec=>(
+                <div key={sec.label} style={{marginTop:"20px"}}>
+                  <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>{sec.label}</p>
+                  {sec.items.map((it,i)=>(
+                    <div key={i} style={{display:"flex",alignItems:"baseline",gap:"12px",padding:"6px 0",borderBottom:`1px solid ${T.line}`}}>
+                      <span style={{fontSize:"13px",color:T.forest}}>\u25c6</span>
+                      <span style={{fontSize:"13px",color:T.ink}}>{it}</span>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
       <div>
         <p style={{fontSize:"9px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>F&B Lainnya</p>
         <div style={{borderTop:`1px solid ${T.line}`}}>
