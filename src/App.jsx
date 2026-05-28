@@ -1671,6 +1671,7 @@ const FoodOrderTab = memo(({user}) => {
 const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
   const [tab,setTab] = useState("order");
   const [cat,setCat] = useState(resto.categories[0].id);
+  const [searchQuery,setSearchQuery] = useState("");
   const [cart,setCart] = useState({});
   const [submitted,setSubmitted] = useState(false);
   const [locked,setLocked] = useState(false);
@@ -1876,76 +1877,127 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
           {cartCount>0&&<span style={{fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,fontWeight:500}}>{cartCount} item dipilih</span>}
         </div>
 
-        <div style={{display:"flex",flexWrap:"wrap",borderBottom:`1px solid ${T.line}`,marginBottom:"32px"}}>
-          {resto.categories.map(c=>(
-            <button key={c.id} onClick={()=>setCat(c.id)} style={{background:"none",border:"none",padding:"10px 20px 10px 0",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:cat===c.id?T.ink:T.muted,fontWeight:cat===c.id?500:300,borderBottom:cat===c.id?`2px solid ${T.ink}`:"2px solid transparent",marginBottom:"-1px",transition:"all 0.2s"}}>{c.name}</button>
-          ))}
+        {/* ── Search bar ── */}
+        <div style={{position:"relative",marginBottom:"24px"}}>
+          <span style={{position:"absolute",left:"14px",top:"50%",transform:"translateY(-50%)",fontSize:"14px",color:T.muted,pointerEvents:"none"}}>⌕</span>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={e=>setSearchQuery(e.target.value)}
+            placeholder="Cari menu…"
+            style={{width:"100%",padding:"10px 36px 10px 38px",border:`1px solid ${searchQuery?T.forest:T.lineD}`,background:searchQuery?T.cream:"transparent",fontSize:"13px",color:T.ink,outline:"none",fontFamily:"'Jost',sans-serif",fontWeight:300,letterSpacing:"0.3px",transition:"all 0.2s",boxSizing:"border-box"}}
+          />
+          {searchQuery&&(
+            <button onClick={()=>setSearchQuery("")} style={{position:"absolute",right:"12px",top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:"16px",color:T.muted,lineHeight:1,padding:"2px 4px"}}>×</button>
+          )}
         </div>
 
-        {resto.categories.filter(c=>c.id===cat).map(c=>(
-          <div key={c.id} style={{borderTop:`1px solid ${T.line}`}}>
-            {c.items.map(item=>{
-              const inCart=cart[item.id];
-              const isDisabled = item.disabled === true;
-              const cfg = itemConfig[item.id] || {};
-              const hasVariants = Array.isArray(item.variants);
-              const selVariant = hasVariants ? item.variants.find(v=>v.label===cfg.variant) : null;
-              const displayPrice = hasVariants ? (selVariant?selVariant.price:null) : item.price;
-              const hasPrice = displayPrice != null && !isDisabled;
-              const priceRange = hasVariants ? `IDR ${Math.min(...item.variants.map(v=>v.price)).toLocaleString("id-ID")}–${Math.max(...item.variants.map(v=>v.price)).toLocaleString("id-ID")}` : null;
-              const needsConfig = hasVariants || (item.options&&item.options.some(g=>g.required));
-              return (
-                <div key={item.id} style={{display:"grid",gridTemplateColumns:"1fr auto",gap:"24px",alignItems:"start",borderBottom:`1px solid ${T.line}`,padding:"20px",margin:"0 -20px",background:isDisabled?T.stone:inCart?T.cream:"transparent",opacity:isDisabled?0.45:1,transition:"background 0.2s"}}>
-                  <div>
-                    <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"2px",flexWrap:"wrap"}}>
-                      <p style={{fontSize:"14px",color:isDisabled?T.muted:T.ink,fontWeight:inCart?500:300,margin:0}}>{item.name}</p>
-                      {hasPrice&&resto.id!=="solaria"&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.gold,border:`1px solid ${T.goldL}`,padding:"1px 7px",fontWeight:500,whiteSpace:"nowrap"}}>IDR {displayPrice.toLocaleString("id-ID")}</span>}
-                      {!hasPrice&&priceRange&&!isDisabled&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.muted,border:`1px solid ${T.line}`,padding:"1px 7px",whiteSpace:"nowrap"}}>{priceRange}</span>}
-                    </div>
-                    {isDisabled&&<p style={{fontSize:"10px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — IDR ${item.price}k melebihi batas IDR 200k`:"Harga pasar — hubungi koordinator"}</p>}
-                    {item.desc&&<p style={{fontSize:"11px",color:isDisabled?T.ghost:T.muted,fontStyle:"italic"}}>{item.desc}</p>}
-
-                    {hasVariants&&!isDisabled&&(
-                      <div style={{marginTop:"10px"}}>
-                        <p style={{fontSize:"9px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>Pilihan *</p>
-                        <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
-                          {item.variants.map(v=>(
-                            <button key={v.label} onClick={()=>setVariant(item.id,v.label)} style={{background:cfg.variant===v.label?T.forest:"transparent",border:`1px solid ${cfg.variant===v.label?T.forest:T.lineD}`,color:cfg.variant===v.label?"white":T.mid,padding:"5px 12px",cursor:"pointer",fontSize:"11px",letterSpacing:"0.5px",transition:"all 0.15s"}}>{v.label} · {(v.price/1000)}k</button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {item.options&&!isDisabled&&item.options.map(g=>(
-                      <div key={g.id} style={{marginTop:"10px"}}>
-                        <p style={{fontSize:"9px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{g.label}{g.required?" *":""}</p>
-                        <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
-                          {g.choices.map(ch=>(
-                            <button key={ch} onClick={()=>setOpt(item.id,g.id,ch)} style={{background:cfg.opts?.[g.id]===ch?T.forest:"transparent",border:`1px solid ${cfg.opts?.[g.id]===ch?T.forest:T.lineD}`,color:cfg.opts?.[g.id]===ch?"white":T.mid,padding:"5px 12px",cursor:"pointer",fontSize:"11px",letterSpacing:"0.5px",transition:"all 0.15s"}}>{ch}</button>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                    {configError[item.id]&&<p style={{fontSize:"10px",color:T.danger,marginTop:"8px",letterSpacing:"0.5px"}}>Pilih dulu opsi bertanda * sebelum menambah.</p>}
-
-                    {inCart&&!isDisabled&&<input value={notes[item.id]||inCart.notes||""} onChange={e=>{setNotes(n=>({...n,[item.id]:e.target.value}));setNote(item.id,e.target.value);}}
-                      placeholder="Catatan khusus (opsional)"
-                      style={{marginTop:"10px",width:"100%",maxWidth:"360px",padding:"8px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"12px",color:T.mid,outline:"none"}}/>}
-                  </div>
-                  <div style={{display:"flex",alignItems:"center",gap:"16px",paddingTop:"2px"}}>
-                    {inCart&&!isDisabled&&<>
-                      <button onClick={()=>rem(item.id)} style={{background:"none",border:"none",cursor:"pointer",fontSize:"18px",color:T.muted,lineHeight:1,fontFamily:"serif",padding:"4px 8px"}}>−</button>
-                      <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:T.ink,minWidth:"24px",textAlign:"center"}}>{inCart.qty}</span>
-                    </>}
-                    {isDisabled
-                      ? <span style={{fontSize:"11px",color:T.ghost,fontStyle:"italic",padding:"4px 10px",minWidth:"32px",textAlign:"center"}}>N/A</span>
-                      : <button onClick={()=>add(item)} disabled={locked&&!isCoord} style={{background:"none",border:`1px solid ${locked&&!isCoord?T.ghost:T.ink}`,cursor:locked&&!isCoord?"not-allowed":"pointer",fontSize:"16px",color:locked&&!isCoord?T.ghost:T.ink,fontFamily:"serif",padding:"4px 10px",transition:"all 0.2s"}}>+</button>
-                    }
-                  </div>
-                </div>
-              );
-            })}
+        {/* ── Category tabs — hidden during search ── */}
+        {!searchQuery&&(
+          <div style={{display:"flex",flexWrap:"wrap",borderBottom:`1px solid ${T.line}`,marginBottom:"32px"}}>
+            {resto.categories.map(c=>(
+              <button key={c.id} onClick={()=>setCat(c.id)} style={{background:"none",border:"none",padding:"10px 20px 10px 0",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:cat===c.id?T.ink:T.muted,fontWeight:cat===c.id?500:300,borderBottom:cat===c.id?`2px solid ${T.ink}`:"2px solid transparent",marginBottom:"-1px",transition:"all 0.2s"}}>{c.name}</button>
+            ))}
           </div>
-        ))}
+        )}
+
+        {/* ── Item list: filtered by search OR by active category ── */}
+        {(()=>{
+          const q = searchQuery.toLowerCase().trim();
+          const renderItem = (item, catLabel) => {
+            const inCart=cart[item.id];
+            const isDisabled = item.disabled === true;
+            const cfg = itemConfig[item.id] || {};
+            const hasVariants = Array.isArray(item.variants);
+            const selVariant = hasVariants ? item.variants.find(v=>v.label===cfg.variant) : null;
+            const displayPrice = hasVariants ? (selVariant?selVariant.price:null) : item.price;
+            const hasPrice = displayPrice != null && !isDisabled;
+            const priceRange = hasVariants ? `IDR ${Math.min(...item.variants.map(v=>v.price)).toLocaleString("id-ID")}–${Math.max(...item.variants.map(v=>v.price)).toLocaleString("id-ID")}` : null;
+            return (
+              <div key={item.id} style={{display:"grid",gridTemplateColumns:"1fr auto",gap:"24px",alignItems:"start",borderBottom:`1px solid ${T.line}`,padding:"20px",margin:"0 -20px",background:isDisabled?T.stone:inCart?T.cream:"transparent",opacity:isDisabled?0.45:1,transition:"background 0.2s"}}>
+                <div>
+                  <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"2px",flexWrap:"wrap"}}>
+                    <p style={{fontSize:"14px",color:isDisabled?T.muted:T.ink,fontWeight:inCart?500:300,margin:0}}>{item.name}</p>
+                    {hasPrice&&resto.id!=="solaria"&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.gold,border:`1px solid ${T.goldL}`,padding:"1px 7px",fontWeight:500,whiteSpace:"nowrap"}}>IDR {displayPrice.toLocaleString("id-ID")}</span>}
+                    {!hasPrice&&priceRange&&!isDisabled&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.muted,border:`1px solid ${T.line}`,padding:"1px 7px",whiteSpace:"nowrap"}}>{priceRange}</span>}
+                    {q&&catLabel&&<span style={{fontSize:"9px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.ghost,border:`1px solid ${T.line}`,padding:"1px 6px"}}>{catLabel}</span>}
+                  </div>
+                  {isDisabled&&<p style={{fontSize:"10px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — IDR ${item.price}k melebihi batas IDR 200k`:"Harga pasar — hubungi koordinator"}</p>}
+                  {item.desc&&<p style={{fontSize:"11px",color:isDisabled?T.ghost:T.muted,fontStyle:"italic"}}>{item.desc}</p>}
+
+                  {hasVariants&&!isDisabled&&(
+                    <div style={{marginTop:"10px"}}>
+                      <p style={{fontSize:"9px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>Pilihan *</p>
+                      <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+                        {item.variants.map(v=>(
+                          <button key={v.label} onClick={()=>setVariant(item.id,v.label)} style={{background:cfg.variant===v.label?T.forest:"transparent",border:`1px solid ${cfg.variant===v.label?T.forest:T.lineD}`,color:cfg.variant===v.label?"white":T.mid,padding:"5px 12px",cursor:"pointer",fontSize:"11px",letterSpacing:"0.5px",transition:"all 0.15s"}}>{v.label} · {(v.price/1000)}k</button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {item.options&&!isDisabled&&item.options.map(g=>(
+                    <div key={g.id} style={{marginTop:"10px"}}>
+                      <p style={{fontSize:"9px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{g.label}{g.required?" *":""}</p>
+                      <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+                        {g.choices.map(ch=>(
+                          <button key={ch} onClick={()=>setOpt(item.id,g.id,ch)} style={{background:cfg.opts?.[g.id]===ch?T.forest:"transparent",border:`1px solid ${cfg.opts?.[g.id]===ch?T.forest:T.lineD}`,color:cfg.opts?.[g.id]===ch?"white":T.mid,padding:"5px 12px",cursor:"pointer",fontSize:"11px",letterSpacing:"0.5px",transition:"all 0.15s"}}>{ch}</button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                  {configError[item.id]&&<p style={{fontSize:"10px",color:T.danger,marginTop:"8px",letterSpacing:"0.5px"}}>Pilih dulu opsi bertanda * sebelum menambah.</p>}
+
+                  {inCart&&!isDisabled&&<input value={notes[item.id]||inCart.notes||""} onChange={e=>{setNotes(n=>({...n,[item.id]:e.target.value}));setNote(item.id,e.target.value);}}
+                    placeholder="Catatan khusus (opsional)"
+                    style={{marginTop:"10px",width:"100%",maxWidth:"360px",padding:"8px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"12px",color:T.mid,outline:"none"}}/>}
+                </div>
+                <div style={{display:"flex",alignItems:"center",gap:"16px",paddingTop:"2px"}}>
+                  {inCart&&!isDisabled&&<>
+                    <button onClick={()=>rem(item.id)} style={{background:"none",border:"none",cursor:"pointer",fontSize:"18px",color:T.muted,lineHeight:1,fontFamily:"serif",padding:"4px 8px"}}>−</button>
+                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:T.ink,minWidth:"24px",textAlign:"center"}}>{inCart.qty}</span>
+                  </>}
+                  {isDisabled
+                    ? <span style={{fontSize:"11px",color:T.ghost,fontStyle:"italic",padding:"4px 10px",minWidth:"32px",textAlign:"center"}}>N/A</span>
+                    : <button onClick={()=>add(item)} disabled={locked&&!isCoord} style={{background:"none",border:`1px solid ${locked&&!isCoord?T.ghost:T.ink}`,cursor:locked&&!isCoord?"not-allowed":"pointer",fontSize:"16px",color:locked&&!isCoord?T.ghost:T.ink,fontFamily:"serif",padding:"4px 10px",transition:"all 0.2s"}}>+</button>
+                  }
+                </div>
+              </div>
+            );
+          };
+
+          if(q) {
+            // Search mode: show matching items across all categories
+            const results = [];
+            resto.categories.forEach(c=>{
+              c.items.forEach(item=>{
+                if((item.name||"").toLowerCase().includes(q)||(item.desc||"").toLowerCase().includes(q)){
+                  results.push({item, catName:c.name});
+                }
+              });
+            });
+            if(!results.length) return (
+              <div style={{padding:"40px 0",textAlign:"center"}}>
+                <p style={{fontSize:"13px",color:T.muted,fontStyle:"italic"}}>Tidak ada menu yang cocok dengan "<strong>{searchQuery}</strong>"</p>
+                <button onClick={()=>setSearchQuery("")} style={{marginTop:"12px",background:"none",border:`1px solid ${T.lineD}`,padding:"6px 18px",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.mid}}>Hapus Pencarian</button>
+              </div>
+            );
+            return (
+              <div>
+                <p style={{fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"16px",paddingBottom:"12px",borderBottom:`1px solid ${T.line}`}}>{results.length} hasil untuk "{searchQuery}"</p>
+                <div style={{borderTop:`1px solid ${T.line}`}}>
+                  {results.map(({item,catName})=>renderItem(item,catName))}
+                </div>
+              </div>
+            );
+          }
+
+          // Normal mode: active category only
+          return resto.categories.filter(c=>c.id===cat).map(c=>(
+            <div key={c.id} style={{borderTop:`1px solid ${T.line}`}}>
+              {c.items.map(item=>renderItem(item,null))}
+            </div>
+          ));
+        })()}
 
         {cartCount>0&&<div style={{marginTop:"40px",padding:"32px",background:T.cream,borderTop:`2px solid ${T.forest}`}}>
           <p style={{fontSize:"9px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"20px"}}>Ringkasan Pesanan</p>
