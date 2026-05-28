@@ -661,12 +661,7 @@ const RESTAURANTS = [
         {id:"dj-so-glacier",name:"Glacier Mineral Water (330ml)", desc:"",price:28000},
         {id:"dj-so-equil", name:"Equil Sparkling Water (330ml)", desc:"",price:36000},
       ]},
-      {id:"dj-cake",name:"Birthday Cake \u2014 IDR 300.000 (18cm, pre-order H-1)",items:[
-        {id:"dj-ck-klepon",name:"Klepon Mousse",   desc:"Cake 18cm \u00b7 made to order min H-1 \u00b7 incl. hard box & 3 candles", price:300000},
-        {id:"dj-ck-tira",  name:"Tiramisu",         desc:"Cake 18cm \u00b7 made to order min H-1 \u00b7 incl. hard box & 3 candles", price:300000},
-        {id:"dj-ck-choco", name:"Chocolate Herbs",  desc:"Cake 18cm \u00b7 made to order min H-1 \u00b7 incl. hard box & 3 candles", price:300000},
-        {id:"dj-ck-yuzu",  name:"Yuzu Cheese Cake",  desc:"Cake 18cm \u00b7 made to order min H-1 \u00b7 incl. hard box & 3 candles", price:300000},
-      ]},
+
     ]
   },
   // ─── BAKPIA PATHOK 25 ────────────────────────────────────────────────────────
