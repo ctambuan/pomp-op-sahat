@@ -998,7 +998,6 @@ const RESTAURANTS = [
 
 // ── PATCH 1: Tentrem Summer Palace removed from UPCOMING_FB ─────────────────
 const UPCOMING_FB = [
-  {name:"Desa Palagan",day:"D3",meal:"Sarapan",sponsor:"Agustinus Tambunan"},
 ];
 
 const SET_MENUS = [
@@ -1022,6 +1021,14 @@ const SET_MENUS = [
         "Kerupuk + Buah Potong",
       ]},
       {label:"Minuman", items:["Teh / Es Teh (free refill)"]},
+    ]
+  },
+  {
+    id:"desa-palagan", name:"Desa Palagan", subtitle:"D3 \u00b7 Sarapan \u00b7 4 Juli 2026, 07.00",
+    sponsor:"HH2 \u00b7 Agustinus", pax:23,
+    note:"Restoran Indonesia konsep all-you-can-eat buffet \u2014 tidak ada menu yang perlu dipilih. Ambil sepuasnya di lokasi.",
+    sections:[
+      {label:"Format", items:["Prasmanan All-You-Can-Eat \u2014 aneka hidangan Indonesia disajikan di lokasi"]},
     ]
   },
 ];
@@ -1564,6 +1571,7 @@ const FoodOrderTab = memo(({user}) => {
         ))}
       </div>
 
+      {UPCOMING_FB.length>0 && (
       <div>
         <p style={{fontSize:"9px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>F&B Lainnya</p>
         <div style={{borderTop:`1px solid ${T.line}`}}>
@@ -1579,6 +1587,7 @@ const FoodOrderTab = memo(({user}) => {
         </div>
         <p style={{fontSize:"11px",color:T.muted,marginTop:"20px",fontStyle:"italic"}}>{isCoord?"Menu akan dibuka oleh koordinator masing-masing.":"Koordinator akan membuka pre-order sebelum keberangkatan."}</p>
       </div>
+      )}
     </div>
   );
 });
