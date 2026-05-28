@@ -1111,6 +1111,16 @@ const SET_MENUS = [
 const fmt = n => "IDR " + Math.abs(Number(n)).toLocaleString("id-ID");
 const pct = (a,b) => b>0?Math.min(100,Math.round((a/b)*100)):0;
 
+const useIsNarrow = (bp=640) => {
+  const [narrow,setNarrow] = useState(typeof window!=="undefined" && window.innerWidth < bp);
+  useEffect(()=>{
+    const on = () => setNarrow(window.innerWidth < bp);
+    window.addEventListener("resize",on);
+    return () => window.removeEventListener("resize",on);
+  },[bp]);
+  return narrow;
+};
+
 const GlobalStyles = () => (
   <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap');
@@ -1388,6 +1398,7 @@ const TYPE_COLOR = {dining:T.forest,excursion:T.gold,arrival:T.settled,departure
 
 const ItineraryTab = memo(() => {
   const [day,setDay] = useState(1);
+  const narrow = useIsNarrow();
   const d = ITINERARY.find(x=>x.day===day);
   return (
     <div className="fade-up">
@@ -1409,7 +1420,7 @@ const ItineraryTab = memo(() => {
         <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"16px",fontStyle:"italic",color:T.muted,marginBottom:"40px"}}>{d.date}</p>
         <div style={{borderTop:`1px solid ${T.line}`}}>
           {d.events.map((ev,i)=>(
-            <div key={i} style={{display:"grid",gridTemplateColumns:"80px 20px 1fr",gap:"0 24px",borderBottom:`1px solid ${T.line}`,padding:"28px 0",alignItems:"start"}}>
+            <div key={i} style={{display:"grid",gridTemplateColumns:narrow?"52px 16px 1fr":"80px 20px 1fr",gap:narrow?"0 14px":"0 24px",borderBottom:`1px solid ${T.line}`,padding:narrow?"22px 0":"28px 0",alignItems:"start"}}>
               <div style={{textAlign:"right",paddingTop:"2px"}}>
                 <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:T.muted,fontStyle:"italic"}}>{ev.time}</p>
               </div>
@@ -1425,13 +1436,24 @@ const ItineraryTab = memo(() => {
                 <p style={{fontSize:"13px",color:T.muted,marginTop:"4px"}}>{ev.loc}</p>
                 {ev.note&&<p style={{fontSize:"13px",color:T.muted,marginTop:"6px",fontStyle:"italic"}}>{ev.note}</p>}
                 {ev.vehicles&&<div style={{marginTop:"12px",borderTop:`1px solid ${T.line}`}}>
-                  {ev.vehicles.map(c=>(
-                    <div key={c.mobil} style={{display:"grid",gridTemplateColumns:"60px 1fr auto",gap:"12px",alignItems:"baseline",padding:"9px 0",borderBottom:`1px solid ${T.line}`}}>
-                      <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"15px",color:T.forest}}>{c.mobil}</span>
-                      <span style={{fontSize:"14px",color:T.ink,lineHeight:1.45}}>{c.pax}</span>
-                      <span style={{fontSize:"10px",letterSpacing:"1px",textTransform:"uppercase",color:c.bagasi.startsWith("Tanpa")?T.muted:T.gold,whiteSpace:"nowrap"}}>{c.bagasi}</span>
-                    </div>
-                  ))}
+                  {ev.vehicles.map(c=>{
+                    const koperColor = c.bagasi.startsWith("Tanpa")?T.muted:T.gold;
+                    return narrow ? (
+                      <div key={c.mobil} style={{padding:"12px 0",borderBottom:`1px solid ${T.line}`}}>
+                        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",gap:"12px",marginBottom:"5px"}}>
+                          <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"16px",color:T.forest}}>{c.mobil}</span>
+                          <span style={{fontSize:"10px",letterSpacing:"1px",textTransform:"uppercase",color:koperColor,whiteSpace:"nowrap"}}>{c.bagasi}</span>
+                        </div>
+                        <p style={{fontSize:"14px",color:T.ink,lineHeight:1.55,margin:0}}>{c.pax}</p>
+                      </div>
+                    ) : (
+                      <div key={c.mobil} style={{display:"grid",gridTemplateColumns:"60px 1fr auto",gap:"12px",alignItems:"baseline",padding:"9px 0",borderBottom:`1px solid ${T.line}`}}>
+                        <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"15px",color:T.forest}}>{c.mobil}</span>
+                        <span style={{fontSize:"14px",color:T.ink,lineHeight:1.45}}>{c.pax}</span>
+                        <span style={{fontSize:"10px",letterSpacing:"1px",textTransform:"uppercase",color:koperColor,whiteSpace:"nowrap"}}>{c.bagasi}</span>
+                      </div>
+                    );
+                  })}
                 </div>}
               </div>
             </div>
