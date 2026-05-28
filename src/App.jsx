@@ -2290,6 +2290,47 @@ const suggestByBrand = (garment, brand, brandSize) => {
   return null;
 };
 
+const SizeCountdown = memo(() => {
+  const [now,setNow] = useState(Date.now());
+  useEffect(()=>{ const id=setInterval(()=>setNow(Date.now()),1000); return ()=>clearInterval(id); },[]);
+  const diff = SIZE_DEADLINE.getTime() - now;
+
+  if(diff<=0) return (
+    <div style={{background:T.dangerBg,border:"1px solid #e8b4a8",borderLeft:`3px solid ${T.danger}`,padding:"18px 22px",marginBottom:"32px",display:"flex",alignItems:"center",gap:"12px",flexWrap:"wrap"}}>
+      <span style={{width:"8px",height:"8px",borderRadius:"50%",background:T.danger,display:"inline-block"}}/>
+      <p style={{fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.danger,fontWeight:500,margin:0}}>Pengumpulan ukuran telah ditutup</p>
+      <span style={{fontSize:"12px",color:T.muted}}>Deadline {SIZE_DEADLINE_LABEL} terlewati</span>
+    </div>
+  );
+
+  const d=Math.floor(diff/86400000), h=Math.floor((diff%86400000)/3600000), m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
+  const urgent = diff < 86400000; // < 24 jam
+  const accent = urgent ? T.danger : T.forest;
+  const units = [{n:d,l:"Hari"},{n:h,l:"Jam"},{n:m,l:"Menit"},{n:s,l:"Detik"}];
+
+  return (
+    <div style={{background:T.cream,border:`1px solid ${urgent?"#e8b4a8":T.line}`,borderLeft:`3px solid ${accent}`,padding:"20px 24px",marginBottom:"32px"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"18px"}}>
+        <div>
+          <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:urgent?T.danger:T.muted,marginBottom:"4px",fontWeight:urgent?500:400}}>{urgent?"Segera dikunci":"Form dikunci dalam"}</p>
+          <p style={{fontSize:"11px",color:T.muted}}>Deadline {SIZE_DEADLINE_LABEL}</p>
+        </div>
+        <div style={{display:"flex",gap:"18px"}}>
+          {units.map((u,i)=>(
+            <div key={u.l} style={{display:"flex",alignItems:"flex-start",gap:"18px"}}>
+              <div style={{textAlign:"center",minWidth:"42px"}}>
+                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"30px",fontWeight:500,color:accent,lineHeight:1}}>{String(u.n).padStart(2,"0")}</p>
+                <p style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginTop:"6px"}}>{u.l}</p>
+              </div>
+              {i<units.length-1&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"26px",color:T.ghost,lineHeight:1.1}}>:</span>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+});
+
 const SizeTab = memo(({user}) => {
   const isCoord = COORDINATORS.includes(user);
   const myHH = ALL_PAX.find(p=>p.name===user)?.hh;
@@ -2386,6 +2427,8 @@ const SizeTab = memo(({user}) => {
         <p style={{fontSize:"13px",color:T.muted,marginTop:"8px"}}>Baju, celana, topi/blangkon & sepatu untuk seluruh peserta. Orang tua dapat mengisikan untuk anggota keluarga.</p>
         <p style={{fontSize:"12px",color:pastDeadline?T.danger:T.warn,marginTop:"10px",letterSpacing:"0.3px"}}>{pastDeadline?`Pengumpulan ukuran telah ditutup (deadline ${SIZE_DEADLINE_LABEL}).`:`Deadline pengisian: ${SIZE_DEADLINE_LABEL} · dapat diubah & submit ulang kapan saja sebelum deadline.`}</p>
       </div>
+
+      <SizeCountdown/>
 
       <div style={{display:"flex",borderBottom:`1px solid ${T.line}`,marginBottom:"40px"}}>
         {[{id:"form",label:"Form Ukuran"},{id:"recap",label:`Rekap — ${filledCount}/${ALL_PAX.length}`}].map(t=>(
