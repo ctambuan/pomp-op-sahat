@@ -269,83 +269,161 @@ const RESTAURANTS = [
   },
   {
     id:"ayom",name:"Ayom Jogja",subtitle:"D2 · Makan Malam · 3 Juli 2026, 17.00",
-    note:"Restoran tepi sawah, Sukunan Banyuraden Gamping Sleman · 23 pax",
+    note:"Restoran tepi sawah, Sukunan Banyuraden Gamping Sleman · 23 pax · Sponsor: HH3 Monang",
+    sponsor:"Monang Panjaitan",
+    sponsorOnly:true,
+    taxRate:0,
+    deadline:"18 Juni 2026",
     participants: ALL_PAX,
     categories:[
       {id:"pembuka",name:"Pembuka",items:[
-        {id:"ay-salmon-salad",name:"Salmon Salad",desc:"Salad salmon panggang, selada romain, tomat ceri, roti baguette"},
-        {id:"ay-salad-udang",name:"Salad Udang Lotis",desc:"Udang rebus, buah-buahan, saus gula aren, cabai, ketumbar, kerupuk"},
-        {id:"ay-caesar",name:"Classic Caesar Salad",desc:"Salad klasik. Tambahan: Chicken +18K / Beef +20K"},
+        {id:"ay-salmon-salad",name:"Salmon Salad",desc:"Salad salmon panggang, selada romain, tomat ceri, roti baguette",price:68000},
+        {id:"ay-salad-udang",name:"Salad Udang Lotis",desc:"Udang rebus, buah-buahan, saus gula aren, cabai, ketumbar, kerupuk",price:47000},
+        {id:"ay-caesar",name:"Classic Caesar Salad",desc:"Salad klasik · Tambahan Chicken +18K / Beef +20K",price:48000},
+        {id:"ay-jagung",name:"Jagung Jemari Puteri",desc:"Jagung baby panggang dengan taburan keju",price:42000},
+        {id:"ay-singkong",name:"Singkong Goreng Merekah",desc:"Singkong goreng, disajikan dengan topping abon kelapa",price:38000},
+        {id:"ay-ubi-brulee",name:"Ubi Brulee",desc:"Ubi panggang dengan keju mozzarella",price:39000},
+        {id:"ay-kroket",name:"Kroket Belanda",desc:"Kroket goreng renyah dengan saus",price:48000},
+      ]},
+      {id:"cemilan",name:"Cemilan",items:[
+        {id:"ay-tahu-udang",name:"Tahu Isi Udang",desc:"",price:48000},
+        {id:"ay-pisang-aroma",name:"Pisang Aroma",desc:"",price:49000},
+        {id:"ay-chicken-wings",name:"Chicken Wings",desc:"",price:56000},
+        {id:"ay-pisang-almond",name:"Pisang Goreng Almond",desc:"",price:42000},
+        {id:"ay-fries",name:"French Fries",desc:"",price:38000},
+        {id:"ay-gorengan",name:"Gorengan Ayom",desc:"",price:48000},
+        {id:"ay-pisang-goreng",name:"Pisang Goreng Ayom",desc:"",price:39000},
+        {id:"ay-tahu-cabe",name:"Tahu Cabe Kering",desc:"",price:38000},
       ]},
       {id:"khas",name:"Khas Ayom",items:[
-        {id:"ay-nasi-campur",name:"Nasi Campur Sultan",desc:"Nasi basmati daun kemangi, bone marrow, ayam kampung goreng, sate sawah 1 tusuk, kering kentang, abon, urap, sambal matah"},
-        {id:"ay-lobster",name:"Lobster Bakar",desc:"Bumbu santan pedas manis, sambal dabu plecing urap, nasi basmati koriander (98K/100gr)"},
-        {id:"ay-ayam-sambal-ijo",name:"Ayam Sambal Ijo Nasi Daun Jeruk",desc:"Ayam bumbu kemangi, nasi basmati daun jeruk, sambal ijo, tomat ceri, jeruk limau, dabu merah hijau"},
-        {id:"ay-sate-sawah",name:"Sate Ayam Sawah",desc:"Sate ayam bumbu kemangi, nasi basmati mentega, kecap cabe, tomat ceri, jeruk limau, dabu merah hijau"},
-        {id:"ay-ayam-goreng-kampung",name:"Ayam Goreng Kampung Nasi Daun Kemangi",desc:"Ayam kampung goreng 1/2 ekor, nasi daun kemangi, urap, sambal matah"},
-        {id:"ay-ayam-kriuk",name:"Ayam Kriuk Kriuk",desc:"Ayam ruas paha atas bumbu tepung, nasi basmati mentega, dabu merah hijau"},
-        {id:"ay-bebek-tengil",name:"Bebek Tengil Nasi Daun Kemangi",desc:"Bebek goreng 1/2 ekor, nasi basmati daun kemangi, urap, sambal matah"},
-        {id:"ay-sop-iga",name:"Sop Iga Sukunan",desc:"Sop bumbu khas Ayom, daging iga, termasuk nasi dan emping"},
-        {id:"ay-rawon-iga",name:"Rawon Iga Hitam Manis",desc:"Rawon iga, nasi putih, telur asin brebes, kerupuk udang, sambal terasi"},
-        {id:"ay-iga-bakar",name:"Iga Bakar 500 Gr",desc:"Iga bakar barbeque 500gr, jagung bakar, coleslaw, french fries"},
-        {id:"ay-sate-maranggi",name:"Sate Bahari Maranggi",desc:"Tenderloin bumbu tradisional, nasi basmati mentega"},
-        {id:"ay-udang-maharaja",name:"Udang Maharaja",desc:"Udang ukuran besar, bumbu khas Ayom manis dan pedas, nasi basmati mentega"},
-        {id:"ay-sop-tenggiri",name:"Sop Ikan Tenggiri",desc:"Sop ikan tenggiri bumbu kuning, tomat hijau, belimbing wuluh, nasi putih, sambal terasi"},
-        {id:"ay-pecel-rames",name:"Pecel Rames Sukunan",desc:"Nasi pecel bumbu kacang, ayam goreng, sate paru, 1/2 telur asin brebes"},
-        {id:"ay-ayam-kecombrang",name:"Ayam Panggang Bumbu Kecombrang",desc:"Nasi basmati mentega, sambal matah"},
-        {id:"ay-ikan-nila-bakar",name:"Ikan Nila Bakar Merah",desc:"Nasi basmati daun kemangi, dabu merah hijau, sambal kecap"},
+        {id:"ay-nasi-campur",name:"Nasi Campur Sultan",desc:"Nasi basmati daun kemangi, bone marrow, ayam kampung goreng, sate sawah 1 tusuk, kering kentang, abon, urap, sambal matah",price:158000},
+        {id:"ay-ayam-sambal-ijo",name:"Ayam Sambal Ijo Nasi Daun Jeruk",desc:"Ayam bumbu kemangi, nasi basmati daun jeruk, sambal ijo, tomat ceri, jeruk limau, dabu merah hijau",price:79000},
+        {id:"ay-sate-sawah",name:"Sate Ayam Sawah",desc:"Sate ayam bumbu kemangi, nasi basmati mentega, kecap cabe, tomat ceri, jeruk limau, dabu merah hijau",price:85000},
+        {id:"ay-ayam-goreng-kampung",name:"Ayam Goreng Kampung Nasi Daun Kemangi",desc:"Ayam kampung goreng 1/2 ekor, nasi daun kemangi, urap, sambal matah",price:78000},
+        {id:"ay-ayam-kriuk",name:"Ayam Kriuk Kriuk",desc:"Ayam ruas paha atas bumbu tepung, nasi basmati mentega, dabu merah hijau",price:79000},
+        {id:"ay-bebek-tengil",name:"Bebek Tengil Nasi Daun Kemangi",desc:"Bebek goreng 1/2 ekor, nasi basmati daun kemangi, urap, sambal matah",price:88000},
+        {id:"ay-sop-iga",name:"Sop Iga Sukunan",desc:"Sop bumbu khas Ayom, daging iga, termasuk nasi dan emping",price:89000},
+        {id:"ay-rawon-iga",name:"Rawon Iga Hitam Manis",desc:"Rawon iga, nasi putih, telur asin brebes, kerupuk udang, sambal terasi",price:95000},
+        {id:"ay-iga-bakar",name:"Iga Bakar 500 Gr",desc:"Iga bakar barbeque 500gr, jagung bakar, coleslaw, french fries",price:158000},
+        {id:"ay-sate-maranggi",name:"Sate Bahari Maranggi",desc:"Tenderloin bumbu tradisional, nasi basmati mentega",price:149000},
+        {id:"ay-udang-maharaja",name:"Udang Maharaja",desc:"Udang ukuran besar, bumbu khas Ayom manis dan pedas, nasi basmati mentega",price:149000},
+        {id:"ay-sop-tenggiri",name:"Sop Ikan Tenggiri",desc:"Sop ikan tenggiri bumbu kuning, tomat hijau, belimbing wuluh, nasi putih, sambal terasi",price:78000},
+        {id:"ay-pecel-rames",name:"Pecel Rames Sukunan",desc:"Nasi pecel bumbu kacang, ayam goreng, sate paru, 1/2 telur asin brebes",price:85000},
+        {id:"ay-ayam-kecombrang",name:"Ayam Panggang Bumbu Kecombrang",desc:"Nasi basmati mentega, sambal matah",price:85000},
+        {id:"ay-ikan-nila-bakar",name:"Nila Bakar Bumbu Bali",desc:"Nasi basmati daun kemangi, dabu merah hijau, sambal kecap",price:76000},
       ]},
       {id:"seafood",name:"Seafood Khas Ayom",items:[
-        {id:"ay-nasi-pedas-laut",name:"Nasi Pedas Lautan Rasa",desc:"Hidangan spesial memadukan kekayaan hasil laut, cita rasa pedas dan gurih"},
-        {id:"ay-sate-tenggiri",name:"Sate Tenggiri Nusa Rasa",desc:"Sate tenggiri juicy, nasi kari"},
-        {id:"ay-udang-sewindu",name:"Udang Sewindu",desc:"Grilled king tiger prawn, mixed tossed traditional blanched vegetables, plecing sambal, basmati butter rice"},
-        {id:"ay-tilapia",name:"Tilapia Masak Dabu",desc:"Ikan tilapia bumbu kemangi, kentang tumbuk, tomat ceri, jeruk limau, dabu merah hijau"},
+        {id:"ay-nasi-pedas-laut",name:"Nasi Pedas Lautan Rasa",desc:"Hidangan spesial memadukan kekayaan hasil laut, cita rasa pedas dan gurih",price:125000},
+        {id:"ay-sate-tenggiri",name:"Sate Tenggiri Nusa Rasa",desc:"Sate tenggiri juicy, nasi kari",price:89000},
+        {id:"ay-udang-sewindu",name:"Udang Sewindu",desc:"Grilled king tiger prawn, mixed tossed traditional blanched vegetables, plecing sambal, basmati butter rice",price:148000},
+        {id:"ay-tilapia",name:"Tilapia Masak Dabu",desc:"Ikan tilapia bumbu kemangi, kentang tumbuk, tomat ceri, jeruk limau, dabu merah hijau",price:88000},
       ]},
       {id:"berbagi",name:"Hidangan Berbagi",items:[
-        {id:"ay-sate-sawah-7",name:"Sate Sawah Tujuh Tusuk",desc:"Sate ayam bumbu kemangi 7 tusuk"},
-        {id:"ay-udang-goreng-terasi",name:"Udang Goreng Sambal Terasi",desc:"Udang goreng, sajikan dengan sambal terasi"},
-        {id:"ay-tenggiri-bakar",name:"Tenggiri Bakar Nusantara",desc:"Sate ikan tenggiri 5 tusuk, cita rasa laut khas, kreasi premium"},
+        {id:"ay-sate-sawah-7",name:"Sate Sawah Tujuh Tusuk",desc:"Sate ayam bumbu kemangi 7 tusuk",price:118000},
+        {id:"ay-udang-goreng-terasi",name:"Udang Goreng Sambal Terasi",desc:"Udang goreng, sajikan dengan sambal terasi",price:79000},
+        {id:"ay-tenggiri-bakar",name:"Tenggiri Bakar Nusantara",desc:"Sate ikan tenggiri 5 tusuk, cita rasa laut khas, kreasi premium",price:119000},
       ]},
       {id:"nasgor",name:"Nasi Goreng",items:[
-        {id:"ay-ng-rendang",name:"Nasi Goreng Rendang",desc:"Nasi goreng Sumatera bumbu rendang, kerupuk emping, daging sapi, telur goreng, sambal"},
-        {id:"ay-ng-kambing",name:"Nasi Goreng Kambing",desc:""},
+        {id:"ay-ng-rendang",name:"Nasi Goreng Rendang",desc:"Nasi goreng Sumatera bumbu rendang, kerupuk emping, daging sapi, telur goreng, sambal",price:89000},
+        {id:"ay-ng-kambing",name:"Nasi Goreng Kambing",desc:"",price:84000},
       ]},
       {id:"steak",name:"Steak Reguler",items:[
-        {id:"ay-tenderloin",name:"Tenderloin",desc:"Grilled Tenderloin, mashed potato, mixed salad, blackpepper sauce"},
-        {id:"ay-tenderloin-angus",name:"Tenderloin Angus",desc:"Grilled Tenderloin Angus, mashed potato, mixed salad, mushroom sauce"},
-        {id:"ay-prime-angus",name:"Prime Angus Striploin",desc:"Grilled aussie premium angus striploin, mixed salad, chimichurri mushroom sauce"},
-        {id:"ay-us-blade-150",name:"US Meat Steak 150gr",desc:"Grilled US Top Blade, french fries, mixed salad, mushroom sauce"},
-        {id:"ay-us-blade-300",name:"US Meat Steak 300gr",desc:"Grilled US Top Blade, french fries, mixed salad, mushroom sauce"},
-        {id:"ay-us-blade-500",name:"US Meat Steak 500gr",desc:"Grilled US Top Blade, french fries, mixed salad, mushroom sauce"},
-        {id:"ay-ribeye",name:"Rib Eye",desc:"Grilled US Top Blade"},
+        {id:"ay-tenderloin",name:"Tenderloin",desc:"Grilled Tenderloin, mashed potato, mixed salad, blackpepper sauce",price:158000},
+        {id:"ay-tenderloin-angus",name:"Tenderloin Angus",desc:"Grilled Tenderloin Angus, mashed potato, mixed salad, mushroom sauce",price:299000},
+        {id:"ay-prime-angus",name:"Prime Angus Striploin",desc:"Grilled aussie premium angus striploin, mixed salad, chimichurri mushroom sauce",price:239000},
+        {id:"ay-us-blade-150",name:"US Meat Steak 150gr",desc:"Grilled US Top Blade, french fries, mixed salad, mushroom sauce",price:173000},
+        {id:"ay-us-blade-300",name:"US Meat Steak 300gr",desc:"Grilled US Top Blade, french fries, mixed salad, mushroom sauce",price:297000},
+        {id:"ay-us-blade-500",name:"US Meat Steak 500gr",desc:"Grilled US Top Blade, french fries, mixed salad, mushroom sauce",price:459000},
+        {id:"ay-ribeye",name:"Rib Eye",desc:"Grilled Rib Eye, choice potato, choice sauce",price:335000},
       ]},
       {id:"steak-live",name:"Steak Live Cooking",items:[
-        {id:"ay-lc-blade",name:"US Top Blade / 100gr",desc:"Grilled US Top Blade, french fries, mixed salad, mushroom sauce. Min order 500gr"},
-        {id:"ay-lc-prime",name:"Prime Angus Striploin / 100gr",desc:"Grilled Striploin, french fries, mixed salad, mushroom sauce. Min order 500gr"},
-        {id:"ay-lc-tenderloin-aussie",name:"Tenderloin Aussie / 100gr",desc:"Grilled Tenderloin, french fries, mixed salad, mushroom sauce. Min order 500gr"},
-        {id:"ay-lc-tenderloin-angus",name:"Tenderloin Angus / 100gr",desc:"Grilled US Hanging Tender, french fries, mixed salad, mushroom sauce. Min order 500gr"},
+        {id:"ay-lc-blade",name:"US Top Blade / 100gr",desc:"Grilled US Top Blade, french fries, mixed salad, mushroom sauce · Min order 500gr",price:93000},
+        {id:"ay-lc-prime",name:"Prime Angus Striploin / 100gr",desc:"Grilled Striploin, french fries, mixed salad, mushroom sauce · Min order 500gr",price:118000},
+        {id:"ay-lc-tenderloin-aussie",name:"Tenderloin Aussie / 100gr",desc:"Grilled Tenderloin, french fries, mixed salad, mushroom sauce · Min order 500gr",price:85000},
+        {id:"ay-lc-tenderloin-angus",name:"Tenderloin Angus / 100gr",desc:"Grilled US Hanging Tender, french fries, mixed salad, mushroom sauce · Min order 500gr",price:130000},
       ]},
       {id:"western",name:"Western",items:[
-        {id:"ay-salmon",name:"Norwegian Salmon",desc:"Ikan salmon, mashed potato, mixed salad"},
-        {id:"ay-philly",name:"Philly Cheese Steak",desc:"Roti phily, isian daging cincang, french fries"},
-        {id:"ay-burger",name:"American Burger",desc:"Burger isian daging paty, french fries"},
+        {id:"ay-salmon",name:"Norwegian Salmon",desc:"Ikan salmon, mashed potato, mixed salad",price:165000},
+        {id:"ay-philly",name:"Philly Cheese Steak",desc:"Roti phily, isian daging cincang, french fries",price:68000},
+        {id:"ay-burger",name:"American Burger",desc:"Burger isian daging paty, french fries",price:76000},
       ]},
       {id:"pasta",name:"Pasta",items:[
-        {id:"ay-aglio",name:"Aglio E Olio Prawn Butter",desc:"Pasta dengan udang khas Ayom, olahan rempah, roti baguette"},
-        {id:"ay-carbonara",name:"Carbonara Smoked Beef",desc:"Pasta saus keju, smoked beef, roti baguette"},
-        {id:"ay-bolognese",name:"Ayom Bolognese",desc:"Pasta saus tomat, daging cincang, roti baguette"},
+        {id:"ay-aglio",name:"Aglio E Olio Prawn Butter",desc:"Pasta dengan udang khas Ayom, olahan rempah, roti baguette",price:86000},
+        {id:"ay-carbonara",name:"Carbonara Smoked Beef",desc:"Pasta saus keju, smoked beef, roti baguette",price:69000},
+        {id:"ay-bolognese",name:"Ayom Bolognese",desc:"Pasta saus tomat, daging cincang, roti baguette",price:69000},
       ]},
       {id:"kreasi-nasi",name:"Kreasi Nasi",items:[
-        {id:"ay-nasi-daun-jeruk",name:"Nasi Daun Jeruk Personal / Porsi",desc:""},
-        {id:"ay-nasi-basmati",name:"Nasi Basmati Mentega Personal / Porsi",desc:""},
-        {id:"ay-nasi-putih",name:"Nasi Putih",desc:""},
+        {id:"ay-nasi-daun-jeruk",name:"Nasi Daun Jeruk Personal / Porsi",desc:"",price:30000},
+        {id:"ay-nasi-basmati",name:"Nasi Basmati Mentega Personal / Porsi",desc:"",price:30000},
+        {id:"ay-nasi-putih",name:"Nasi Putih",desc:"",price:8500},
       ]},
       {id:"dessert",name:"Penutup",items:[
-        {id:"ay-french-toast",name:"French Toast Ice Cream Vanila",desc:""},
+        {id:"ay-french-toast",name:"French Toast Ice Cream Vanila",desc:"",price:49000},
+        {id:"ay-tiramisu",name:"Tiramisu",desc:"",price:47000},
+        {id:"ay-panna-cotta",name:"Strawberry Panna Cotta",desc:"",price:39000},
+        {id:"ay-creme-brulee",name:"Creme Brulee",desc:"",price:39000},
+        {id:"ay-gelato-s",name:"Gelato Small",desc:"2 flavor · 2 scoop · Pilihan: Salted Caramel / Chocolate / Chocolate Mint / Oreo / Vanilla Bourbon / Big Ball Bubble Gum / Mandarino / Strawberry",price:46000},
+        {id:"ay-gelato-m",name:"Gelato Medium",desc:"2 flavor · 3 scoop",price:55000},
+      ]},
+      {id:"kopi",name:"Kopi & Khas",items:[
+        {id:"ay-espresso",name:"Espresso",desc:"Single shot / Doppio / Lungo",price:23000},
+        {id:"ay-americano",name:"Americano",desc:"",price:31000},
+        {id:"ay-cappuccino",name:"Cappuccino",desc:"",price:35000},
+        {id:"ay-latte",name:"Caffe Latte",desc:"",price:34000},
+        {id:"ay-mochacino",name:"Mochacino",desc:"",price:37000},
+        {id:"ay-kopi-susu-ayom",name:"Kopi Susu Ayom",desc:"Kopi dengan susu adonan ayom, rasa kelapa yang manis",price:37000},
+        {id:"ay-kopi-susu-sanjana",name:"Kopi Susu Sanjana",desc:"Kopi dengan susu adonan ayom, gula palem",price:36000},
+        {id:"ay-tirtagangga",name:"Tirtagangga",desc:"Olahan kopi khas Ayom · Aroma bunga tropis, rasa bubblegum manis berpadu rasa kopi",price:41000},
+        {id:"ay-mandalawangi",name:"Mandalawangi",desc:"Olahan kopi khas Ayom · Rasa kopi tipis dengan kombucha, sensasi buah tropis",price:41000},
+        {id:"ay-meranti",name:"Meranti",desc:"Olahan kopi khas Ayom · Perpaduan kopi dan susu segar, rasa coklat kacang manis tiramisu",price:42000},
+      ]},
+      {id:"non-kopi",name:"Non Kopi",items:[
+        {id:"ay-niskala",name:"Niskala",desc:"Rasa susu · Coklat dengan susu adonan ayom",price:39000},
+        {id:"ay-nawasena",name:"Nawasena",desc:"Rasa susu · Red velvet dengan susu adonan ayom",price:39000},
+        {id:"ay-temaram",name:"Temaram",desc:"Khas Ayom · Olahan sirup rempah, campuran kombucha dan tamarind",price:41000},
+        {id:"ay-nandikara",name:"Nandikara",desc:"Khas Ayom · Manis susu ungu dicampurkan dengan susu gandung dan pisang",price:45000},
+        {id:"ay-demak-ijo",name:"Demak Ijo",desc:"Khas Ayom · Minuman kesehatan sayuran hijau dicampur air kelapa",price:48000},
+        {id:"ay-naloni",name:"Naloni",desc:"Khas Ayom · Minuman segar rasa rujak",price:46000},
+        {id:"ay-nirmala",name:"Soda Nirmala",desc:"Soda segar · Rasa permen karet",price:33000},
+        {id:"ay-lembayung",name:"Soda Lembayung",desc:"Soda segar · Rasa bunga lavender, madu murni dan soda",price:32000},
+        {id:"ay-infuse-water",name:"Infuse Water",desc:"Menu Berbagi · Minuman berbagi potongan buah-buahan tropis · untuk 4 orang (5x refill)",price:75000},
+        {id:"ay-timun-serut",name:"Timun Serut",desc:"Menu Berbagi · Minuman segar timun, mentimun, irisan tipis, nata de coco · untuk 4 orang (5x refill)",price:75000},
+      ]},
+      {id:"teh-tradisional",name:"Teh & Tradisional",items:[
+        {id:"ay-teh-sultan",name:"Teh Sultan Rempah Ayom",desc:"Teh khas Ayom dengan berbagai macam rempah wangi · untuk 2 porsi",price:49000},
+        {id:"ay-teh-krampoel",name:"Teh Krampoel",desc:"Teh khas yang memiliki aroma jeruk jawak",price:32000},
+        {id:"ay-teh-jahe",name:"Teh Jahe",desc:"",price:28000},
+        {id:"ay-lychee-tea",name:"Lychee Tea",desc:"",price:36000},
+        {id:"ay-wedang-uwuh",name:"Wedang Uwuh",desc:"Minuman dari bahan rempah-rempah merah, memiliki rasa pedas manis, disajikan panas",price:39000},
+        {id:"ay-es-kelapa-ayom",name:"Es Kelapa Ayom",desc:"Minuman dari air dan daging kelapa, menawarkan rasa manis dan menyegarkan",price:35000},
+        {id:"ay-jamu-kunir",name:"Jamu Kunir Asem",desc:"Jamu kunir asam murni, disajikan tanpa es",price:32000},
+        {id:"ay-jamu-beras-kencur",name:"Jamu Beras Kencur",desc:"Jamu beras kencur murni, disajikan tanpa es",price:32000},
+        {id:"ay-bir-pletok",name:"Bir Pletok",desc:"Minuman rempah Betawi tanpa alkohol · Rasa hangat, manis, pedas dan menenangkan",price:35000},
+      ]},
+      {id:"jus",name:"Jus & Segar",items:[
+        {id:"ay-fresh-orange",name:"Fresh Squeeze Orange",desc:"Perasan murni jeruk manis tanpa gula",price:42000},
+        {id:"ay-jus-semangka",name:"Semangka",desc:"",price:37000},
+        {id:"ay-jus-mangga",name:"Mangga",desc:"",price:38000},
+        {id:"ay-jus-alpukat",name:"Alpukat",desc:"",price:37000},
+        {id:"ay-jus-sirsak",name:"Sirsak",desc:"",price:37000},
+        {id:"ay-jus-strawberry",name:"Strawberry",desc:"",price:38000},
+        {id:"ay-sirsak-leci",name:"Sirsak Leci",desc:"Menu Berbagi · Perpaduan buah sirsak dan leci · untuk 2 orang",price:62000},
+        {id:"ay-nanas-rempah",name:"Nanas Rempah",desc:"Menu Berbagi · Infuse pineapple + rempah diperkuat air kelapa segar · untuk 2 orang",price:62000},
+      ]},
+      {id:"anak",name:"Anak-Anak",items:[
+        {id:"ay-aruna",name:"Aruna",desc:"Susu segar dan ice cream blend merah, rasa pisang, topping coklat stik",price:43000},
+        {id:"ay-dahayu",name:"Dahayu",desc:"Ice cream dan mixberry, topping strawberry, almond dan sereal",price:45000},
+        {id:"ay-gayatri",name:"Gayatri",desc:"Susu hangat rasa coklat karamel, topping coklat stik dan marshmallow",price:45000},
+        {id:"ay-arnawama",name:"Arnawama",desc:"Susu segar dan ice cream blend biru, rasa permen, topping warna-warni",price:43000},
+      ]},
+      {id:"air-mineral",name:"Air Mineral",items:[
+        {id:"ay-pristine",name:"Pristine Mineral",desc:"",price:18000},
+        {id:"ay-equil-natural",name:"Equil Natural",desc:"",price:29000},
+        {id:"ay-equil-sparkling",name:"Equil Sparkling",desc:"",price:29000},
       ]},
       {id:"additional",name:"Tambahan",items:[
-        {id:"ay-extra-sambal",name:"Extra Sambal",desc:"Pilihan: Sambal Ijo / Sambal Merah / Sambal Matah / Sambal Terasi"},
-        {id:"ay-extra-sauce",name:"Extra Sauce",desc:"Pilihan: Sauce Mushroom / Sauce BBQ / Sauce Blackpepper / Sauce Chimichurri"},
+        {id:"ay-extra-sambal",name:"Extra Sambal",desc:"Pilihan: Sambal Ijo / Sambal Merah / Sambal Matah / Sambal Terasi",price:10000},
+        {id:"ay-extra-sauce",name:"Extra Sauce",desc:"Pilihan: Sauce Mushroom / Sauce BBQ / Sauce Blackpepper / Sauce Chimichurri",price:10000},
       ]},
     ]
   },
@@ -1753,6 +1831,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
             <p style={{fontSize:"11px",color:T.muted}}>{resto.subtitle} · {resto.note}</p>
             {resto.deadline&&<p style={{fontSize:"10px",color:T.warn,marginTop:"4px",letterSpacing:"0.5px"}}>Deadline pre-order: {resto.deadline}</p>}
             {resto.taxRate&&<p style={{fontSize:"10px",color:T.muted,marginTop:"4px"}}>Harga nett · +11% pajak pemerintah & +10% service charge ditambahkan saat checkout</p>}
+            {resto.sponsorOnly&&<p style={{fontSize:"10px",color:T.forest,marginTop:"4px",letterSpacing:"0.3px"}}>✦ Makan malam ini disponsori · Harga menu tidak ditampilkan · {isCoord?"Biaya terlihat di Rekap":""}</p>}
             {lastSync&&<p style={{fontSize:"10px",color:T.ghost,marginTop:"4px"}}>Tersimpan: {lastSync.toLocaleTimeString("id-ID")} · Auto-refresh 30 dtk</p>}
           </div>
           <div style={{display:"flex",gap:"12px",alignItems:"center",flexWrap:"wrap"}}>
@@ -1824,7 +1903,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                   <div>
                     <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"2px",flexWrap:"wrap"}}>
                       <p style={{fontSize:"14px",color:isDisabled?T.muted:T.ink,fontWeight:inCart?500:300,margin:0}}>{item.name}</p>
-                      {hasPrice&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.gold,border:`1px solid ${T.goldL}`,padding:"1px 7px",fontWeight:500,whiteSpace:"nowrap"}}>IDR {displayPrice.toLocaleString("id-ID")}</span>}
+                      {hasPrice&&!resto.sponsorOnly&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.gold,border:`1px solid ${T.goldL}`,padding:"1px 7px",fontWeight:500,whiteSpace:"nowrap"}}>IDR {displayPrice.toLocaleString("id-ID")}</span>}
                       {!hasPrice&&priceRange&&!isDisabled&&<span style={{fontSize:"10px",letterSpacing:"1px",color:T.muted,border:`1px solid ${T.line}`,padding:"1px 7px",whiteSpace:"nowrap"}}>{priceRange}</span>}
                     </div>
                     {isDisabled&&<p style={{fontSize:"10px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — IDR ${item.price}k melebihi batas IDR 200k`:"Harga pasar — hubungi koordinator"}</p>}
@@ -1885,10 +1964,10 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                 <div key={id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${T.line}`,gap:"12px"}}>
                   <span style={{fontSize:"13px",color:T.ink,flex:1}}>{item.name}{item.config&&<span style={{color:T.gold}}> · {item.config}</span>}{item.notes&&<span style={{color:T.muted,fontStyle:"italic"}}> · {item.notes}</span>}</span>
                   <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"15px",color:T.ink,minWidth:"32px",textAlign:"right"}}>×{item.qty}</span>
-                  {hasPrices&&item.price&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"14px",color:T.settled,minWidth:"120px",textAlign:"right"}}>IDR {(item.price*item.qty).toLocaleString("id-ID")}</span>}
+                  {hasPrices&&item.price&&!resto.sponsorOnly&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"14px",color:T.settled,minWidth:"120px",textAlign:"right"}}>IDR {(item.price*item.qty).toLocaleString("id-ID")}</span>}
                 </div>
               ))}
-              {hasPrices&&nettTotal>0&&<>
+              {hasPrices&&nettTotal>0&&!resto.sponsorOnly&&<>
                 {resto.taxRate&&<>
                   <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0 4px",borderTop:`1px solid ${T.line}`,marginTop:"8px"}}>
                     <span style={{fontSize:"11px",color:T.muted}}>Subtotal (nett)</span>
@@ -1904,6 +1983,13 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                   <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.forest,fontWeight:500}}>IDR {grandTotal.toLocaleString("id-ID")}</span>
                 </div>
               </>}
+              {hasPrices&&nettTotal>0&&resto.sponsorOnly&&isCoord&&(
+                <div style={{marginTop:"16px",padding:"14px 16px",background:"#f0f4ef",borderLeft:`3px solid ${T.forest}`}}>
+                  <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,marginBottom:"6px",fontWeight:500}}>Estimasi Biaya Sponsor · Khusus Koordinator</p>
+                  <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest,fontWeight:500}}>IDR {grandTotal.toLocaleString("id-ID")}</p>
+                  <p style={{fontSize:"9px",color:T.muted,marginTop:"4px"}}>Harga sudah termasuk pajak & service · Tidak ditampilkan ke peserta</p>
+                </div>
+              )}
             </>;
           })()}
           <button onClick={submit} disabled={saving||locked} style={{marginTop:"24px",width:"100%",padding:"14px",background:locked?T.muted:T.forest,color:"white",border:"none",cursor:locked?"not-allowed":"pointer",fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500,transition:"background 0.2s"}}>
@@ -1922,15 +2008,26 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
               const totalBoxes = Object.values(allOrders).reduce((s,o)=>s+(o.items||[]).reduce((ss,i)=>ss+Number(i.qty),0),0);
               if(!grandAllTotal&&!totalBoxes) return null;
               return (
-                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"1px",background:T.line,marginBottom:"32px"}}>
-                  <div style={{background:T.cream,padding:"20px 24px"}}>
-                    <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Total Kotak</p>
-                    <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"28px",color:T.ink}}>{totalBoxes} <span style={{fontSize:"13px",color:T.muted}}>kotak</span></p>
+                <div style={{marginBottom:"32px"}}>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"1px",background:T.line}}>
+                    <div style={{background:T.cream,padding:"20px 24px"}}>
+                      <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Total Item Dipesan</p>
+                      <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"28px",color:T.ink}}>{totalBoxes} <span style={{fontSize:"13px",color:T.muted}}>item</span></p>
+                    </div>
+                    {!resto.sponsorOnly&&(
+                      <div style={{background:T.cream,padding:"20px 24px"}}>
+                        <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Total Tagihan Semua</p>
+                        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest}}>IDR {grandAllTotal.toLocaleString("id-ID")}</p>
+                      </div>
+                    )}
                   </div>
-                  <div style={{background:T.cream,padding:"20px 24px"}}>
-                    <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Total Tagihan Semua</p>
-                    <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest}}>IDR {grandAllTotal.toLocaleString("id-ID")}</p>
-                  </div>
+                  {resto.sponsorOnly&&isCoord&&grandAllTotal>0&&(
+                    <div style={{marginTop:"1px",background:"#f0f4ef",padding:"20px 24px",borderLeft:`3px solid ${T.forest}`}}>
+                      <p style={{fontSize:"9px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,marginBottom:"6px",fontWeight:500}}>Estimasi Biaya Sponsor — {resto.sponsor||"Sponsor"} · Khusus Koordinator</p>
+                      <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"28px",color:T.forest,fontWeight:500}}>IDR {grandAllTotal.toLocaleString("id-ID")}</p>
+                      <p style={{fontSize:"9px",color:T.muted,marginTop:"6px"}}>Harga sudah termasuk pajak & service charge · Tidak ditampilkan ke peserta · Gunakan sebagai referensi saat eksekusi order</p>
+                    </div>
+                  )}
                 </div>
               );
             })()}
