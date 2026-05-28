@@ -92,9 +92,9 @@ const RESTAURANTS = [
     participants: ALL_PAX.filter(p=>p.name!=="Nadia Tambunan"),
     categories:[
       {id:"express",name:"Express Bowl",items:[
-        {id:"eb-ayam",name:"Express Bowl Ayam",desc:"Pilihan saus: Mentega / Rica-rica / Asam Manis / Mayo / Teriyaki"},
-        {id:"eb-ikan",name:"Express Bowl Ikan",desc:"Pilihan saus: Mentega / Rica-rica / Asam Manis / Mayo / Teriyaki"},
-        {id:"eb-mix",name:"Express Bowl Mix",desc:"Udang, Ayam & Ikan. Pilihan saus: Mentega / Rica-rica / Asam Manis / Mayo / Teriyaki"},
+        {id:"eb-ayam",name:"Express Bowl Ayam",desc:"Chicken",options:[{id:"saus",label:"Pilihan Saus",required:true,choices:["Mentega","Rica-rica","Asam Manis","Mayo","Teriyaki"]}]},
+        {id:"eb-ikan",name:"Express Bowl Ikan",desc:"Fish",options:[{id:"saus",label:"Pilihan Saus",required:true,choices:["Mentega","Rica-rica","Asam Manis","Mayo","Teriyaki"]}]},
+        {id:"eb-mix",name:"Express Bowl Mix",desc:"Udang, Ayam & Ikan",options:[{id:"saus",label:"Pilihan Saus",required:true,choices:["Mentega","Rica-rica","Asam Manis","Mayo","Teriyaki"]}]},
       ]},
       {id:"special",name:"Menu Special",items:[
         {id:"sp-mie-katsu",name:"Mie + Ayam Katsu Teriyaki Saos",desc:"Noodle + Chicken Katsu Teriyaki Sauce"},
@@ -260,7 +260,7 @@ const RESTAURANTS = [
         {id:"dr-sejora",name:"Sejora",desc:""},{id:"dr-lemon-tea",name:"Es Lemon Tea",desc:""},
         {id:"dr-lemonade",name:"Es Lemonade",desc:""},{id:"dr-melon-lemonade",name:"Melon Lemonade",desc:""},
         {id:"dr-lychee",name:"Lychee Tea",desc:""},{id:"dr-ice-tea-green",name:"Ice Tea Green",desc:""},
-        {id:"dr-coke",name:"Coke / Fanta / Sprite",desc:""},{id:"dr-teh-botol",name:"Teh Botol Sosro",desc:""},
+        {id:"dr-coke",name:"Soft Drink",desc:"Pilih",options:[{id:"jenis",label:"Pilihan",required:true,choices:["Coke","Fanta","Sprite"]}]},{id:"dr-teh-botol",name:"Teh Botol Sosro",desc:""},
         {id:"dr-air-mineral",name:"Air Mineral Botol",desc:""},{id:"dr-es-teh-manis",name:"Es Teh Manis",desc:""},
         {id:"dr-teh-manis-panas",name:"Teh Manis Panas",desc:""},{id:"dr-es-teh-tawar",name:"Es Teh Tawar",desc:""},
         {id:"dr-teh-panas",name:"Teh Panas",desc:""},{id:"dr-es-batu",name:"Es Batu",desc:""},
