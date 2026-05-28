@@ -671,6 +671,176 @@ const RESTAURANTS = [
 
     ]
   },
+  // ─── KEMANGI BISTRO ───────────────────────────────────────────────────────────
+  {
+    id:"kemangi",name:"Kemangi Bistro",subtitle:"D1 Welcome Dinner (2 Juli 19.00) & D2 Breakfast (3 Juli 07.00)",
+    note:"Kemangi Bistro, Hyatt Regency \u00b7 23 pax \u00b7 Sponsor: HH4 Gerard \u00b7 Harga belum termasuk 21% pajak & service",
+    deadline:"18 Juni 2026",
+    taxRate:0.21,
+    participants: ALL_PAX,
+    categories:[
+      {id:"km-salad",name:"Salad Appetizer",items:[
+        {id:"km-sl-caesar",name:"Classic Caesar Salad",desc:"Romaine, crispy beef bacon, parmesan, croutons, Caesar dressing",
+         variants:[{label:"Plain",price:88000},{label:"+ Grilled Chicken",price:103000},{label:"+ Grilled Prawn",price:106000},{label:"+ Poached Egg",price:96000}]},
+        {id:"km-sl-kale",name:"Kale Tuna Loin",desc:"Organic kale, quinoa, tuna loin, strawberry, cherry tomatoes, sesame dressing",price:80000},
+        {id:"km-sl-garden",name:"Garden Greens",desc:"Mixed greens, carrot, tomato, capsicum, onion, cucumber, balsamic dressing",price:60000},
+        {id:"km-sl-salmon",name:"Healthy Salmon Salad",desc:"Salmon gravlax, mixed greens, nuts, feta, pita bread, balsamic vinaigrette",price:120000},
+        {id:"km-sl-gado",name:"Gado-Gado Djakarta",desc:"Vegetable salad, bean sprouts, boiled egg, potatoes, bean curd, tempeh, peanut sauce",price:78000},
+        {id:"km-sl-lotek",name:"Lotek Jogja",desc:"Steamed vegetables & rice cake, vegetable fritter, peanut sauce",price:74000},
+      ]},
+      {id:"km-snack",name:"Snack",items:[
+        {id:"km-sn-ballen",name:"Beef Cheese Ballen",desc:"Smoked beef, potato & cheese balls, honey mustard",price:78000},
+        {id:"km-sn-springroll",name:"Duck and Vegetable Spring Rolls",desc:"Crispy vegetable & sliced duck rolls, Thai chili dip",price:78000},
+        {id:"km-sn-fries",name:"Cheese Truffle Fries",desc:"Potato sticks, truffle oil, parmesan, chili tomato sauce",price:68000},
+      ]},
+      {id:"km-soup",name:"Soup",items:[
+        {id:"km-sp-pumpkin",name:"Butternut Pumpkin Soup",desc:"Creamy butternut pumpkin soup, cheese stick",price:75000},
+        {id:"km-sp-wonton",name:"Wonton Soup",desc:"Chicken & prawn dumpling soup, mushrooms, baby bok choy",price:80000},
+        {id:"km-sp-mushroom",name:"Roasted Forest Mushroom Soup",desc:"Mushroom cream soup, crispy mushrooms, garlic butter bread, truffle oil",price:75000},
+      ]},
+      {id:"km-signature",name:"Signature Dish",items:[
+        {id:"km-sg-buntut",name:"Sop Buntut",desc:"Beef oxtail & vegetable soup, steamed rice, green sambal",price:178000},
+        {id:"km-sg-nasgor",name:"Nasi Goreng Kecombrang",desc:"Fried rice, salted fish, bitter beans, bean sprouts, galangal flower, sunny-side-up egg, peanut crackers",price:118000},
+        {id:"km-sg-ikan",name:"Ikan Kuah Kemangi",desc:"Pan-fried snapper fillet, yellow curry sauce, sweet basil, vegetables",price:128000},
+      ]},
+      {id:"km-veg",name:"Vegetarian",items:[
+        {id:"km-vg-paratha",name:"Indian Paratha",desc:"Paratha, vegetable stew in curry, mango chutney, yogurt",price:95000},
+        {id:"km-vg-kwetiaw",name:"Vegan Fried Kwetiaw",desc:"Flat rice noodles, assorted vegetables, mushrooms, zucchini, cauliflower tempura",price:80000},
+        {id:"km-vg-avocado",name:"Vegetable Avocado Roll",desc:"Mixed vegetables & avocado in tortilla, sun-dried tomato pesto, fries",price:80000},
+        {id:"km-vg-fruit",name:"Fruit Salad with Strawberry Vinaigrette",desc:"Mixed lettuce, cucumber, pineapple, tomato, olives, corn, strawberries, honey, olive oil",price:80000},
+        {id:"km-vg-gulai",name:"Gulai Jamur",desc:"Stewed local mushrooms in red curry sauce, steamed rice",price:80000},
+      ]},
+      {id:"km-asian",name:"Asian Dish",items:[
+        {id:"km-as-duck",name:"Duck Confit Nasi Kecombrang",desc:"Deep-fried crispy duck (half), vegetable urap, steamed rice galangal, sambal bawang, peanut crackers",price:138000},
+        {id:"km-as-barramundi",name:"Grilled Barramundi Jimbaran",desc:"Grilled barramundi, Balinese marination, water spinach, bean sprout rice, sambal matah, peanut crackers",price:128000},
+        {id:"km-as-kremes",name:"Ayam Kremes",desc:"Crispy fried free-range chicken, cucumber, fried cabbage, lime, basil, bitter beans, lettuce, garlic sambal",price:118000},
+        {id:"km-as-konro",name:"Iga Bakar Konro Makassar",desc:"Char-grilled dark beef ribs, steamed rice, cucumber",price:178000},
+        {id:"km-as-buntutgoreng",name:"Buntut Goreng Balado",desc:"Fried beef oxtail, spicy chili sauce, beef broth, steamed rice, fresh vegetables",price:168000},
+        {id:"km-as-nasgorkampoeng",name:"Nasi Goreng Kampoeng",desc:"Fried rice, shredded chicken, chicken satay, fried egg, prawns",price:118000},
+        {id:"km-as-satay",name:"Assorted Satay",desc:"Charcoal-grilled chicken, lamb & beef satay, rice cakes, peanut sauce, sweet ketchup",price:128000},
+        {id:"km-as-mietektek",name:"Mie Goreng Tek Tek",desc:"Fried egg noodles Javanese style, chicken, egg, prawns, vegetables, crackers",price:98000},
+        {id:"km-as-miegodhog",name:"Mie Godhog Jawa",desc:"Javanese boiled egg noodle soup, shredded chicken, egg, vegetables, crackers",price:98000},
+        {id:"km-as-padthai",name:"Pad Thai",desc:"Flat rice noodle, sweet-savory-sour sauce, peanuts, chives, fried tofu, bean sprouts, fried egg",price:128000,
+         options:[{id:"protein",label:"Pilihan Protein",required:true,choices:["Beef","Prawn","Chicken"]}]},
+        {id:"km-as-soto",name:"Soto Ayam",desc:"Clear chicken soup, glass noodles, vegetables, steamed rice",price:98000},
+        {id:"km-as-ayamareh",name:"Ayam Bakar Areh",desc:"Grilled free-range chicken, coconut milk & spices, long beans, sprouts, steamed rice, garlic sambal",price:118000},
+      ]},
+      {id:"km-main",name:"Main Course",items:[
+        {id:"km-mn-surfturf",name:"Surf and Turf",desc:"Grilled Black Angus tenderloin & king prawn, mashed potatoes, sauteed vegetables, duo mix sauce",price:328000},
+        {id:"km-mn-fishchips",name:"Fish and Chips",desc:"Fried battered snapper fillet, French fries, tartar sauce",price:108000},
+        {id:"km-mn-spring",name:"Roasted Spring Chicken",desc:"Roasted half baby chicken, sauteed vegetables, mashed potatoes, duo mixed sauce",price:150000},
+      ]},
+      {id:"km-grill",name:"Grill & Hot Stone",items:[
+        {id:"km-gr-lobster",name:"Lobster Hot Stone (per 100gr)",desc:"Fresh lobster, garlic butter, cooked on hot stone. Harga per 100gr \u2014 koordinator konfirmasi berat.",
+         price:160000,options:[
+           {id:"greens",label:"Greens",required:true,choices:["Vegetable of The Day","Mixed Garden Salad"]},
+           {id:"side",label:"Side Dish",required:true,choices:["Mashed Potato","French Fries","Herbs Baked Potato","Steamed Rice"]},
+           {id:"sauce",label:"Sauce",required:true,choices:["Mushroom","Green Peppercorn","Green Chimichurri","Barbecue","Beurre Blanc","Lemon Butter","Garlic Butter"]}]},
+        {id:"km-gr-salmon",name:"Norwegian Salmon",desc:"Sustainable seafood, grilled",price:208000,options:[
+           {id:"greens",label:"Greens",required:true,choices:["Vegetable of The Day","Mixed Garden Salad"]},
+           {id:"side",label:"Side Dish",required:true,choices:["Mashed Potato","French Fries","Herbs Baked Potato","Steamed Rice"]},
+           {id:"sauce",label:"Sauce",required:true,choices:["Mushroom","Green Peppercorn","Green Chimichurri","Barbecue","Beurre Blanc","Lemon Butter","Garlic Butter"]}]},
+        {id:"km-gr-tenderloin",name:"Australian Black Angus Tenderloin 170gr",desc:"Grill / hot stone",price:388000,options:[
+           {id:"greens",label:"Greens",required:true,choices:["Vegetable of The Day","Mixed Garden Salad"]},
+           {id:"side",label:"Side Dish",required:true,choices:["Mashed Potato","French Fries","Herbs Baked Potato","Steamed Rice"]},
+           {id:"sauce",label:"Sauce",required:true,choices:["Mushroom","Green Peppercorn","Green Chimichurri","Barbecue","Beurre Blanc","Lemon Butter","Garlic Butter"]}]},
+        {id:"km-gr-sirloin",name:"Australian Black Angus Sirloin 200gr",desc:"Grill / hot stone",price:318000,options:[
+           {id:"greens",label:"Greens",required:true,choices:["Vegetable of The Day","Mixed Garden Salad"]},
+           {id:"side",label:"Side Dish",required:true,choices:["Mashed Potato","French Fries","Herbs Baked Potato","Steamed Rice"]},
+           {id:"sauce",label:"Sauce",required:true,choices:["Mushroom","Green Peppercorn","Green Chimichurri","Barbecue","Beurre Blanc","Lemon Butter","Garlic Butter"]}]},
+        {id:"km-gr-ribeye",name:"Australian Black Angus Rib Eye 200gr",desc:"Grill / hot stone",price:358000,options:[
+           {id:"greens",label:"Greens",required:true,choices:["Vegetable of The Day","Mixed Garden Salad"]},
+           {id:"side",label:"Side Dish",required:true,choices:["Mashed Potato","French Fries","Herbs Baked Potato","Steamed Rice"]},
+           {id:"sauce",label:"Sauce",required:true,choices:["Mushroom","Green Peppercorn","Green Chimichurri","Barbecue","Beurre Blanc","Lemon Butter","Garlic Butter"]}]},
+      ]},
+      {id:"km-sandwich",name:"Sandwich",items:[
+        {id:"km-sw-wagyu",name:"Wagyu Beef Burger",desc:"Lettuce, gherkins, onions, tomatoes, cheese, mayonnaise, French fries",price:138000},
+        {id:"km-sw-club",name:"Club Sandwich",desc:"Romaine, tomatoes, chicken, fried egg, beef bacon, mayonnaise, French fries",price:118000},
+        {id:"km-sw-panini",name:"Grilled Salmon Panini",desc:"Feta, dill mayonnaise, onion, cheddar, sourdough, mixed greens, potato chips",price:108000},
+        {id:"km-sw-pita",name:"Healthy Chicken Avocado Pita Sandwich",desc:"Roasted chicken, avocado, romaine, garlic yogurt sauce, pita",price:118000},
+        {id:"km-sw-bagel",name:"Salmon Gravlax Bagel",desc:"Bagel, salmon gravlax, herb cream cheese, shallot pickle, fried capers, dill, mixed lettuce, fries",price:118000},
+        {id:"km-sw-croque",name:"Croque Madam",desc:"Sourdough, smoked beef, cheese, sunny-side-up egg, French fries",price:108000},
+        {id:"km-sw-pullbeef",name:"8 Hours Pull Beef Texas BBQ Sourdough Sandwich",desc:"Pulled beef, pesto butter, cream, melted cheese, jalapenos, gherkins, lettuce, French fries",price:135000},
+      ]},
+      {id:"km-pasta",name:"Pasta",items:[
+        {id:"km-ps-pomodoro",name:"Spaghetti Pomodoro",desc:"Tomato sauce, basil, parmesan",price:86000},
+        {id:"km-ps-lorenzo",name:"Spaghetti Lorenzo",desc:"Mixed seafood, olive oil, asparagus, garlic, dried tomatoes, chili",price:110000},
+        {id:"km-ps-carbonara",name:"Fusili Carbonara",desc:"Parmesan, egg yolk, beef bacon",price:110000},
+        {id:"km-ps-linguini",name:"Linguini Short Plate Mushroom",desc:"Gravy & light cream, basil, tomato, grilled beef, mushrooms",price:115000},
+        {id:"km-ps-penne",name:"Penne Cream Basil Pesto",desc:"Toasted penne, basil, grilled chicken, cheese",price:108000},
+        {id:"km-ps-fettuccine",name:"Fettuccine Bolognese",desc:"Traditional Bolognese sauce",price:110000},
+      ]},
+      {id:"km-pizza",name:"Pizza",items:[
+        {id:"km-pz-buffalo",name:"Buffalo Chicken Calzone",desc:"Grilled chicken, spinach, mozzarella, barbeque sauce, tomato base",price:108000},
+        {id:"km-pz-classic",name:"Classic Calzone",desc:"Beef ragout, smoked beef, mushrooms, mozzarella, tomato base",price:108000},
+        {id:"km-pz-margherita",name:"Margherita",desc:"Mozzarella, basil, tomato base",price:98000},
+        {id:"km-pz-supreme",name:"Supreme",desc:"Mushrooms, chicken, smoked beef, tomatoes, mozzarella, tomato base",price:108000},
+        {id:"km-pz-meatlover",name:"Meat Lover Pizza",desc:"Pepperoni, bacon, beef ragout, mozzarella, tomato base",price:118000},
+        {id:"km-pz-rustica",name:"Rustica",desc:"Mushrooms, smoked beef, arugula, parmesan, tomato sauce",price:108000},
+        {id:"km-pz-salmon",name:"Smoked Salmon Pizza",desc:"Smoked salmon, mozzarella, basil pesto, tomato base",price:118000},
+      ]},
+      {id:"km-kids",name:"For Little One",items:[
+        {id:"km-ki-pizzabambini",name:"Pizza Bambini",desc:"Tomato base, mozzarella, basil",price:50000},
+        {id:"km-ki-boots",name:"Boots Burger",desc:"Small burger, cheese, French fries",price:50000},
+        {id:"km-ki-hotdog",name:"Ducky Hot Dog",desc:"Hot dog, tomato sauce, French fries",price:45000},
+        {id:"km-ki-spaghetti",name:"Mickey Spaghetti",desc:"Spaghetti with Bolognese sauce",price:45000},
+        {id:"km-ki-friedrice",name:"Upin Ipin Fried Rice",desc:"Chicken fried rice, egg, chicken drumstick",price:45000},
+        {id:"km-ki-nugget",name:"Moana Chicken",desc:"Chicken nugget, French fries, cheese dip",price:45000},
+        {id:"km-ki-fishchip",name:"Patrick Fish Chip",desc:"Fried battered snapper fillet, French fries, tartar sauce",price:45000},
+      ]},
+      {id:"km-dessert",name:"Dessert",items:[
+        {id:"km-ds-tiramisu",name:"Tiramisu",desc:"Mascarpone mousse, ladyfingers, double espresso, cocoa",price:68000},
+        {id:"km-ds-klepon",name:"Klepon Pannacotta",desc:"Pandan coconut milk panna cotta, palm sugar, crushed nuts, dried coconut, vanilla ice cream",price:68000},
+        {id:"km-ds-lava",name:"Chocolate Lava Cake",desc:"Chocolate cake with rum raisin ice cream",price:68000},
+        {id:"km-ds-cheesecake",name:"Double Chocolate Cheese Cake",desc:"Cheesecake, smoked burnt, strawberry sauce",price:68000},
+        {id:"km-ds-pisang",name:"Pisang Goreng Crispy",desc:"Banana fritters, palm sugar, condensed milk, icing sugar, shredded cheese",price:68000},
+        {id:"km-ds-fruit",name:"Tropical Fresh Fruit",desc:"Slices of tropical seasonal fruits",price:58000},
+        {id:"km-ds-gelato",name:"Homemade Gelato & Sorbet (2 scoops)",desc:"Pilih 2 scoop",price:68000,
+         options:[
+           {id:"scoop1",label:"Scoop 1",required:true,choices:["Gelato Kecombrang","Gelato Vanilla","Gelato Chocolate","Gelato Mocca","Gelato Choco Hazelnut","Gelato Mango","Gelato Taro","Gelato Klepon","Sorbet Kecombrang","Sorbet Soursop","Sorbet Lime"]},
+           {id:"scoop2",label:"Scoop 2",required:true,choices:["Gelato Kecombrang","Gelato Vanilla","Gelato Chocolate","Gelato Mocca","Gelato Choco Hazelnut","Gelato Mango","Gelato Taro","Gelato Klepon","Sorbet Kecombrang","Sorbet Soursop","Sorbet Lime"]}]},
+      ]},
+      {id:"km-healthjuice",name:"Health Juice",items:[
+        {id:"km-hj-kemango",name:"Kemango Splash",desc:"Puree mango, orange, basil leaf",price:55000},
+        {id:"km-hj-yellow",name:"Yellow Sunrise",desc:"Pineapple, honey, banana, orange",price:55000},
+        {id:"km-hj-lychia",name:"Lychia",desc:"Lychee, apple, cucumber, honey",price:55000},
+        {id:"km-hj-morning",name:"Morning in Glory",desc:"Apple, ginger, pineapple, rosemary",price:55000},
+        {id:"km-hj-greeny",name:"Greeny",desc:"Broccoli, bok choy, honey, lime, orange",price:55000},
+        {id:"km-hj-wildlychee",name:"Wild Lychee",desc:"Lychee, plain yogurt, lime juice, vanilla syrup, lemon leaf",price:55000},
+      ]},
+      {id:"km-juice",name:"Fresh Squeezed Juice",items:[
+        {id:"km-fj-60",name:"Fresh Juice",desc:"Pilih satu",price:60000,options:[{id:"fruit",label:"Pilihan",required:true,choices:["Orange","Avocado","Carrot","Pineapple","Mixed"]}]},
+        {id:"km-fj-50",name:"Fresh Juice",desc:"Pilih satu",price:50000,options:[{id:"fruit",label:"Pilihan",required:true,choices:["Papaya","Honeydew","Guava","Strawberry","Watermelon","Red Dragon Fruit"]}]},
+      ]},
+      {id:"km-cold",name:"Mocktails / Milkshakes / Smoothies",items:[
+        {id:"km-cd-lycheeberry",name:"Lychee Berry (Mocktail)",desc:"Lychee strawberry syrup, vanilla ice cream, marshmallows, soda",price:52000},
+        {id:"km-cd-punch",name:"Kemangi Punch (Mocktail)",desc:"Orange, pineapple, grenadine syrup, blue pea flower",price:52000},
+        {id:"km-cd-mojito",name:"Virgin Mojito (Mocktail)",desc:"Mint leaf, lime juice, soda water, sugar",price:52000},
+        {id:"km-cd-fiz",name:"Kecombrang Fiz (Mocktail)",desc:"Homemade wild ginger flower syrup, soda",price:52000},
+        {id:"km-cd-milkshake",name:"Milkshake",desc:"Pilih rasa",price:50000,options:[{id:"rasa",label:"Rasa",required:true,choices:["Strawberry","Vanilla","Chocolate"]}]},
+        {id:"km-cd-smoothie",name:"Smoothie",desc:"Pilih rasa",price:52000,options:[{id:"rasa",label:"Rasa",required:true,choices:["Strawberry","Banana","Pineapple","Avocado"]}]},
+      ]},
+      {id:"km-hot",name:"Hot Beverage & Others",items:[
+        {id:"km-ht-coconut",name:"Young Coconut",desc:"Fresh whole coconut, slice lime, simple syrup",price:50000},
+        {id:"km-ht-infused",name:"Infused Water",desc:"Mineral water with sliced fruit, served in pitcher",price:45000},
+        {id:"km-ht-choc",name:"Hot Chocolate",desc:"Dark chocolate, fresh milk, marshmallow",price:45000},
+        {id:"km-ht-jahe",name:"Wedang Jahe",desc:"Homemade hot ginger drink, honey on the side",price:42000},
+        {id:"km-ht-uwuh",name:"Wedang Uwuh",desc:"Secang wood, cinnamon, ginger, clove, nutmeg leaf, lemongrass, cardamom",price:42000},
+      ]},
+      {id:"km-coffeetea",name:"Coffee & Tea",items:[
+        {id:"km-ct-coffee",name:"Coffee",desc:"Pilih jenis",price:45000,options:[{id:"jenis",label:"Pilihan Kopi",required:true,choices:["Espresso","Double Espresso","Long Black","Americano","Cappuccino","Caffe Latte"]}]},
+        {id:"km-ct-flavour",name:"Flavour Coffee",desc:"Pilih rasa & suhu",price:45000,options:[{id:"rasa",label:"Rasa",required:true,choices:["Caramel Latte","Hazelnut Coffee","Palm Sugar"]},{id:"suhu",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
+        {id:"km-ct-tea",name:"Loose Leaf Tea",desc:"Pilih teh",price:42000,options:[{id:"teh",label:"Pilihan Teh",required:true,choices:["English Breakfast","Earl Grey","Jasmine","Java","Green","Darjeeling","Peppermint","Chamomile","Chinese Tea"]}]},
+        {id:"km-ct-icedtea",name:"Iced Tea",desc:"Pilih rasa",price:42000,options:[{id:"rasa",label:"Rasa",required:true,choices:["Java","Lime","Lemon","Lychee"]}]},
+        {id:"km-ct-squash",name:"Squash",desc:"Pilih rasa",price:45000,options:[{id:"rasa",label:"Rasa",required:true,choices:["Lime","Lemon","Orange","Peach","Lychee","Strawberry"]}]},
+      ]},
+      {id:"km-soft",name:"Soft Drink & Water",items:[
+        {id:"km-sf-soda",name:"Soft Drink",desc:"Pilih",price:35000,options:[{id:"jenis",label:"Pilihan",required:true,choices:["Coke","Coke Zero","Sprite"]}]},
+        {id:"km-sf-equil",name:"Equil Mineral Water",desc:"",price:39000},
+        {id:"km-sf-equilsparkling",name:"Equil Sparkling Water",desc:"",price:39000},
+      ]},
+    ]
+  },
   // ─── BAKPIA PATHOK 25 ────────────────────────────────────────────────────────
   {
     id:"bakpia",name:"Bakpia Pathok 25",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
@@ -828,7 +998,6 @@ const RESTAURANTS = [
 
 // ── PATCH 1: Tentrem Summer Palace removed from UPCOMING_FB ─────────────────
 const UPCOMING_FB = [
-  {name:"Kemangi",day:"D1",meal:"Welcome Dinner",sponsor:"Gerard Sahat"},
   {name:"Desa Palagan",day:"D3",meal:"Sarapan",sponsor:"Agustinus Tambunan"},
 ];
 
