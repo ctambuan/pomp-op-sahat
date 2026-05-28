@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, memo, Component } from "react";
+import { useState, useEffect, useCallback, useRef, memo, Component, Fragment } from "react";
 import { sGet, sSet, sList, onValue, ref, db } from "./firebase";
 
 const T = {
@@ -1166,7 +1166,7 @@ const NameScreen = memo(({onSuccess}) => {
 });
 
 const Shell = ({user,tab,setTab,children}) => {
-  const TABS = [{id:"budget",label:"Dana"},{id:"itinerary",label:"Itinerary"},{id:"food",label:"Pre-Order F&B"}];
+  const TABS = [{id:"budget",label:"Dana"},{id:"itinerary",label:"Itinerary"},{id:"size",label:"Ukuran Pakaian"},{id:"food",label:"Pre-Order F&B"}];
   return (
     <div style={{minHeight:"100vh",background:T.stone}}>
       <GlobalStyles/>
@@ -2133,6 +2133,434 @@ class ErrorBoundary extends Component {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// UKURAN PAKAIAN — data & komponen
+// ═══════════════════════════════════════════════════════════════════════════
+const SIZE_GARMENTS = [
+  {
+    id:"baju", label:"Baju (Kaos Unisex)", unit:"cm",
+    measure:"Cara ukur: rebahkan kaos yang sudah pas, ukur lebar dada dari ketiak ke ketiak (cm).",
+    helperLabel:"Lebar dada baju — ketiak ke ketiak (cm)",
+    chartCols:["Ukuran","Lebar Dada (cm)","Panjang (cm)"],
+    groups:[
+      {name:"Anak", items:[
+        {v:"Anak 2-3th", cm:31, row:["31","40"]},
+        {v:"Anak 4-5th", cm:33, row:["33","44"]},
+        {v:"Anak 6-7th", cm:35, row:["35","48"]},
+        {v:"Anak 8-9th", cm:37, row:["37","52"]},
+        {v:"Anak 10-11th", cm:39, row:["39","56"]},
+        {v:"Anak 12-13th", cm:41, row:["41","60"]},
+      ]},
+      {name:"Dewasa", items:[
+        {v:"S", cm:47, row:["47","67"]},
+        {v:"M", cm:49, row:["49","70"]},
+        {v:"L", cm:52, row:["52","72"]},
+        {v:"XL", cm:55, row:["55","74"]},
+        {v:"XXL", cm:58, row:["58","76"]},
+        {v:"XXXL", cm:61, row:["61","78"]},
+      ]},
+    ],
+    brands:{
+      Uniqlo:{S:"S",M:"M",L:"L",XL:"XL",XXL:"XXL"},
+      Zara:{S:"S",M:"S",L:"M",XL:"L",XXL:"XL"},
+      Mango:{S:"S",M:"M",L:"L",XL:"XL",XXL:"XXL"},
+      "M&S":{S:"M",M:"L",L:"XL",XL:"XXL",XXL:"XXXL"},
+    },
+    brandSizes:["S","M","L","XL","XXL"],
+  },
+  {
+    id:"celana", label:"Celana (Pinggang Tidak Elastis)", unit:"cm",
+    measure:"Cara ukur: ukur lingkar pinggang celana yang sudah pas, atau lingkar pinggang badan (cm).",
+    helperLabel:"Lingkar pinggang (cm)",
+    chartCols:["Ukuran","Lingkar Pinggang (cm)"],
+    groups:[
+      {name:"Anak", items:[
+        {v:"Anak 2-3th", cm:49, row:["48–50"]},
+        {v:"Anak 4-5th", cm:51, row:["50–53"]},
+        {v:"Anak 6-7th", cm:54, row:["53–56"]},
+        {v:"Anak 8-9th", cm:57, row:["56–59"]},
+        {v:"Anak 10-11th", cm:60, row:["59–62"]},
+        {v:"Anak 12-13th", cm:64, row:["62–66"]},
+      ]},
+      {name:"Dewasa (nomor pinggang)", items:[
+        {v:"28", cm:71, row:["71"]},
+        {v:"29", cm:74, row:["74"]},
+        {v:"30", cm:76, row:["76"]},
+        {v:"31", cm:79, row:["79"]},
+        {v:"32", cm:81, row:["81"]},
+        {v:"33", cm:84, row:["84"]},
+        {v:"34", cm:86, row:["86"]},
+        {v:"36", cm:91, row:["91"]},
+        {v:"38", cm:97, row:["97"]},
+        {v:"40", cm:102, row:["102"]},
+        {v:"42", cm:107, row:["107"]},
+        {v:"44", cm:112, row:["112"]},
+      ]},
+    ],
+    // brand mode: pilih nomor pinggang merek; Zara/Mango EU slim → +1 nomor
+    brands:{
+      Uniqlo:"same", "M&S":"same", Zara:"up", Mango:"up",
+    },
+    brandSizes:["28","29","30","31","32","33","34","36","38","40"],
+    adultNumbers:["28","29","30","31","32","33","34","36","38","40","42","44"],
+  },
+  {
+    id:"topi", label:"Topi / Blangkon", unit:"cm",
+    measure:"Cara ukur: ukur lingkar kepala melingkar di atas alis & telinga (cm).",
+    helperLabel:"Lingkar kepala (cm)",
+    chartCols:["Ukuran","Lingkar Kepala (cm)"],
+    noBrand:true,
+    groups:[
+      {name:"Anak", items:[
+        {v:"Anak S", cm:49, row:["48–50"]},
+        {v:"Anak L", cm:52, row:["51–53"]},
+      ]},
+      {name:"Dewasa", items:[
+        {v:"Dewasa S", cm:54.5, row:["54–55"]},
+        {v:"Dewasa M", cm:56.5, row:["56–57"]},
+        {v:"Dewasa L", cm:58.5, row:["58–59"]},
+        {v:"Dewasa XL", cm:60.5, row:["60–61"]},
+      ]},
+    ],
+  },
+  {
+    id:"sepatu", label:"Sepatu (EU)", unit:"cm",
+    measure:"Cara ukur: ukur panjang telapak kaki dari tumit ke ujung jari terpanjang (cm). Disarankan +1 cm kelonggaran.",
+    helperLabel:"Panjang telapak kaki (cm)",
+    chartCols:["EU","Panjang Kaki (cm)"],
+    groups:[
+      {name:"Anak", items:[
+        {v:"28", cm:17, row:["±17"]},
+        {v:"29", cm:17.5, row:["±17,5"]},
+        {v:"30", cm:18.5, row:["±18,5"]},
+        {v:"31", cm:19, row:["±19"]},
+        {v:"32", cm:20, row:["±20"]},
+        {v:"33", cm:20.5, row:["±20,5"]},
+        {v:"34", cm:21.5, row:["±21,5"]},
+      ]},
+      {name:"Dewasa", items:[
+        {v:"35", cm:22, row:["±22"]},
+        {v:"36", cm:22.5, row:["±22,5"]},
+        {v:"37", cm:23.5, row:["±23,5"]},
+        {v:"38", cm:24, row:["±24"]},
+        {v:"39", cm:25, row:["±25"]},
+        {v:"40", cm:25.5, row:["±25,5"]},
+        {v:"41", cm:26, row:["±26"]},
+        {v:"42", cm:27, row:["±27"]},
+        {v:"43", cm:27.5, row:["±27,5"]},
+        {v:"44", cm:28, row:["±28"]},
+        {v:"45", cm:29, row:["±29"]},
+        {v:"46", cm:29.5, row:["±29,5"]},
+      ]},
+    ],
+    // brand mode: pilih merek + EU; Adidas EU sama, Nike agak sempit (saran naik bila ragu)
+    brands:{Adidas:"same", Nike:"snug"},
+    brandSizes:["38","39","40","41","42","43","44","45","46"],
+  },
+];
+
+// helper: cari ukuran terdekat berdasarkan nilai cm
+const suggestByCm = (garment, val) => {
+  const num = parseFloat(String(val).replace(",","."));
+  if(isNaN(num)||num<=0) return null;
+  let best=null, bestDiff=Infinity;
+  garment.groups.forEach(g=>g.items.forEach(it=>{
+    const d=Math.abs(it.cm-num);
+    if(d<bestDiff){ bestDiff=d; best=it.v; }
+  }));
+  return best;
+};
+// helper: saran berdasarkan merek
+const suggestByBrand = (garment, brand, brandSize) => {
+  if(garment.id==="baju"){ return garment.brands[brand]?.[brandSize]||null; }
+  if(garment.id==="celana"){
+    const rule=garment.brands[brand]; const nums=garment.adultNumbers;
+    const idx=nums.indexOf(brandSize); if(idx<0) return null;
+    if(rule==="same") return brandSize;
+    return nums[Math.min(idx+1, nums.length-1)]; // up 1 (Zara/Mango)
+  }
+  if(garment.id==="sepatu"){
+    const rule=garment.brands[brand];
+    if(rule==="same") return brandSize;
+    // Nike snug: kalau ragu, naik 1
+    const n=parseInt(brandSize,10); return String(n); // tampilkan sama, beri catatan naik bila ragu
+  }
+  return null;
+};
+
+const SizeTab = memo(({user}) => {
+  const isCoord = COORDINATORS.includes(user);
+  const myHH = ALL_PAX.find(p=>p.name===user)?.hh;
+  const [tab,setTab] = useState("form");
+  const [allSizes,setAllSizes] = useState({});
+  const [loading,setLoading] = useState(true);
+  const [saving,setSaving] = useState(false);
+  const [syncError,setSyncError] = useState(null);
+  const [lastSync,setLastSync] = useState(null);
+  const [target,setTarget] = useState(user); // peserta yang sedang diisi
+  const [draft,setDraft] = useState({baju:"",celana:"",topi:"",sepatu:"",catatan:""});
+  const [openChart,setOpenChart] = useState(null);   // garment id chart terbuka
+  const [openHelper,setOpenHelper] = useState(null); // garment id helper terbuka
+  const [helperMode,setHelperMode] = useState("cm"); // cm | brand
+  const [helperCm,setHelperCm] = useState("");
+  const [helperBrand,setHelperBrand] = useState("");
+  const [helperBrandSize,setHelperBrandSize] = useState("");
+  const [helperResult,setHelperResult] = useState(null);
+
+  // siapa saja yang bisa diisi user ini: diri sendiri + anggota household
+  const fillableFor = ALL_PAX.filter(p => p.name===user || (isCoord ? true : p.hh===myHH));
+
+  const loadAll = useCallback(async () => {
+    try {
+      const keys = await sList("size.");
+      const grouped = {};
+      for(const k of keys){
+        const v = await sGet(k);
+        if(v){ const name=k.replace("size.","").replace(/_/g," "); grouped[name]=JSON.parse(v); }
+      }
+      setAllSizes(grouped);
+      setLastSync(new Date());
+    } catch { setSyncError("Gagal memuat data. Cek koneksi."); }
+  }, []);
+
+  useEffect(()=>{ (async()=>{ setLoading(true); await loadAll(); setLoading(false); })(); }, [loadAll]);
+  useEffect(()=>{ const id=setInterval(loadAll,30000); return ()=>clearInterval(id); },[loadAll]);
+
+  // saat target berganti, isi draft dari data tersimpan (kalau ada)
+  useEffect(()=>{
+    const ex = allSizes[target];
+    setDraft(ex ? {baju:ex.baju||"",celana:ex.celana||"",topi:ex.topi||"",sepatu:ex.sepatu||"",catatan:ex.catatan||""}
+                : {baju:"",celana:"",topi:"",sepatu:"",catatan:""});
+    setOpenChart(null); setOpenHelper(null); setHelperResult(null); setHelperCm(""); setHelperBrand(""); setHelperBrandSize("");
+  }, [target, allSizes]);
+
+  const setField = (gid,val) => setDraft(d=>({...d,[gid]:d[gid]===val?"":val}));
+
+  const submit = async () => {
+    if(saving) return;
+    if(!draft.baju&&!draft.celana&&!draft.topi&&!draft.sepatu){ setSyncError("Pilih minimal satu ukuran sebelum konfirmasi."); return; }
+    setSaving(true); setSyncError(null);
+    try {
+      const key = `size.${target.replace(/\s+/g,"_")}`;
+      const rec = {peserta:target, hh:ALL_PAX.find(p=>p.name===target)?.hh||"",
+        baju:draft.baju, celana:draft.celana, topi:draft.topi, sepatu:draft.sepatu,
+        catatan:draft.catatan||"", filledBy:user, submittedAt:new Date().toISOString()};
+      const ok = await sSet(key, JSON.stringify(rec));
+      if(ok){ await loadAll(); setTab("recap"); }
+      else setSyncError("Gagal menyimpan. Coba lagi.");
+    } catch { setSyncError("Gagal menyimpan. Coba lagi."); }
+    setSaving(false);
+  };
+
+  const runHelper = (garment) => {
+    let res=null, note="";
+    if(helperMode==="cm"){ res=suggestByCm(garment, helperCm); if(garment.id==="sepatu"&&res) note="Disarankan +1 cm kelonggaran — bila di antara dua nomor, ambil yang lebih besar."; }
+    else { if(helperBrand&&helperBrandSize){ res=suggestByBrand(garment, helperBrand, helperBrandSize);
+      if(garment.id==="sepatu"&&helperBrand==="Nike") note="Nike cenderung agak sempit — bila ragu, ambil satu nomor lebih besar.";
+      if(garment.id==="celana"&&(helperBrand==="Zara"||helperBrand==="Mango")) note="Celana EU Zara/Mango potongan slim — nomor sudah disesuaikan naik 1.";
+    }}
+    setHelperResult(res?{size:res,note}:{size:null,note:"Lengkapi dulu input di atas."});
+  };
+
+  const exportCSV = () => {
+    const rows=[["Nama","HH","Baju","Celana","Topi","Sepatu","Catatan","Diisi Oleh"]];
+    ALL_PAX.forEach(p=>{ const s=allSizes[p.name]||{}; rows.push([p.name,p.hh,s.baju||"",s.celana||"",s.topi||"",s.sepatu||"",s.catatan||"",s.filledBy||""]); });
+    const csv=rows.map(r=>r.map(c=>`"${c}"`).join(",")).join("\n");
+    const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+    a.download="Ukuran_Pakaian_PompOpSahat.csv"; a.click();
+  };
+
+  const filledCount = ALL_PAX.filter(p=>allSizes[p.name]&&(allSizes[p.name].baju||allSizes[p.name].celana||allSizes[p.name].topi||allSizes[p.name].sepatu)).length;
+
+  if(loading) return (<div style={{textAlign:"center",padding:"80px 0",color:T.muted}}><p style={{fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase"}}>Memuat data dari Firebase…</p></div>);
+
+  return (
+    <div className="fade-up">
+      <div style={{marginBottom:"40px"}}>
+        <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pengumpulan Ukuran</p>
+        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"36px",fontWeight:400,color:T.ink}}>Ukuran Pakaian</h2>
+        <p style={{fontSize:"13px",color:T.muted,marginTop:"8px"}}>Baju, celana, topi/blangkon & sepatu untuk seluruh peserta. Orang tua dapat mengisikan untuk anggota keluarga.</p>
+      </div>
+
+      <div style={{display:"flex",borderBottom:`1px solid ${T.line}`,marginBottom:"40px"}}>
+        {[{id:"form",label:"Form Ukuran"},{id:"recap",label:`Rekap — ${filledCount}/${ALL_PAX.length}`}].map(t=>(
+          <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",padding:"0 32px 16px 0",cursor:"pointer",fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:tab===t.id?500:300,color:tab===t.id?T.forest:T.muted,borderBottom:tab===t.id?`2px solid ${T.forest}`:"2px solid transparent",marginBottom:"-1px",transition:"all 0.2s"}}>{t.label}</button>
+        ))}
+      </div>
+
+      {syncError&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"12px 16px",marginBottom:"24px"}}><p style={{fontSize:"12px",color:T.danger}}>{syncError}</p></div>}
+
+      {tab==="form"&&<div>
+        {/* pilih untuk siapa */}
+        <div style={{marginBottom:"32px"}}>
+          <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"14px"}}>Mengisi untuk</p>
+          <div style={{display:"flex",flexWrap:"wrap",gap:"8px"}}>
+            {fillableFor.map(p=>{
+              const done = allSizes[p.name]&&(allSizes[p.name].baju||allSizes[p.name].celana||allSizes[p.name].topi||allSizes[p.name].sepatu);
+              const sel = target===p.name;
+              return (
+                <button key={p.name} onClick={()=>setTarget(p.name)} style={{background:sel?T.forest:"transparent",border:`1px solid ${sel?T.forest:T.lineD}`,color:sel?"white":T.mid,padding:"7px 14px",cursor:"pointer",fontSize:"12px",letterSpacing:"0.3px",transition:"all 0.15s",display:"flex",alignItems:"center",gap:"7px"}}>
+                  {p.name===user?"Saya — ":""}{p.name.split(" ")[0]} {done&&<span style={{fontSize:"10px",color:sel?"#cfe0cc":T.settled}}>✓</span>}
+                </button>
+              );
+            })}
+          </div>
+          {target!==user&&<p style={{fontSize:"11px",color:T.muted,fontStyle:"italic",marginTop:"10px"}}>Anda mengisi untuk {target}. Akan tercatat "diisi oleh {user}".</p>}
+        </div>
+
+        {/* field tiap garment */}
+        {SIZE_GARMENTS.map(g=>(
+          <div key={g.id} style={{marginBottom:"36px",paddingBottom:"32px",borderBottom:`1px solid ${T.line}`}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",flexWrap:"wrap",gap:"8px",marginBottom:"14px"}}>
+              <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{g.label}</h3>
+              <div style={{display:"flex",gap:"16px"}}>
+                <button onClick={()=>{setOpenChart(openChart===g.id?null:g.id);}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"11px",letterSpacing:"1px",textTransform:"uppercase",color:T.muted,borderBottom:`1px solid ${openChart===g.id?T.forest:"transparent"}`,padding:"2px 0"}}>Panduan ukuran</button>
+                <button onClick={()=>{setOpenHelper(openHelper===g.id?null:g.id);setHelperMode("cm");setHelperResult(null);setHelperCm("");setHelperBrand("");setHelperBrandSize("");}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"11px",letterSpacing:"1px",textTransform:"uppercase",color:T.gold,borderBottom:`1px solid ${openHelper===g.id?T.gold:"transparent"}`,padding:"2px 0"}}>Bantu pilih ukuran</button>
+              </div>
+            </div>
+
+            {/* chart panel */}
+            {openChart===g.id&&(
+              <div style={{background:T.cream,padding:"18px 20px",marginBottom:"16px",border:`1px solid ${T.line}`}}>
+                <p style={{fontSize:"11px",color:T.muted,fontStyle:"italic",marginBottom:"14px"}}>{g.measure}</p>
+                {g.groups.map(grp=>(
+                  <div key={grp.name} style={{marginBottom:"14px"}}>
+                    <p style={{fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,marginBottom:"8px"}}>{grp.name}</p>
+                    <div style={{display:"grid",gridTemplateColumns:`90px repeat(${g.chartCols.length-1},1fr)`,gap:"2px 12px",fontSize:"12px"}}>
+                      {g.chartCols.map((c,i)=><span key={c} style={{fontSize:"10px",letterSpacing:"1px",textTransform:"uppercase",color:T.muted,paddingBottom:"4px",borderBottom:`1px solid ${T.lineD}`,textAlign:i===0?"left":"right"}}>{c}</span>)}
+                      {grp.items.map(it=>(<Fragment key={it.v}>
+                        <span style={{color:T.ink,paddingTop:"3px"}}>{it.v}</span>
+                        {it.row.map((cell,j)=><span key={j} style={{color:T.mid,textAlign:"right",paddingTop:"3px",fontFamily:"'Playfair Display',Georgia,serif"}}>{cell}</span>)}
+                      </Fragment>))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* helper panel */}
+            {openHelper===g.id&&(
+              <div style={{background:"#f6f3ec",padding:"18px 20px",marginBottom:"16px",border:`1px solid ${T.goldL}`}}>
+                <div style={{display:"flex",gap:"6px",marginBottom:"14px"}}>
+                  <button onClick={()=>{setHelperMode("cm");setHelperResult(null);}} style={{flex:"0 0 auto",background:helperMode==="cm"?T.gold:"transparent",border:`1px solid ${T.goldL}`,color:helperMode==="cm"?"white":T.mid,padding:"5px 14px",cursor:"pointer",fontSize:"11px",letterSpacing:"1px",textTransform:"uppercase"}}>Ukur (cm)</button>
+                  {!g.noBrand&&<button onClick={()=>{setHelperMode("brand");setHelperResult(null);}} style={{flex:"0 0 auto",background:helperMode==="brand"?T.gold:"transparent",border:`1px solid ${T.goldL}`,color:helperMode==="brand"?"white":T.mid,padding:"5px 14px",cursor:"pointer",fontSize:"11px",letterSpacing:"1px",textTransform:"uppercase"}}>Dari merek lain</button>}
+                </div>
+
+                {helperMode==="cm"&&<div>
+                  <p style={{fontSize:"11px",color:T.muted,marginBottom:"10px"}}>{g.measure}</p>
+                  <div style={{display:"flex",gap:"10px",alignItems:"center",flexWrap:"wrap"}}>
+                    <input value={helperCm} onChange={e=>setHelperCm(e.target.value)} inputMode="decimal" placeholder={g.helperLabel}
+                      style={{flex:"1 1 200px",padding:"10px 12px",border:`1px solid ${T.lineD}`,background:"white",fontSize:"13px",color:T.ink,outline:"none"}}/>
+                    <button onClick={()=>runHelper(g)} style={{background:T.gold,border:"none",color:"white",padding:"10px 20px",cursor:"pointer",fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase"}}>Sarankan</button>
+                  </div>
+                </div>}
+
+                {helperMode==="brand"&&!g.noBrand&&<div>
+                  <p style={{fontSize:"11px",color:T.muted,marginBottom:"10px"}}>Pilih merek yang biasa Anda pakai, lalu ukuran existing Anda.</p>
+                  <div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"10px"}}>
+                    {Object.keys(g.brands).map(b=>(
+                      <button key={b} onClick={()=>{setHelperBrand(b);setHelperResult(null);}} style={{background:helperBrand===b?T.forest:"transparent",border:`1px solid ${helperBrand===b?T.forest:T.lineD}`,color:helperBrand===b?"white":T.mid,padding:"6px 14px",cursor:"pointer",fontSize:"12px"}}>{b}</button>
+                    ))}
+                  </div>
+                  {helperBrand&&<div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"12px"}}>
+                    {g.brandSizes.map(s=>(
+                      <button key={s} onClick={()=>{setHelperBrandSize(s);setHelperResult(null);}} style={{background:helperBrandSize===s?T.gold:"transparent",border:`1px solid ${helperBrandSize===s?T.gold:T.lineD}`,color:helperBrandSize===s?"white":T.mid,padding:"6px 14px",cursor:"pointer",fontSize:"12px"}}>{g.id==="sepatu"?`EU ${s}`:s}</button>
+                    ))}
+                  </div>}
+                  <button onClick={()=>runHelper(g)} disabled={!helperBrand||!helperBrandSize} style={{background:helperBrand&&helperBrandSize?T.gold:T.lineD,border:"none",color:"white",padding:"9px 20px",cursor:helperBrand&&helperBrandSize?"pointer":"not-allowed",fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase"}}>Sarankan</button>
+                  <p style={{fontSize:"10px",color:T.muted,fontStyle:"italic",marginTop:"10px"}}>Perkiraan — verifikasi dengan panduan cm. Potongan tiap merek berbeda.</p>
+                </div>}
+
+                {helperResult&&<div style={{marginTop:"14px",paddingTop:"14px",borderTop:`1px solid ${T.goldL}`}}>
+                  {helperResult.size
+                    ? <div style={{display:"flex",alignItems:"center",gap:"14px",flexWrap:"wrap"}}>
+                        <span style={{fontSize:"11px",color:T.muted}}>Saran ukuran:</span>
+                        <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.forest,fontWeight:500}}>{g.id==="sepatu"?`EU ${helperResult.size}`:helperResult.size}</span>
+                        <button onClick={()=>setDraft(d=>({...d,[g.id]:helperResult.size}))} style={{background:"none",border:`1px solid ${T.forest}`,color:T.forest,padding:"6px 16px",cursor:"pointer",fontSize:"11px",letterSpacing:"1px",textTransform:"uppercase"}}>Pakai ini</button>
+                      </div>
+                    : <p style={{fontSize:"12px",color:T.danger}}>{helperResult.note}</p>}
+                  {helperResult.size&&helperResult.note&&<p style={{fontSize:"11px",color:T.muted,fontStyle:"italic",marginTop:"8px"}}>{helperResult.note}</p>}
+                </div>}
+              </div>
+            )}
+
+            {/* pilihan ukuran */}
+            {g.groups.map(grp=>(
+              <div key={grp.name} style={{marginBottom:"12px"}}>
+                <p style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>{grp.name}</p>
+                <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+                  {grp.items.map(it=>{
+                    const sel=draft[g.id]===it.v;
+                    return <button key={it.v} onClick={()=>setField(g.id,it.v)} title={it.row.join(" · ")} style={{background:sel?T.forest:"transparent",border:`1px solid ${sel?T.forest:T.lineD}`,color:sel?"white":T.mid,padding:"7px 14px",cursor:"pointer",fontSize:"12px",letterSpacing:"0.3px",transition:"all 0.15s"}}>{g.id==="sepatu"?`EU ${it.v}`:it.v}</button>;
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+
+        {/* catatan */}
+        <div style={{marginBottom:"32px"}}>
+          <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"10px"}}>Catatan (opsional)</p>
+          <input value={draft.catatan} onChange={e=>setDraft(d=>({...d,catatan:e.target.value}))} placeholder="mis. suka fit longgar, alergi bahan tertentu"
+            style={{width:"100%",maxWidth:"460px",padding:"10px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"13px",color:T.mid,outline:"none"}}/>
+        </div>
+
+        {/* ringkasan + submit */}
+        <div style={{background:T.cream,padding:"24px",borderTop:`2px solid ${T.forest}`}}>
+          <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>Ukuran {target===user?"Saya":target}</p>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(120px,1fr))",gap:"16px",marginBottom:"20px"}}>
+            {SIZE_GARMENTS.map(g=>(
+              <div key={g.id}>
+                <p style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"5px"}}>{g.label.split(" ")[0]}</p>
+                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"17px",color:draft[g.id]?T.ink:T.ghost}}>{draft[g.id]?(g.id==="sepatu"?`EU ${draft[g.id]}`:draft[g.id]):"—"}</p>
+              </div>
+            ))}
+          </div>
+          <button onClick={submit} disabled={saving} style={{width:"100%",padding:"14px",background:T.forest,color:"white",border:"none",cursor:saving?"wait":"pointer",fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500}}>
+            {saving?"Menyimpan…":`Konfirmasi Ukuran ${target===user?"Saya":target.split(" ")[0]}`}
+          </button>
+        </div>
+      </div>}
+
+      {tab==="recap"&&<div>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"24px",flexWrap:"wrap",gap:"12px"}}>
+          <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>{filledCount} dari {ALL_PAX.length} peserta sudah mengisi{lastSync&&<span style={{color:T.ghost}}> · {lastSync.toLocaleTimeString("id-ID")}</span>}</p>
+          <div style={{display:"flex",gap:"10px"}}>
+            <button onClick={loadAll} style={{background:"none",border:`1px solid ${T.line}`,padding:"7px 16px",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>↻ Refresh</button>
+            {isCoord&&<button onClick={exportCSV} style={{background:T.forest,border:"none",padding:"7px 16px",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:"white"}}>Export CSV</button>}
+          </div>
+        </div>
+        <div style={{overflowX:"auto"}}>
+          <div style={{minWidth:"640px"}}>
+            <div style={{display:"grid",gridTemplateColumns:"1.6fr 0.5fr 1fr 0.8fr 1fr 0.8fr",gap:"0 12px",padding:"0 0 10px",borderBottom:`2px solid ${T.lineD}`}}>
+              {["Nama","HH","Baju","Celana","Topi","Sepatu"].map(h=><p key={h} style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted}}>{h}</p>)}
+            </div>
+            {ALL_PAX.map(p=>{
+              const s=allSizes[p.name]||{};
+              const done=s.baju||s.celana||s.topi||s.sepatu;
+              return (
+                <div key={p.name} style={{display:"grid",gridTemplateColumns:"1.6fr 0.5fr 1fr 0.8fr 1fr 0.8fr",gap:"0 12px",padding:"12px 0",borderBottom:`1px solid ${T.line}`,alignItems:"center",opacity:done?1:0.55}}>
+                  <div>
+                    <p style={{fontSize:"13px",color:T.ink}}>{p.name}{p.name===user&&<span style={{fontSize:"10px",color:T.gold}}> (Anda)</span>}</p>
+                    {s.filledBy&&s.filledBy!==p.name&&<p style={{fontSize:"10px",color:T.ghost,fontStyle:"italic"}}>diisi oleh {s.filledBy.split(" ")[0]}</p>}
+                  </div>
+                  <p style={{fontSize:"12px",color:T.muted}}>{p.hh}</p>
+                  <p style={{fontSize:"13px",color:s.baju?T.ink:T.ghost}}>{s.baju||"—"}</p>
+                  <p style={{fontSize:"13px",color:s.celana?T.ink:T.ghost}}>{s.celana||"—"}</p>
+                  <p style={{fontSize:"13px",color:s.topi?T.ink:T.ghost}}>{s.topi||"—"}</p>
+                  <p style={{fontSize:"13px",color:s.sepatu?T.ink:T.ghost}}>{s.sepatu?`EU ${s.sepatu}`:"—"}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <p style={{fontSize:"11px",color:T.muted,fontStyle:"italic",marginTop:"20px"}}>Catatan ukuran (bila ada) tersimpan & muncul di Export CSV.</p>
+      </div>}
+    </div>
+  );
+});
+
 export default function App() {
   const [screen,setScreen] = useState("password");
   const [user,setUser] = useState("");
@@ -2145,6 +2573,7 @@ export default function App() {
       <Shell user={user} tab={tab} setTab={setTab}>
         {tab==="budget"    && <BudgetTab user={user}/>}
         {tab==="itinerary" && <ItineraryTab/>}
+        {tab==="size"      && <SizeTab user={user}/>}
         {tab==="food"      && <FoodOrderTab user={user}/>}
       </Shell>
     </ErrorBoundary>
