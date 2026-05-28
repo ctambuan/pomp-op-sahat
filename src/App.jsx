@@ -9,7 +9,7 @@ const T = {
   abs:"#3a4a6a",absBg:"#eef0f6",line:"#e0d5c8",lineD:"#ccc0b0",
 };
 
-const PASSWORD = "OpSahat2026";
+const PASSWORD = "opsahat2026";
 const COORDINATORS = ["Christine Tambunan","Nhaomy Panjaitan","Intan Tambunan","Rany Yamemia","Lusiana"];
 
 const ALL_PAX = [
@@ -897,7 +897,7 @@ const NameScreen = memo(({onSuccess}) => {
         <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"36px",fontWeight:400,color:T.ink,marginBottom:"48px"}}>Siapa Anda?</h2>
         <select value={sel} onChange={e=>setSel(e.target.value)} style={{width:"100%",padding:"16px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"14px",color:sel?T.ink:T.muted,outline:"none",cursor:"pointer",appearance:"none",textAlign:"center"}}>
           <option value="">Pilih nama Anda</option>
-          {ALL_PAX.map(p=><option key={p.name} value={p.name}>{p.name} — {p.hh}</option>)}
+          {ALL_PAX.map(p=><option key={p.name} value={p.name}>{p.name} ({p.hh})</option>)}
         </select>
         <div style={{marginTop:"40px"}}>
           <button onClick={()=>sel&&onSuccess(sel)} disabled={!sel} style={{background:"none",border:"none",cursor:sel?"pointer":"default",fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:sel?T.forest:T.ghost,padding:"12px 0",fontWeight:500,borderBottom:`1px solid ${sel?T.forest:T.ghost}`,transition:"all 0.2s"}}>Lanjutkan</button>
