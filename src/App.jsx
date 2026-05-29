@@ -1213,6 +1213,8 @@ const BudgetTab = memo(({user}) => {
   const [d, setD] = useState(BUDGET_DEFAULT);
   const [syncedAt, setSyncedAt] = useState(null);
   const [ledger, setLedger] = useState([]);
+  const [loadedLedger, setLoadedLedger] = useState(false);
+  const [ledgerError, setLedgerError] = useState(null);
   const [revealed,setRevealed] = useState(false);
   const [pwOpen,setPwOpen] = useState(false);
   const [pw,setPw] = useState("");
@@ -1239,14 +1241,25 @@ const BudgetTab = memo(({user}) => {
         setD(merged);
         setSyncedAt(new Date());
       }
-    });
+    }, err => { console.warn("budget onValue error:", err.message); });
+
     const unsubLedger = onValue(ref(db, "ledger"), snap => {
+      setLoadedLedger(true);
+      setLedgerError(null);
       if (snap.exists()) {
         const val = snap.val();
         setLedger(Array.isArray(val) ? val : Object.values(val));
+      } else {
+        setLedger([]);
       }
+    }, err => {
+      setLoadedLedger(true);
+      setLedgerError(err.message);
     });
-    return () => { unsubBudget(); unsubLedger(); };
+
+    // fallback: jika onValue tidak fire dalam 12 detik (rules block / no network)
+    const fallback = setTimeout(() => setLoadedLedger(true), 12000);
+    return () => { unsubBudget(); unsubLedger(); clearTimeout(fallback); };
   }, []);
 
   const collection = pct(d.totals.deposit, d.totals.gross);
@@ -1371,8 +1384,15 @@ const BudgetTab = memo(({user}) => {
           <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted}}>Riwayat Transaksi</p>
           {syncedAt&&<p style={{fontSize:"16px",color:T.ghost}}>Live · {syncedAt.toLocaleTimeString("id-ID")}</p>}
         </div>
-        {ledger.length===0
+        {!loadedLedger
           ? <p style={{fontSize:"18px",color:T.muted,fontStyle:"italic"}}>Memuat data transaksi…</p>
+          : ledgerError
+            ? <div style={{background:T.dangerBg,border:`1px solid #e8b4a8`,padding:"14px 18px"}}>
+                <p style={{fontSize:"16px",color:T.danger,marginBottom:"6px"}}>Gagal memuat riwayat transaksi.</p>
+                <p style={{fontSize:"15px",color:T.muted}}>Kemungkinan Firebase Rules belum mengizinkan path <code>/ledger</code>. Tambahkan <code>"ledger": {"{"}".read": true, ".write": true{"}"}</code> di Firebase Console → Realtime Database → Rules.</p>
+              </div>
+          : ledger.length===0
+            ? <p style={{fontSize:"18px",color:T.muted,fontStyle:"italic"}}>Belum ada catatan transaksi. Data diisi oleh Lusiana (Finance) via Firebase Console.</p>
           : <>
             <div style={{display:"grid",gridTemplateColumns:"32px 100px 80px 1fr 120px 120px 130px",gap:"0 16px",padding:"0 0 10px",borderBottom:`2px solid ${T.line}`}}>
               {["No","Tanggal","Tipe","Keterangan","Deposit (+)","Refund (−)","Saldo"].map(h=>(
