@@ -2625,13 +2625,25 @@ const SizeTab = memo(({user}) => {
   useEffect(()=>{ (async()=>{ setLoading(true); await loadAll(); setLoading(false); })(); }, [loadAll]);
   useEffect(()=>{ const id=setInterval(loadAll,30000); return ()=>clearInterval(id); },[loadAll]);
 
-  // saat target berganti, isi draft dari data tersimpan (kalau ada)
+  // target berubah → selalu reload dari data tersimpan (atau kosongkan)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(()=>{
     const ex = allSizes[target];
     setDraft(ex ? {baju:ex.baju||"",celana:ex.celana||"",topi:ex.topi||"",sepatu:ex.sepatu||"",catatan:ex.catatan||""}
                 : {baju:"",celana:"",topi:"",sepatu:"",catatan:""});
     setOpenChart(null); setOpenHelper(null); setHelperResult(null); setHelperCm(""); setHelperBrand(""); setHelperBrandSize("");
-  }, [target, allSizes]);
+  }, [target]); // sengaja: allSizes tidak di sini agar auto-refresh tidak menimpa isian user
+
+  // allSizes berubah (auto-refresh) → hanya pre-fill jika draft masih kosong (user belum memilih)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(()=>{
+    const ex = allSizes[target];
+    if(!ex) return;
+    setDraft(prev=>{
+      if(prev.baju||prev.celana||prev.topi||prev.sepatu) return prev; // user sedang mengisi, jangan timpa
+      return {baju:ex.baju||"",celana:ex.celana||"",topi:ex.topi||"",sepatu:ex.sepatu||"",catatan:ex.catatan||""};
+    });
+  }, [allSizes]); // sengaja: target tidak di sini, sudah ditangani effect di atas
 
   const setField = (gid,val) => setDraft(d=>({...d,[gid]:d[gid]===val?"":val}));
 
