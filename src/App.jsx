@@ -2617,12 +2617,20 @@ const SizeTab = memo(({user}) => {
 
   const loadAll = useCallback(async () => {
     try {
-      const keys = await withTimeout(sList("size."));
-      const grouped = {};
-      for(const k of keys){
-        const v = await withTimeout(sGet(k));
-        if(v){ const name=k.replace("size.","").replace(/_/g," "); grouped[name]=JSON.parse(v); }
+      // coba baca semua sekaligus via parent node
+      let keys = await withTimeout(sList("size."));
+      // fallback: kalau sList return kosong, baca per-peserta langsung
+      // (Firebase rules mungkin memblokir read parent tapi bukan child)
+      if(keys.length===0){
+        keys = ALL_PAX.map(p=>`size.${p.name.replace(/\s+/g,"_")}`);
       }
+      const grouped = {};
+      await Promise.all(keys.map(async k=>{
+        try {
+          const v = await withTimeout(sGet(k));
+          if(v){ const name=k.replace("size.","").replace(/_/g," "); grouped[name]=JSON.parse(v); }
+        } catch {}
+      }));
       setAllSizes(grouped);
       setLastSync(new Date());
       setSyncError(null);
@@ -2675,8 +2683,11 @@ const SizeTab = memo(({user}) => {
         baju:draft.baju, celana:draft.celana, topi:draft.topi, sepatu:draft.sepatu,
         catatan:draft.catatan||"", filledBy:user, submittedAt:new Date().toISOString()};
       const ok = await sSet(key, JSON.stringify(rec));
-      if(ok){ await loadAll(); setTab("recap"); }
-      else setSyncError("Gagal menyimpan. Coba lagi.");
+      if(ok){
+        // optimistic update langsung — tidak re-read Firebase (sList parent-read bisa diblokir rules)
+        setAllSizes(prev=>({...prev,[target]:rec}));
+        setTab("recap");
+      } else setSyncError("Gagal menyimpan. Coba lagi.");
     } catch { setSyncError("Gagal menyimpan. Coba lagi."); }
     setSaving(false);
   };
