@@ -1171,7 +1171,7 @@ const NameScreen = memo(({onSuccess}) => {
   );
 });
 
-const Shell = ({user,tab,setTab,children}) => {
+const Shell = ({user,tab,setTab,children,muted,onToggleMute}) => {
   const TABS = [{id:"itinerary",label:"Itinerary"},{id:"size",label:"Ukuran Pakaian"},{id:"makan",label:"Pesan Makanan"},{id:"oleholeh",label:"Oleh-Oleh"},{id:"budget",label:"Dana"}];
   return (
     <div style={{minHeight:"100vh",background:T.stone}}>
@@ -1183,7 +1183,14 @@ const Shell = ({user,tab,setTab,children}) => {
               <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",fontWeight:400,color:T.ink,letterSpacing:"-0.3px"}}>Pomp Op Sahat</h1>
               <p style={{fontSize:"12px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted,marginTop:"3px"}}>Yogyakarta · Hyatt Regency · 2–5 Juli 2026 · 23 Peserta</p>
             </div>
-            <p style={{fontSize:"13px",color:T.muted}}>Halo, <span style={{color:T.ink,fontWeight:500}}>{user}</span></p>
+            <div style={{display:"flex",alignItems:"center",gap:"16px"}}>
+              <button onClick={onToggleMute} aria-label={muted?"Nyalakan musik":"Senyapkan musik"} title={muted?"Nyalakan musik":"Senyapkan musik"} style={{background:"none",border:"none",cursor:"pointer",padding:"4px",color:muted?T.ghost:T.forest,lineHeight:0}}>
+                {muted
+                  ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                  : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>}
+              </button>
+              <p style={{fontSize:"13px",color:T.muted}}>Halo, <span style={{color:T.ink,fontWeight:500}}>{user}</span></p>
+            </div>
           </div>
           <nav style={{display:"flex"}}>
             {TABS.map(t=>(
@@ -2877,6 +2884,24 @@ export default function App() {
   const [user,setUser] = useState(initial ? initial.user : "");
   const [tab,setTab] = useState("itinerary");
 
+  const audioRef = useRef(null);
+  const [musicMuted,setMusicMuted] = useState(()=>{ try{ return localStorage.getItem("pos_music_muted")==="1"; }catch{ return false; } });
+  const startMusic = useCallback(()=>{
+    const a=audioRef.current; if(!a) return;
+    a.volume=0.5;
+    try{ a.muted = localStorage.getItem("pos_music_muted")==="1"; }catch{}
+    a.play().catch(()=>{});
+  },[]);
+  const toggleMute = useCallback(()=>{
+    setMusicMuted(m=>{
+      const nm=!m;
+      try{ localStorage.setItem("pos_music_muted", nm?"1":"0"); }catch{}
+      const a=audioRef.current;
+      if(a){ a.muted=nm; if(!nm){ a.volume=0.5; a.play().catch(()=>{}); } }
+      return nm;
+    });
+  },[]);
+
   // Persistensi sesi: tetap login saat refresh; logout hanya setelah 15 menit idle / tidak diakses
   useEffect(() => {
     if(screen!=="main") return;
@@ -2892,17 +2917,30 @@ export default function App() {
     return () => { events.forEach(e=>window.removeEventListener(e,onActivity)); clearInterval(check); document.removeEventListener("visibilitychange",onVisible); };
   }, [screen]);
 
-  if(screen==="password") return <PasswordScreen onSuccess={()=>setScreen("name")}/>;
-  if(screen==="name") return <NameScreen onSuccess={n=>{setUser(n);saveSession(n);setScreen("main");}}/>;
+  useEffect(()=>{
+    if(screen!=="main") return;
+    startMusic();
+    const onFirst=()=>{ startMusic(); window.removeEventListener("pointerdown",onFirst); };
+    window.addEventListener("pointerdown",onFirst);
+    return ()=>window.removeEventListener("pointerdown",onFirst);
+  },[screen,startMusic]);
+
   return (
-    <ErrorBoundary>
-      <Shell user={user} tab={tab} setTab={setTab}>
-        {tab==="budget"    && <BudgetTab user={user}/>}
-        {tab==="itinerary" && <ItineraryTab/>}
-        {tab==="size"      && <SizeTab user={user}/>}
-        {tab==="makan"     && <MakanTab user={user}/>}
-        {tab==="oleholeh"  && <OlehOlehTab user={user}/>}
-      </Shell>
-    </ErrorBoundary>
+    <>
+      <audio ref={audioRef} src="/welcome-ambient.mp3" loop preload="auto" />
+      {screen==="password" && <PasswordScreen onSuccess={()=>setScreen("name")}/>}
+      {screen==="name" && <NameScreen onSuccess={n=>{setUser(n);saveSession(n);setScreen("main");startMusic();}}/>}
+      {screen==="main" && (
+        <ErrorBoundary>
+          <Shell user={user} tab={tab} setTab={setTab} muted={musicMuted} onToggleMute={toggleMute}>
+            {tab==="budget"    && <BudgetTab user={user}/>}
+            {tab==="itinerary" && <ItineraryTab/>}
+            {tab==="size"      && <SizeTab user={user}/>}
+            {tab==="makan"     && <MakanTab user={user}/>}
+            {tab==="oleholeh"  && <OlehOlehTab user={user}/>}
+          </Shell>
+        </ErrorBoundary>
+      )}
+    </>
   );
 }
