@@ -1589,14 +1589,14 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
       const pad = n=>String(n).padStart(2,"0");
       const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}${pad(now.getMinutes())}`;
       const filename = `TransferOlehOleh ${user} ${stamp}.jpg`;
-      const res = await fetch(OLEHOLEH_UPLOAD_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify({filename, mimeType:"image/jpeg", dataBase64}) });
-      const json = await res.json();
-      if(json && json.ok){
-        const rec = {ts:now.toISOString(), filename};
-        await sSet(`oleholeh.proof.${user.replace(/\s+/g,"_")}`, JSON.stringify(rec));
-        setMyProof(rec);
-        setUploadMsg("✓ Bukti terkirim. Terima kasih!");
-      } else { setUploadMsg("Gagal mengunggah. Coba lagi."); }
+      // Apps Script responds via a redirect without CORS headers, so the response
+      // can't be read cross-origin. Use no-cors fire-and-forget: the request still
+      // reaches the script and the file is saved; we treat no network error as success.
+      await fetch(OLEHOLEH_UPLOAD_URL, { method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify({filename, mimeType:"image/jpeg", dataBase64}) });
+      const rec = {ts:now.toISOString(), filename};
+      await sSet(`oleholeh.proof.${user.replace(/\s+/g,"_")}`, JSON.stringify(rec));
+      setMyProof(rec);
+      setUploadMsg("✓ Bukti terkirim. Terima kasih!");
     } catch { setUploadMsg("Gagal mengunggah. Periksa koneksi & coba lagi."); }
     setUploading(false);
   };
