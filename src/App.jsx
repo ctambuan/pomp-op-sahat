@@ -1176,7 +1176,7 @@ const NameScreen = memo(({onSuccess}) => {
 });
 
 const Shell = ({user,tab,setTab,children}) => {
-  const TABS = [{id:"budget",label:"Dana"},{id:"itinerary",label:"Itinerary"},{id:"size",label:"Ukuran Pakaian"},{id:"food",label:"Pre-Order F&B"}];
+  const TABS = [{id:"itinerary",label:"Itinerary"},{id:"size",label:"Ukuran Pakaian"},{id:"food",label:"Pre-Order F&B"},{id:"budget",label:"Dana"}];
   return (
     <div style={{minHeight:"100vh",background:T.stone}}>
       <GlobalStyles/>
@@ -2653,7 +2653,7 @@ const SizeTab = memo(({user}) => {
 export default function App() {
   const [screen,setScreen] = useState("password");
   const [user,setUser] = useState("");
-  const [tab,setTab] = useState("budget");
+  const [tab,setTab] = useState("itinerary");
 
   if(screen==="password") return <PasswordScreen onSuccess={()=>setScreen("name")}/>;
   if(screen==="name") return <NameScreen onSuccess={n=>{setUser(n);setScreen("main");}}/>;
