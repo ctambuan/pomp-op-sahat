@@ -1210,6 +1210,15 @@ const BudgetTab = memo(({user}) => {
   const [d, setD] = useState(BUDGET_DEFAULT);
   const [syncedAt, setSyncedAt] = useState(null);
   const [ledger, setLedger] = useState([]);
+  const [revealed,setRevealed] = useState(false);
+  const [pwOpen,setPwOpen] = useState(false);
+  const [pw,setPw] = useState("");
+  const [pwErr,setPwErr] = useState(false);
+  const MASK = "••••••";
+  const show = v => revealed ? fmt(v) : `IDR ${MASK}`;
+  const showPct = p => revealed ? `${p}%` : "••%";
+  const barW = w => revealed ? `${w}%` : "0%";
+  const tryReveal = () => { if(pw.trim().toLowerCase()==="lihatdana"){ setRevealed(true); setPwOpen(false); setPw(""); setPwErr(false); } else setPwErr(true); };
 
   useEffect(() => {
     const toArr = v => !v ? [] : Array.isArray(v) ? v : Object.values(v);
@@ -1245,16 +1254,36 @@ const BudgetTab = memo(({user}) => {
     <div className="fade-up">
       <div style={{marginBottom:"56px"}}>
         <p style={{fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Dana Bersama</p>
-        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink,marginBottom:"8px"}}>Ringkasan Keuangan</h2>
-        <p style={{fontSize:"14px",color:T.muted}}>Per {d.lastSync} · Data dari Lusiana{syncedAt && <span style={{color:T.ghost}}> · Live {syncedAt.toLocaleTimeString("id-ID")}</span>}</p>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"20px",flexWrap:"wrap"}}>
+          <div>
+            <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink,marginBottom:"8px"}}>Ringkasan Keuangan</h2>
+            <p style={{fontSize:"14px",color:T.muted}}>Per {d.lastSync} · Data dari Lusiana{syncedAt && <span style={{color:T.ghost}}> · Live {syncedAt.toLocaleTimeString("id-ID")}</span>}</p>
+          </div>
+          <div style={{flexShrink:0}}>
+            <button onClick={()=>{ if(revealed){setRevealed(false);} else {setPwOpen(o=>!o);setPwErr(false);} }} style={{display:"flex",alignItems:"center",gap:"8px",background:revealed?T.cream:"none",border:`1px solid ${revealed?T.forest:T.lineD}`,padding:"9px 16px",cursor:"pointer",fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:revealed?T.forest:T.muted}}>
+              {revealed
+                ? <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M1 1l22 22"/></svg>
+                : <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>}
+              {revealed ? "Sembunyikan" : "Lihat Angka"}
+            </button>
+            {pwOpen && !revealed && (
+              <div style={{marginTop:"12px",display:"flex",flexDirection:"column",gap:"8px",width:"220px",marginLeft:"auto"}}>
+                <input type="password" value={pw} onChange={e=>{setPw(e.target.value);setPwErr(false);}} onKeyDown={e=>e.key==="Enter"&&tryReveal()} placeholder="Password lihat dana" autoFocus
+                  style={{padding:"10px 12px",border:`1px solid ${pwErr?T.danger:T.lineD}`,background:"white",fontSize:"13px",color:T.ink,outline:"none"}}/>
+                <button onClick={tryReveal} style={{background:T.forest,color:"white",border:"none",padding:"10px",cursor:"pointer",fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:500}}>Buka</button>
+                {pwErr&&<p style={{fontSize:"11px",color:T.danger}}>Password salah.</p>}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"1px",background:T.line,marginBottom:"64px"}}>
         {[
-          {label:"Total Dana",val:fmt(d.totals.gross),sub:"Dana bersama"},
-          {label:"Per Peserta",val:fmt(d.perPax),sub:"Kontribusi"},
-          {label:"Terkumpul",val:fmt(d.totals.deposit),sub:`${collection}% dari target`,hi:T.settled},
-          {label:"Belum Lunas",val:fmt(Math.max(0,-d.totals.balance)),sub:"Outstanding",hi:d.totals.balance<0?T.danger:T.settled},
+          {label:"Total Dana",val:show(d.totals.gross),sub:"Dana bersama"},
+          {label:"Per Peserta",val:show(d.perPax),sub:"Kontribusi"},
+          {label:"Terkumpul",val:show(d.totals.deposit),sub:`${showPct(collection)} dari target`,hi:T.settled},
+          {label:"Belum Lunas",val:show(Math.max(0,-d.totals.balance)),sub:"Outstanding",hi:d.totals.balance<0?T.danger:T.settled},
         ].map(k=>(
           <div key={k.label} style={{background:T.cream,padding:"32px 28px"}}>
             <p style={{fontSize:"12px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>{k.label}</p>
@@ -1267,14 +1296,14 @@ const BudgetTab = memo(({user}) => {
       <div style={{marginBottom:"64px"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:"12px"}}>
           <p style={{fontSize:"12px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted}}>Tingkat Pelunasan</p>
-          <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.ink}}>{collection}%</p>
+          <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.ink}}>{showPct(collection)}</p>
         </div>
         <div style={{height:"1px",background:T.line,position:"relative"}}>
-          <div style={{position:"absolute",top:0,left:0,height:"2px",width:`${collection}%`,background:T.forest,marginTop:"-0.5px",transition:"width 1s ease"}}/>
+          <div style={{position:"absolute",top:0,left:0,height:"2px",width:barW(collection),background:T.forest,marginTop:"-0.5px",transition:"width 1s ease"}}/>
         </div>
         <div style={{display:"flex",justifyContent:"space-between",marginTop:"8px"}}>
-          <p style={{fontSize:"12px",color:T.muted}}>Terkumpul: {fmt(d.totals.deposit)}</p>
-          <p style={{fontSize:"12px",color:T.muted}}>Target: {fmt(d.totals.gross)}</p>
+          <p style={{fontSize:"12px",color:T.muted}}>Terkumpul: {show(d.totals.deposit)}</p>
+          <p style={{fontSize:"12px",color:T.muted}}>Target: {show(d.totals.gross)}</p>
         </div>
       </div>
 
@@ -1300,14 +1329,14 @@ const BudgetTab = memo(({user}) => {
                     {show&&!absorbed&&(
                       <div style={{display:"grid",gridTemplateColumns:"repeat(3,160px)",gap:"24px"}}>
                         {[
-                          {l:"Total",v:fmt(hh.gross),c:T.ink},
-                          {l:"Dibayar",v:fmt(hh.deposit),c:T.settled},
-                          {l:hh.balance>=0?"Credit":"Sisa Bayar",v:fmt(Math.abs(hh.balance)),c:hh.balance>=0?T.settled:T.danger},
+                          {l:"Total",v:show(hh.gross),c:T.ink},
+                          {l:"Dibayar",v:show(hh.deposit),c:T.settled},
+                          {l:hh.balance>=0?"Credit":"Sisa Bayar",v:show(Math.abs(hh.balance)),c:hh.balance>=0?T.settled:T.danger},
                         ].map(f=>(
                           <div key={f.l}>
                             <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{f.l}</p>
                             <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:f.c,fontWeight:400}}>{f.v}</p>
-                            {hh.gross>0&&f.l==="Dibayar"&&<div style={{marginTop:"6px",height:"1px",background:T.line}}><div style={{height:"1px",width:`${pct(hh.deposit,hh.gross)}%`,background:T.settled}}/></div>}
+                            {hh.gross>0&&f.l==="Dibayar"&&<div style={{marginTop:"6px",height:"1px",background:T.line}}><div style={{height:"1px",width:barW(pct(hh.deposit,hh.gross)),background:T.settled}}/></div>}
                           </div>
                         ))}
                       </div>
@@ -1319,8 +1348,8 @@ const BudgetTab = memo(({user}) => {
                           <div key={i} style={{display:"grid",gridTemplateColumns:"1fr 60px 120px 100px",gap:"16px",padding:"8px 0",borderBottom:`1px solid ${T.line}`,fontSize:"14px",alignItems:"center"}}>
                             <span style={{color:T.mid}}>{s.members}</span>
                             <span style={{color:T.muted,textAlign:"right"}}>{s.pax}px</span>
-                            <span style={{color:T.settled,textAlign:"right"}}>{fmt(s.deposit)}</span>
-                            <span style={{color:s.balance>=0?T.settled:T.danger,textAlign:"right",fontWeight:500}}>{s.balance>=0?"+":""}{fmt(s.balance)}</span>
+                            <span style={{color:T.settled,textAlign:"right"}}>{show(s.deposit)}</span>
+                            <span style={{color:s.balance>=0?T.settled:T.danger,textAlign:"right",fontWeight:500}}>{s.balance>=0?"+":""}{revealed?fmt(s.balance):MASK}</span>
                           </div>
                         ))}
                       </div>
@@ -1362,9 +1391,9 @@ const BudgetTab = memo(({user}) => {
                     <p style={{fontSize:"14px",color:T.ink}}>{row.keterangan}</p>
                     {row.note&&<p style={{fontSize:"12px",color:T.ghost,marginTop:"2px",fontStyle:"italic"}}>{row.note}</p>}
                   </div>
-                  <p style={{fontSize:"14px",color:row.deposit>0?T.settled:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.deposit>0?`+${fmt(row.deposit)}`:"—"}</p>
-                  <p style={{fontSize:"14px",color:row.refund>0?T.warn:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.refund>0?`−${fmt(row.refund)}`:"—"}</p>
-                  <p style={{fontSize:"15px",color:T.ink,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif",fontWeight:i===ledger.length-1?500:400}}>{fmt(row.saldo)}</p>
+                  <p style={{fontSize:"14px",color:row.deposit>0?T.settled:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.deposit>0?(revealed?`+${fmt(row.deposit)}`:`+${MASK}`):"—"}</p>
+                  <p style={{fontSize:"14px",color:row.refund>0?T.warn:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.refund>0?(revealed?`−${fmt(row.refund)}`:`−${MASK}`):"—"}</p>
+                  <p style={{fontSize:"15px",color:T.ink,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif",fontWeight:i===ledger.length-1?500:400}}>{show(row.saldo)}</p>
                 </div>
               );
             })}
@@ -1372,7 +1401,7 @@ const BudgetTab = memo(({user}) => {
               <span/><span/><span/>
               <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Saldo Kas</p>
               <span/><span/>
-              <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest,textAlign:"right",fontWeight:500}}>{ledger.length>0?fmt(ledger[ledger.length-1].saldo):"—"}</p>
+              <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest,textAlign:"right",fontWeight:500}}>{ledger.length>0?show(ledger[ledger.length-1].saldo):"—"}</p>
             </div>
           </>
         }
