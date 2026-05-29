@@ -2312,6 +2312,8 @@ const suggestByBrand = (garment, brand, brandSize) => {
   return null;
 };
 
+const isSizeComplete = r => !!(r && r.baju && r.celana && r.topi && r.sepatu);
+
 const SizeCountdown = memo(() => {
   const [now,setNow] = useState(Date.now());
   useEffect(()=>{ const id=setInterval(()=>setNow(Date.now()),1000); return ()=>clearInterval(id); },[]);
@@ -2405,7 +2407,8 @@ const SizeTab = memo(({user}) => {
   const submit = async () => {
     if(saving) return;
     if(pastDeadline && !isCoord){ setSyncError("Pengumpulan ukuran telah ditutup. Hubungi koordinator untuk perubahan."); return; }
-    if(!draft.baju&&!draft.celana&&!draft.topi&&!draft.sepatu){ setSyncError("Pilih minimal satu ukuran sebelum konfirmasi."); return; }
+    const missing = SIZE_GARMENTS.filter(g=>!draft[g.id]).map(g=>g.label.split(" ")[0]);
+    if(missing.length){ setSyncError(`Lengkapi semua ukuran sebelum konfirmasi. Belum diisi: ${missing.join(", ")}.`); return; }
     setSaving(true); setSyncError(null);
     try {
       const key = `size.${target.replace(/\s+/g,"_")}`;
@@ -2437,7 +2440,7 @@ const SizeTab = memo(({user}) => {
     a.download="Ukuran_Pakaian_PompOpSahat.csv"; a.click();
   };
 
-  const filledCount = ALL_PAX.filter(p=>allSizes[p.name]&&(allSizes[p.name].baju||allSizes[p.name].celana||allSizes[p.name].topi||allSizes[p.name].sepatu)).length;
+  const filledCount = ALL_PAX.filter(p=>isSizeComplete(allSizes[p.name])).length;
 
   if(loading) return (<div style={{textAlign:"center",padding:"80px 0",color:T.muted}}><p style={{fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase"}}>Memuat data dari Firebase…</p></div>);
 
@@ -2466,7 +2469,7 @@ const SizeTab = memo(({user}) => {
           <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"14px"}}>Mengisi untuk</p>
           <div style={{display:"flex",flexWrap:"wrap",gap:"8px"}}>
             {fillableFor.map(p=>{
-              const done = allSizes[p.name]&&(allSizes[p.name].baju||allSizes[p.name].celana||allSizes[p.name].topi||allSizes[p.name].sepatu);
+              const done = isSizeComplete(allSizes[p.name]);
               const sel = target===p.name;
               return (
                 <button key={p.name} onClick={()=>setTarget(p.name)} style={{background:sel?T.forest:"transparent",border:`1px solid ${sel?T.forest:T.lineD}`,color:sel?"white":T.mid,padding:"7px 14px",cursor:"pointer",fontSize:"12px",letterSpacing:"0.3px",transition:"all 0.15s",display:"flex",alignItems:"center",gap:"7px"}}>
@@ -2483,11 +2486,13 @@ const SizeTab = memo(({user}) => {
           )}
         </div>
 
+        <p style={{fontSize:"12px",color:T.muted,marginBottom:"28px",letterSpacing:"0.3px"}}>Semua ukuran <span style={{color:T.gold,fontWeight:500}}>wajib diisi lengkap</span> — baju, celana, topi & sepatu — sebelum dapat dikonfirmasi.</p>
+
         {/* field tiap garment */}
         {SIZE_GARMENTS.map(g=>(
           <div key={g.id} style={{marginBottom:"36px",paddingBottom:"32px",borderBottom:`1px solid ${T.line}`}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",flexWrap:"wrap",gap:"8px",marginBottom:"14px"}}>
-              <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{g.label}</h3>
+              <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{g.label} <span style={{color:draft[g.id]?T.settled:T.gold,fontSize:"14px"}}>{draft[g.id]?"✓":"*"}</span></h3>
               <div style={{display:"flex",gap:"16px"}}>
                 <button onClick={()=>{setOpenChart(openChart===g.id?null:g.id);}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"11px",letterSpacing:"1px",textTransform:"uppercase",color:T.muted,borderBottom:`1px solid ${openChart===g.id?T.forest:"transparent"}`,padding:"2px 0"}}>Panduan ukuran</button>
                 <button onClick={()=>{setOpenHelper(openHelper===g.id?null:g.id);setHelperMode("cm");setHelperResult(null);setHelperCm("");setHelperBrand("");setHelperBrandSize("");}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"11px",letterSpacing:"1px",textTransform:"uppercase",color:T.gold,borderBottom:`1px solid ${openHelper===g.id?T.gold:"transparent"}`,padding:"2px 0"}}>Bantu pilih ukuran</button>
@@ -2588,7 +2593,7 @@ const SizeTab = memo(({user}) => {
             {SIZE_GARMENTS.map(g=>(
               <div key={g.id}>
                 <p style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"5px"}}>{g.label.split(" ")[0]}</p>
-                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"17px",color:draft[g.id]?T.ink:T.ghost}}>{draft[g.id]?(g.id==="sepatu"?`EU ${draft[g.id]}`:draft[g.id]):"—"}</p>
+                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"17px",color:draft[g.id]?T.ink:T.danger}}>{draft[g.id]?(g.id==="sepatu"?`EU ${draft[g.id]}`:draft[g.id]):"Belum"}</p>
               </div>
             ))}
           </div>
@@ -2620,7 +2625,7 @@ const SizeTab = memo(({user}) => {
             </div>
             {ALL_PAX.map(p=>{
               const s=allSizes[p.name]||{};
-              const done=s.baju||s.celana||s.topi||s.sepatu;
+              const done=isSizeComplete(s);
               return (
                 <div key={p.name} style={{display:"grid",gridTemplateColumns:"1.6fr 0.5fr 1fr 0.8fr 1fr 0.8fr",gap:"0 12px",padding:"12px 0",borderBottom:`1px solid ${T.line}`,alignItems:"center",opacity:done?1:0.55}}>
                   <div>
