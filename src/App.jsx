@@ -1216,8 +1216,6 @@ const BudgetTab = memo(({user}) => {
   const [pwErr,setPwErr] = useState(false);
   const MASK = "••••••";
   const show = v => revealed ? fmt(v) : `IDR ${MASK}`;
-  const showPct = p => revealed ? `${p}%` : "••%";
-  const barW = w => revealed ? `${w}%` : "0%";
   const tryReveal = () => { if(pw.trim().toLowerCase()==="lihatdana"){ setRevealed(true); setPwOpen(false); setPw(""); setPwErr(false); } else setPwErr(true); };
 
   useEffect(() => {
@@ -1282,7 +1280,7 @@ const BudgetTab = memo(({user}) => {
         {[
           {label:"Total Dana",val:show(d.totals.gross),sub:"Dana bersama"},
           {label:"Per Peserta",val:show(d.perPax),sub:"Kontribusi"},
-          {label:"Terkumpul",val:show(d.totals.deposit),sub:`${showPct(collection)} dari target`,hi:T.settled},
+          {label:"Terkumpul",val:show(d.totals.deposit),sub:`${collection}% dari target`,hi:T.settled},
           {label:"Belum Lunas",val:show(Math.max(0,-d.totals.balance)),sub:"Outstanding",hi:d.totals.balance<0?T.danger:T.settled},
         ].map(k=>(
           <div key={k.label} style={{background:T.cream,padding:"32px 28px"}}>
@@ -1296,10 +1294,10 @@ const BudgetTab = memo(({user}) => {
       <div style={{marginBottom:"64px"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:"12px"}}>
           <p style={{fontSize:"12px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted}}>Tingkat Pelunasan</p>
-          <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.ink}}>{showPct(collection)}</p>
+          <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.ink}}>{collection}%</p>
         </div>
         <div style={{height:"1px",background:T.line,position:"relative"}}>
-          <div style={{position:"absolute",top:0,left:0,height:"2px",width:barW(collection),background:T.forest,marginTop:"-0.5px",transition:"width 1s ease"}}/>
+          <div style={{position:"absolute",top:0,left:0,height:"2px",width:`${collection}%`,background:T.forest,marginTop:"-0.5px",transition:"width 1s ease"}}/>
         </div>
         <div style={{display:"flex",justifyContent:"space-between",marginTop:"8px"}}>
           <p style={{fontSize:"12px",color:T.muted}}>Terkumpul: {show(d.totals.deposit)}</p>
@@ -1336,7 +1334,7 @@ const BudgetTab = memo(({user}) => {
                           <div key={f.l}>
                             <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{f.l}</p>
                             <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:f.c,fontWeight:400}}>{f.v}</p>
-                            {hh.gross>0&&f.l==="Dibayar"&&<div style={{marginTop:"6px",height:"1px",background:T.line}}><div style={{height:"1px",width:barW(pct(hh.deposit,hh.gross)),background:T.settled}}/></div>}
+                            {hh.gross>0&&f.l==="Dibayar"&&<div style={{marginTop:"6px",height:"1px",background:T.line}}><div style={{height:"1px",width:`${pct(hh.deposit,hh.gross)}%`,background:T.settled}}/></div>}
                           </div>
                         ))}
                       </div>
