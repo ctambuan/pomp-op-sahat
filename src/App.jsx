@@ -2219,14 +2219,16 @@ const SIZE_GARMENTS = [
         {v:"40", cm:102, row:["102"]},
         {v:"42", cm:107, row:["107"]},
         {v:"44", cm:112, row:["112"]},
+        {v:"46", cm:117, row:["117"]},
+        {v:"48", cm:122, row:["122"]},
       ]},
     ],
     // brand mode: pilih nomor pinggang merek; Zara/Mango EU slim → +1 nomor
     brands:{
       Uniqlo:"same", "M&S":"same", Zara:"up", Mango:"up",
     },
-    brandSizes:["28","29","30","31","32","33","34","36","38","40"],
-    adultNumbers:["28","29","30","31","32","33","34","36","38","40","42","44"],
+    brandSizes:["28","29","30","31","32","33","34","36","38","40","42","44","46","48"],
+    adultNumbers:["28","29","30","31","32","33","34","36","38","40","42","44","46","48"],
   },
   {
     id:"topi", label:"Topi / Blangkon", unit:"cm",
