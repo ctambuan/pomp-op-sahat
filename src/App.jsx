@@ -2650,13 +2650,40 @@ const SizeTab = memo(({user}) => {
   );
 });
 
+const SESSION_KEY = "pos_session";
+const IDLE_MS = 15 * 60 * 1000; // 15 menit idle / tidak diakses
+const loadSession = () => {
+  try { const s = JSON.parse(localStorage.getItem(SESSION_KEY)||"null");
+    if(s && s.user && s.ts && (Date.now()-s.ts < IDLE_MS)) return s; } catch {}
+  return null;
+};
+const saveSession = user => { try { localStorage.setItem(SESSION_KEY, JSON.stringify({user, ts:Date.now()})); } catch {} };
+const touchSession = () => { try { const s=JSON.parse(localStorage.getItem(SESSION_KEY)||"null"); if(s&&s.user){ s.ts=Date.now(); localStorage.setItem(SESSION_KEY, JSON.stringify(s)); } } catch {} };
+const clearSession = () => { try { localStorage.removeItem(SESSION_KEY); } catch {} };
+
 export default function App() {
-  const [screen,setScreen] = useState("password");
-  const [user,setUser] = useState("");
+  const initial = typeof window!=="undefined" ? loadSession() : null;
+  const [screen,setScreen] = useState(initial ? "main" : "password");
+  const [user,setUser] = useState(initial ? initial.user : "");
   const [tab,setTab] = useState("itinerary");
 
+  // Persistensi sesi: tetap login saat refresh; logout hanya setelah 15 menit idle / tidak diakses
+  useEffect(() => {
+    if(screen!=="main") return;
+    touchSession();
+    const logout = () => { clearSession(); setUser(""); setScreen("password"); };
+    let last = Date.now();
+    const onActivity = () => { const now=Date.now(); if(now-last>10000){ last=now; touchSession(); } };
+    const events = ["pointerdown","keydown","touchstart","scroll"];
+    events.forEach(e=>window.addEventListener(e,onActivity,{passive:true}));
+    const check = setInterval(()=>{ if(!loadSession()) logout(); }, 30000);
+    const onVisible = () => { if(document.visibilityState==="visible" && !loadSession()) logout(); };
+    document.addEventListener("visibilitychange",onVisible);
+    return () => { events.forEach(e=>window.removeEventListener(e,onActivity)); clearInterval(check); document.removeEventListener("visibilitychange",onVisible); };
+  }, [screen]);
+
   if(screen==="password") return <PasswordScreen onSuccess={()=>setScreen("name")}/>;
-  if(screen==="name") return <NameScreen onSuccess={n=>{setUser(n);setScreen("main");}}/>;
+  if(screen==="name") return <NameScreen onSuccess={n=>{setUser(n);saveSession(n);setScreen("main");}}/>;
   return (
     <ErrorBoundary>
       <Shell user={user} tab={tab} setTab={setTab}>
