@@ -2617,17 +2617,16 @@ const SizeTab = memo(({user}) => {
 
   const loadAll = useCallback(async () => {
     try {
-      // coba baca semua sekaligus via parent node
-      let keys = await withTimeout(sList("size."));
-      // fallback: kalau sList return kosong, baca per-peserta langsung
-      // (Firebase rules mungkin memblokir read parent tapi bukan child)
+      // coba baca semua via parent node (cepat); fallback ke per-peserta kalau gagal/timeout/empty
+      let keys = [];
+      try { keys = await withTimeout(sList("size."), 6000); } catch {}
       if(keys.length===0){
         keys = ALL_PAX.map(p=>`size.${p.name.replace(/\s+/g,"_")}`);
       }
       const grouped = {};
       await Promise.all(keys.map(async k=>{
         try {
-          const v = await withTimeout(sGet(k));
+          const v = await withTimeout(sGet(k), 8000);
           if(v){ const name=k.replace("size.","").replace(/_/g," "); grouped[name]=JSON.parse(v); }
         } catch {}
       }));
@@ -2635,9 +2634,7 @@ const SizeTab = memo(({user}) => {
       setLastSync(new Date());
       setSyncError(null);
     } catch(e) {
-      setSyncError(e.message==="timeout"
-        ? "Koneksi lambat — ketuk Refresh untuk coba lagi."
-        : "Gagal memuat data. Cek koneksi.");
+      setSyncError("Gagal memuat data. Cek koneksi & ketuk Refresh.");
     }
   }, []);
 
@@ -2684,9 +2681,14 @@ const SizeTab = memo(({user}) => {
         catatan:draft.catatan||"", filledBy:user, submittedAt:new Date().toISOString()};
       const ok = await sSet(key, JSON.stringify(rec));
       if(ok){
-        // optimistic update langsung — tidak re-read Firebase (sList parent-read bisa diblokir rules)
-        setAllSizes(prev=>({...prev,[target]:rec}));
-        setTab("recap");
+        // verifikasi: cek data benar-benar tersimpan di server (deteksi Firebase Rules rejection)
+        const verify = await sGet(key);
+        if(verify){
+          setAllSizes(prev=>({...prev,[target]:rec}));
+          setTab("recap");
+        } else {
+          setSyncError("⚠ Data tidak tersimpan di server. Kemungkinan Firebase Rules belum mengizinkan path '/size'. Hubungi koordinator untuk update Rules.");
+        }
       } else setSyncError("Gagal menyimpan. Coba lagi.");
     } catch { setSyncError("Gagal menyimpan. Coba lagi."); }
     setSaving(false);
