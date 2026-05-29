@@ -1497,12 +1497,36 @@ const TRANSFER_INFO = {
   bank:"Bank Jago",
   account:"102816180854",
 };
+const OLEHOLEH_UPLOAD_URL = "https://script.google.com/macros/s/AKfycbyV1sh8kD9z6PuwxsjqkyEUQ5OMTrrqPYYnIAfTTCDj6TXjO-tg1HSGfPyWavcwhN1O/exec";
+const compressImage = (file, maxDim=1600, quality=0.8) => new Promise((resolve,reject)=>{
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      let {width,height} = img;
+      if(width>=height && width>maxDim){ height=Math.round(height*maxDim/width); width=maxDim; }
+      else if(height>width && height>maxDim){ width=Math.round(width*maxDim/height); height=maxDim; }
+      const c = document.createElement("canvas");
+      c.width=width; c.height=height;
+      c.getContext("2d").drawImage(img,0,0,width,height);
+      try { resolve(c.toDataURL("image/jpeg",quality).split(",")[1]); } catch(err){ reject(err); }
+    };
+    img.onerror = reject;
+    img.src = reader.result;
+  };
+  reader.onerror = reject;
+  reader.readAsDataURL(file);
+});
 
 const OlehOlehSummary = memo(({user,isCoord}) => {
   const takeawayRestos = RESTAURANTS.filter(r=>r.isTakeaway);
   const [myOrders,setMyOrders]   = useState({});
   const [allPaxOrders,setAllPaxOrders] = useState({});
   const [loading,setLoading]     = useState(true);
+  const [myProof,setMyProof]     = useState(null);
+  const [allProofs,setAllProofs] = useState({});
+  const [uploading,setUploading] = useState(false);
+  const [uploadMsg,setUploadMsg] = useState(null);
 
   useEffect(()=>{
     (async()=>{
@@ -1519,6 +1543,9 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
         }catch{}
       }
       setMyOrders(mine);
+
+      // proof of transfer — self
+      try { const pv = await sGet(`oleholeh.proof.${user.replace(/\s+/g,"_")}`); if(pv) setMyProof(JSON.parse(pv)); } catch {}
 
       // If coordinator, fetch all pax orders
       if(isCoord){
@@ -1538,10 +1565,41 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
           }catch{}
         }
         setAllPaxOrders(all);
+
+        // all proofs for coordinator
+        try {
+          const pkeys = await sList("oleholeh.proof.");
+          const proofs = {};
+          for(const k of pkeys){ const v = await sGet(k); if(v){ proofs[k.replace("oleholeh.proof.","").replace(/_/g," ")] = JSON.parse(v); } }
+          setAllProofs(proofs);
+        } catch {}
       }
       setLoading(false);
     })();
   },[user,isCoord]);
+
+  const onFile = async e => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if(!file) return;
+    setUploading(true); setUploadMsg(null);
+    try {
+      const dataBase64 = await compressImage(file);
+      const now = new Date();
+      const pad = n=>String(n).padStart(2,"0");
+      const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}${pad(now.getMinutes())}`;
+      const filename = `TransferOlehOleh ${user} ${stamp}.jpg`;
+      const res = await fetch(OLEHOLEH_UPLOAD_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify({filename, mimeType:"image/jpeg", dataBase64}) });
+      const json = await res.json();
+      if(json && json.ok){
+        const rec = {ts:now.toISOString(), filename};
+        await sSet(`oleholeh.proof.${user.replace(/\s+/g,"_")}`, JSON.stringify(rec));
+        setMyProof(rec);
+        setUploadMsg("✓ Bukti terkirim. Terima kasih!");
+      } else { setUploadMsg("Gagal mengunggah. Coba lagi."); }
+    } catch { setUploadMsg("Gagal mengunggah. Periksa koneksi & coba lagi."); }
+    setUploading(false);
+  };
 
   const myStores  = Object.values(myOrders);
   const myTotal   = myStores.reduce((s,o)=>s+Number(o.totalIDR),0);
@@ -1576,6 +1634,15 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
               <p style={{fontSize:"15px",color:T.mid}}>{TRANSFER_INFO.bank} · {TRANSFER_INFO.account}</p>
               <p style={{fontSize:"13px",color:T.muted,marginTop:"8px"}}>Berita: <span style={{color:T.ink,fontWeight:500}}>OLEHOLEH {user}</span></p>
             </div>
+            <div style={{marginTop:"16px"}}>
+              {myProof
+                ? <div style={{background:T.settledBg,border:`1px solid ${T.settled}`,padding:"12px 16px",display:"flex",justifyContent:"space-between",alignItems:"center",gap:"12px",flexWrap:"wrap"}}>
+                    <p style={{fontSize:"12px",color:T.settled}}>✓ Bukti terkirim · {new Date(myProof.ts).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</p>
+                    <label style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:uploading?T.muted:T.muted,cursor:uploading?"wait":"pointer",borderBottom:`1px solid ${T.lineD}`}}>{uploading?"Mengunggah…":"Ganti bukti"}<input type="file" accept="image/*" onChange={onFile} disabled={uploading} style={{display:"none"}}/></label>
+                  </div>
+                : <label style={{display:"block",textAlign:"center",border:`1px dashed ${T.gold}`,padding:"14px",cursor:uploading?"wait":"pointer",fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:uploading?T.muted:T.forest,background:"white"}}>{uploading?"Mengunggah…":"Upload Bukti Transfer"}<input type="file" accept="image/*" onChange={onFile} disabled={uploading} style={{display:"none"}}/></label>}
+              {uploadMsg&&<p style={{fontSize:"11px",color:uploadMsg.startsWith("✓")?T.settled:T.danger,marginTop:"8px"}}>{uploadMsg}</p>}
+            </div>
           </div>
         </div>
       )}
@@ -1591,6 +1658,7 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
                   <th style={{textAlign:"left",padding:"8px 12px 8px 0",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"11px"}}>Peserta</th>
                   {takeawayRestos.map(r=><th key={r.id} style={{textAlign:"right",padding:"8px 12px",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"11px",whiteSpace:"nowrap"}}>{r.name}</th>)}
                   <th style={{textAlign:"right",padding:"8px 0 8px 12px",color:T.forest,fontWeight:500,letterSpacing:"1px",textTransform:"uppercase",fontSize:"11px"}}>Total</th>
+                  <th style={{textAlign:"center",padding:"8px 0 8px 16px",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"11px",whiteSpace:"nowrap"}}>Bukti</th>
                 </tr>
               </thead>
               <tbody>
@@ -1605,6 +1673,7 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
                         </td>
                       ))}
                       <td style={{textAlign:"right",padding:"10px 0 10px 12px",color:T.forest,fontFamily:"'Playfair Display',Georgia,serif",fontWeight:500}}>IDR {rowTotal.toLocaleString("id-ID")}</td>
+                      <td style={{textAlign:"center",padding:"10px 0 10px 16px",whiteSpace:"nowrap"}}>{allProofs[pName]?<span style={{color:T.settled,fontSize:"12px"}}>✓ {new Date(allProofs[pName].ts).toLocaleDateString("id-ID",{day:"numeric",month:"short"})}</span>:<span style={{color:T.ghost}}>—</span>}</td>
                     </tr>
                   );
                 })}
@@ -1619,6 +1688,7 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
                   <td style={{textAlign:"right",padding:"12px 0 4px 12px",fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:T.forest,fontWeight:500}}>
                     IDR {paxWithOrders.reduce((s,[,stores])=>s+Object.values(stores).reduce((ss,o)=>ss+Number(o.totalIDR),0),0).toLocaleString("id-ID")}
                   </td>
+                  <td style={{textAlign:"center",padding:"12px 0 4px 16px",fontSize:"12px",color:T.muted,whiteSpace:"nowrap"}}>{paxWithOrders.filter(([pName])=>allProofs[pName]).length}/{paxWithOrders.length}</td>
                 </tr>
               </tfoot>
             </table>
