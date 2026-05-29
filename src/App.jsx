@@ -2617,19 +2617,9 @@ const SizeTab = memo(({user}) => {
 
   const loadAll = useCallback(async () => {
     try {
-      // coba baca semua via parent node (cepat); fallback ke per-peserta kalau gagal/timeout/empty
-      let keys = [];
-      try { keys = await withTimeout(sList("size."), 6000); } catch {}
-      if(keys.length===0){
-        keys = ALL_PAX.map(p=>`size.${p.name.replace(/\s+/g,"_")}`);
-      }
-      const grouped = {};
-      await Promise.all(keys.map(async k=>{
-        try {
-          const v = await withTimeout(sGet(k), 8000);
-          if(v){ const name=k.replace("size.","").replace(/_/g," "); grouped[name]=JSON.parse(v); }
-        } catch {}
-      }));
+      // satu key tunggal "size.all" → tidak butuh sList, tidak ada parallel calls
+      const v = await withTimeout(sGet("size.all"), 10000);
+      const grouped = v ? JSON.parse(v) : {};
       setAllSizes(grouped);
       setLastSync(new Date());
       setSyncError(null);
@@ -2675,19 +2665,23 @@ const SizeTab = memo(({user}) => {
     if(missing.length){ setSyncError(`Lengkapi semua ukuran sebelum konfirmasi. Belum diisi: ${missing.join(", ")}.`); return; }
     setSaving(true); setSyncError(null);
     try {
-      const key = `size.${target.replace(/\s+/g,"_")}`;
       const rec = {peserta:target, hh:ALL_PAX.find(p=>p.name===target)?.hh||"",
         baju:draft.baju, celana:draft.celana, topi:draft.topi, sepatu:draft.sepatu,
         catatan:draft.catatan||"", filledBy:user, submittedAt:new Date().toISOString()};
-      const ok = await sSet(key, JSON.stringify(rec));
+      // baca state terkini, tambahkan/update target, simpan kembali sebagai satu blob
+      const currentStr = await sGet("size.all");
+      const current = currentStr ? JSON.parse(currentStr) : {};
+      current[target] = rec;
+      const ok = await sSet("size.all", JSON.stringify(current));
       if(ok){
-        // verifikasi: cek data benar-benar tersimpan di server (deteksi Firebase Rules rejection)
-        const verify = await sGet(key);
-        if(verify){
-          setAllSizes(prev=>({...prev,[target]:rec}));
+        // verifikasi: pastikan data benar-benar tersimpan di server
+        const verifyStr = await sGet("size.all");
+        const verified = verifyStr ? JSON.parse(verifyStr) : {};
+        if(verified[target]){
+          setAllSizes(verified);
           setTab("recap");
         } else {
-          setSyncError("⚠ Data tidak tersimpan di server. Kemungkinan Firebase Rules belum mengizinkan path '/size'. Hubungi koordinator untuk update Rules.");
+          setSyncError("Data belum terkonfirmasi server. Coba lagi.");
         }
       } else setSyncError("Gagal menyimpan. Coba lagi.");
     } catch { setSyncError("Gagal menyimpan. Coba lagi."); }
