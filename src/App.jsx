@@ -1644,27 +1644,40 @@ const FoodOrderTab = memo(({user}) => {
         <p style={{fontSize:"14px",color:T.muted,marginTop:"8px"}}>Pilih restoran untuk melihat menu dan melakukan pemesanan</p>
       </div>
       <OlehOlehSummary user={user} isCoord={isCoord}/>
-      <div style={{marginBottom:"56px"}}>
-        <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.forest,marginBottom:"24px",fontWeight:500}}>Pre-Order Tersedia</p>
-        <div style={{borderTop:`1px solid ${T.line}`}}>
-          {RESTAURANTS.map(r=>(
-            <div key={r.id} onClick={()=>{setActiveResto(r);setView("restaurant");}}
-              style={{display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",borderBottom:`1px solid ${T.line}`,padding:"28px 0",cursor:"pointer"}}
-              onMouseEnter={e=>e.currentTarget.style.background=T.cream}
-              onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-              <div>
-                <div style={{display:"flex",alignItems:"center",gap:"16px",marginBottom:"6px"}}>
-                  <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{r.name}</h3>
-                  <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.settled,borderBottom:`1px solid ${T.settled}`}}>Terbuka</span>
-                </div>
-                <p style={{fontSize:"13px",color:T.muted}}>{r.subtitle}</p>
-                <p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"2px"}}>{r.note}</p>
+      {(()=>{
+        const row = r => (
+          <div key={r.id} onClick={()=>{setActiveResto(r);setView("restaurant");}}
+            style={{display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",borderBottom:`1px solid ${T.line}`,padding:"28px 0",cursor:"pointer"}}
+            onMouseEnter={e=>e.currentTarget.style.background=T.cream}
+            onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+            <div>
+              <div style={{display:"flex",alignItems:"center",gap:"16px",marginBottom:"6px"}}>
+                <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{r.name}</h3>
+                <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.settled,borderBottom:`1px solid ${T.settled}`}}>Terbuka</span>
               </div>
-              <span style={{fontSize:"20px",color:T.muted}}>→</span>
+              <p style={{fontSize:"13px",color:T.muted}}>{r.subtitle}</p>
+              <p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"2px"}}>{r.note}</p>
             </div>
-          ))}
-        </div>
-      </div>
+            <span style={{fontSize:"20px",color:T.muted}}>→</span>
+          </div>
+        );
+        const sponsored = RESTAURANTS.filter(r=>!r.isTakeaway);
+        const oleholeh  = RESTAURANTS.filter(r=>r.isTakeaway);
+        return (
+          <>
+            <div style={{marginBottom:"56px"}}>
+              <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.forest,marginBottom:"6px",fontWeight:500}}>Makanan & Minuman</p>
+              <p style={{fontSize:"12px",color:T.muted,marginBottom:"24px",fontStyle:"italic"}}>Seluruhnya disponsori per household — tidak dibayar peserta.</p>
+              <div style={{borderTop:`1px solid ${T.line}`}}>{sponsored.map(row)}</div>
+            </div>
+            <div style={{marginBottom:"56px",borderTop:`2px solid ${T.gold}`,paddingTop:"40px"}}>
+              <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.gold,marginBottom:"6px",fontWeight:500}}>Pre-Order Oleh-Oleh</p>
+              <p style={{fontSize:"12px",color:T.muted,marginBottom:"24px",fontStyle:"italic"}}>Dibayar sendiri — transfer ke koordinator, total tergabung di kartu "Tagihan Oleh-Oleh" di atas.</p>
+              <div style={{borderTop:`1px solid ${T.line}`}}>{oleholeh.map(row)}</div>
+            </div>
+          </>
+        );
+      })()}
       <div style={{marginBottom:"56px"}}>
         <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.gold,marginBottom:"24px",fontWeight:500}}>Menu Buffet</p>
         {SET_MENUS.map(m=>(
@@ -2076,7 +2089,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                   </div>
                 </>}
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 0 0",borderTop:`2px solid ${T.lineD}`}}>
-                  <span style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Perkiraan Harga (Sponsor)</span>
+                  <span style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>{resto.isTakeaway?"Total":"Perkiraan Harga (Sponsor)"}</span>
                   <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.forest,fontWeight:500}}>IDR {grandTotal.toLocaleString("id-ID")}</span>
                 </div>
               </>}
@@ -2105,7 +2118,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                     </div>
                     {resto.id!=="solaria"&&grandAllTotal>0&&(
                       <div style={{background:T.cream,padding:"20px 24px"}}>
-                        <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Perkiraan Total (Sponsor)</p>
+                        <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>{resto.isTakeaway?"Total Pesanan":"Perkiraan Total (Sponsor)"}</p>
                         <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest}}>IDR {grandAllTotal.toLocaleString("id-ID")}</p>
                       </div>
                     )}
