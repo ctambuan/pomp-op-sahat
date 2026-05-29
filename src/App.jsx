@@ -542,7 +542,6 @@ const RESTAURANTS = [
       ]},
     ]
   },
-,
   // ─── DJIWANA CAFE & EATERY ────────────────────────────────────────────────────
   {
     id:"djiwana",name:"Djiwana Cafe & Eatery",subtitle:"D3 · Makan Siang · 4 Juli 2026, 12.00",
@@ -945,7 +944,6 @@ const RESTAURANTS = [
       ]},
     ]
   },
-,
   // ─── JUWARA SATOE ─────────────────────────────────────────────────────────────
   {
     id:"juwara",name:"Juwara Satoe",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
@@ -1012,7 +1010,6 @@ const RESTAURANTS = [
       ]},
     ]
   },
-,
   // ─── WAHYU AUSTIN PASTRY ──────────────────────────────────────────────────────
   {
     id:"wahyu-austin",name:"Wahyu Austin Pastry",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
@@ -1032,7 +1029,6 @@ const RESTAURANTS = [
       ]},
     ]
   },
-,
   // ─── PUTU RADJA BOLU PISANG ───────────────────────────────────────────────────
   {
     id:"putu-radja",name:"Putu Radja Bolu Pisang",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
@@ -1111,6 +1107,16 @@ const SET_MENUS = [
 const fmt = n => "IDR " + Math.abs(Number(n)).toLocaleString("id-ID");
 const pct = (a,b) => b>0?Math.min(100,Math.round((a/b)*100)):0;
 
+const useIsNarrow = (bp=640) => {
+  const [narrow,setNarrow] = useState(typeof window!=="undefined" && window.innerWidth < bp);
+  useEffect(()=>{
+    const on = () => setNarrow(window.innerWidth < bp);
+    window.addEventListener("resize",on);
+    return () => window.removeEventListener("resize",on);
+  },[bp]);
+  return narrow;
+};
+
 const GlobalStyles = () => (
   <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap');
@@ -1130,16 +1136,16 @@ const PasswordScreen = memo(({onSuccess}) => {
     <div style={{minHeight:"100vh",background:T.stone,display:"flex",alignItems:"center",justifyContent:"center",padding:"40px 24px"}}>
       <GlobalStyles/>
       <div className="fade-up" style={{width:"100%",maxWidth:"400px",textAlign:"center"}}>
-        <p style={{fontSize:"12px",letterSpacing:"4px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Yogyakarta · 2–5 Juli 2026</p>
+        <p style={{fontSize:"16px",letterSpacing:"4px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Yogyakarta · 2–5 Juli 2026</p>
         <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"42px",fontWeight:400,color:T.ink,marginBottom:"8px",letterSpacing:"-0.5px",lineHeight:1.1}}>Pomp Op Sahat</h1>
-        <p style={{fontSize:"14px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"56px"}}>Hyatt Regency Yogyakarta</p>
+        <p style={{fontSize:"18px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"56px"}}>Hyatt Regency Yogyakarta</p>
         <div style={{marginBottom:err?"8px":"24px"}}>
           <input ref={inputRef} type="password" value={val} onChange={e=>{setVal(e.target.value);setErr(false);}} onKeyDown={e=>e.key==="Enter"&&submit()}
-            placeholder="Kata sandi" style={{width:"100%",padding:"16px 0",borderTop:"none",borderLeft:"none",borderRight:"none",borderBottom:`1px solid ${err?T.danger:T.lineD}`,background:"transparent",fontSize:"16px",letterSpacing:"1px",color:T.ink,outline:"none",textAlign:"center"}} />
+            placeholder="Kata sandi" style={{width:"100%",padding:"16px 0",borderTop:"none",borderLeft:"none",borderRight:"none",borderBottom:`1px solid ${err?T.danger:T.lineD}`,background:"transparent",fontSize:"20px",letterSpacing:"1px",color:T.ink,outline:"none",textAlign:"center"}} />
         </div>
-        {err && <p style={{fontSize:"13px",color:T.danger,letterSpacing:"1px",marginBottom:"16px",textTransform:"uppercase"}}>Kata sandi tidak tepat</p>}
-        <button onClick={submit} style={{background:"none",border:"none",cursor:"pointer",fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.forest,padding:"12px 0",fontWeight:500,borderBottom:`1px solid ${T.forest}`}}>Masuk</button>
-        <p style={{marginTop:"48px",fontSize:"12px",color:T.ghost,letterSpacing:"1px"}}>Hubungi koordinator untuk kata sandi</p>
+        {err && <p style={{fontSize:"17px",color:T.danger,letterSpacing:"1px",marginBottom:"16px",textTransform:"uppercase"}}>Kata sandi tidak tepat</p>}
+        <button onClick={submit} style={{background:"none",border:"none",cursor:"pointer",fontSize:"17px",letterSpacing:"3px",textTransform:"uppercase",color:T.forest,padding:"12px 0",fontWeight:500,borderBottom:`1px solid ${T.forest}`}}>Masuk</button>
+        <p style={{marginTop:"48px",fontSize:"16px",color:T.ghost,letterSpacing:"1px"}}>Hubungi koordinator untuk kata sandi</p>
       </div>
     </div>
   );
@@ -1151,22 +1157,22 @@ const NameScreen = memo(({onSuccess}) => {
     <div style={{minHeight:"100vh",background:T.stone,display:"flex",alignItems:"center",justifyContent:"center",padding:"40px 24px"}}>
       <GlobalStyles/>
       <div className="fade-up" style={{width:"100%",maxWidth:"400px",textAlign:"center"}}>
-        <p style={{fontSize:"12px",letterSpacing:"4px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Selamat datang</p>
+        <p style={{fontSize:"16px",letterSpacing:"4px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Selamat datang</p>
         <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"36px",fontWeight:400,color:T.ink,marginBottom:"48px"}}>Siapa Anda?</h2>
-        <select value={sel} onChange={e=>setSel(e.target.value)} style={{width:"100%",padding:"16px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"16px",color:sel?T.ink:T.muted,outline:"none",cursor:"pointer",appearance:"none",textAlign:"center"}}>
+        <select value={sel} onChange={e=>setSel(e.target.value)} style={{width:"100%",padding:"16px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"20px",color:sel?T.ink:T.muted,outline:"none",cursor:"pointer",appearance:"none",textAlign:"center"}}>
           <option value="">Pilih nama Anda</option>
           {ALL_PAX.map(p=><option key={p.name} value={p.name}>{p.name} ({p.hh})</option>)}
         </select>
         <div style={{marginTop:"40px"}}>
-          <button onClick={()=>sel&&onSuccess(sel)} disabled={!sel} style={{background:"none",border:"none",cursor:sel?"pointer":"default",fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:sel?T.forest:T.ghost,padding:"12px 0",fontWeight:500,borderBottom:`1px solid ${sel?T.forest:T.ghost}`,transition:"all 0.2s"}}>Lanjutkan</button>
+          <button onClick={()=>sel&&onSuccess(sel)} disabled={!sel} style={{background:"none",border:"none",cursor:sel?"pointer":"default",fontSize:"17px",letterSpacing:"3px",textTransform:"uppercase",color:sel?T.forest:T.ghost,padding:"12px 0",fontWeight:500,borderBottom:`1px solid ${sel?T.forest:T.ghost}`,transition:"all 0.2s"}}>Lanjutkan</button>
         </div>
       </div>
     </div>
   );
 });
 
-const Shell = ({user,tab,setTab,children}) => {
-  const TABS = [{id:"budget",label:"Dana"},{id:"itinerary",label:"Itinerary"},{id:"size",label:"Ukuran Pakaian"},{id:"food",label:"Pre-Order F&B"}];
+const Shell = ({user,tab,setTab,children,muted,onToggleMute}) => {
+  const TABS = [{id:"itinerary",label:"Itinerary"},{id:"size",label:"Ukuran Pakaian"},{id:"makan",label:"Pesan Makanan"},{id:"oleholeh",label:"Oleh-Oleh"},{id:"budget",label:"Dana"}];
   return (
     <div style={{minHeight:"100vh",background:T.stone}}>
       <GlobalStyles/>
@@ -1174,21 +1180,28 @@ const Shell = ({user,tab,setTab,children}) => {
         <div style={{maxWidth:"960px",margin:"0 auto",padding:"0 40px"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"20px 0 16px",borderBottom:`1px solid ${T.line}`}}>
             <div>
-              <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",fontWeight:400,color:T.ink,letterSpacing:"-0.3px"}}>Pomp Op Sahat</h1>
-              <p style={{fontSize:"12px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted,marginTop:"3px"}}>Yogyakarta · Hyatt Regency · 2–5 Juli 2026 · 23 Peserta</p>
+              <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"23px",fontWeight:400,color:T.ink,letterSpacing:"-0.3px"}}>Pomp Op Sahat</h1>
+              <p style={{fontSize:"16px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted,marginTop:"3px"}}>Yogyakarta · Hyatt Regency · 2–5 Juli 2026 · 23 Peserta</p>
             </div>
-            <p style={{fontSize:"13px",color:T.muted}}>Halo, <span style={{color:T.ink,fontWeight:500}}>{user}</span></p>
+            <div style={{display:"flex",alignItems:"center",gap:"16px"}}>
+              <button onClick={onToggleMute} aria-label={muted?"Nyalakan musik":"Senyapkan musik"} title={muted?"Nyalakan musik":"Senyapkan musik"} style={{background:"none",border:"none",cursor:"pointer",padding:"4px",color:muted?T.ghost:T.forest,lineHeight:0}}>
+                {muted
+                  ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                  : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>}
+              </button>
+              <p style={{fontSize:"17px",color:T.muted}}>Halo, <span style={{color:T.ink,fontWeight:500}}>{user}</span></p>
+            </div>
           </div>
           <nav style={{display:"flex"}}>
             {TABS.map(t=>(
-              <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",padding:"16px 28px 14px",cursor:"pointer",fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:tab===t.id?500:300,color:tab===t.id?T.forest:T.muted,borderBottom:tab===t.id?`2px solid ${T.forest}`:"2px solid transparent",transition:"all 0.2s",marginBottom:"-1px"}}>{t.label}</button>
+              <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",padding:"16px 28px 14px",cursor:"pointer",fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:tab===t.id?500:300,color:tab===t.id?T.forest:T.muted,borderBottom:tab===t.id?`2px solid ${T.forest}`:"2px solid transparent",transition:"all 0.2s",marginBottom:"-1px"}}>{t.label}</button>
             ))}
           </nav>
         </div>
       </header>
       <main style={{maxWidth:"960px",margin:"0 auto",padding:"60px 40px"}}>{children}</main>
       <footer style={{borderTop:`1px solid ${T.line}`,padding:"32px 40px",textAlign:"center"}}>
-        <p style={{fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.ghost}}>Konfidensial · Pomp Op Sahat 2026 · Yogyakarta</p>
+        <p style={{fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:T.ghost}}>Konfidensial · Pomp Op Sahat 2026 · Yogyakarta</p>
       </footer>
     </div>
   );
@@ -1200,6 +1213,13 @@ const BudgetTab = memo(({user}) => {
   const [d, setD] = useState(BUDGET_DEFAULT);
   const [syncedAt, setSyncedAt] = useState(null);
   const [ledger, setLedger] = useState([]);
+  const [revealed,setRevealed] = useState(false);
+  const [pwOpen,setPwOpen] = useState(false);
+  const [pw,setPw] = useState("");
+  const [pwErr,setPwErr] = useState(false);
+  const MASK = "••••••";
+  const show = v => revealed ? fmt(v) : `IDR ${MASK}`;
+  const tryReveal = () => { if(pw.trim().toLowerCase()==="lihatdana"){ setRevealed(true); setPwOpen(false); setPw(""); setPwErr(false); } else setPwErr(true); };
 
   useEffect(() => {
     const toArr = v => !v ? [] : Array.isArray(v) ? v : Object.values(v);
@@ -1234,69 +1254,89 @@ const BudgetTab = memo(({user}) => {
   return (
     <div className="fade-up">
       <div style={{marginBottom:"56px"}}>
-        <p style={{fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Dana Bersama</p>
-        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink,marginBottom:"8px"}}>Ringkasan Keuangan</h2>
-        <p style={{fontSize:"14px",color:T.muted}}>Per {d.lastSync} · Data dari Lusiana{syncedAt && <span style={{color:T.ghost}}> · Live {syncedAt.toLocaleTimeString("id-ID")}</span>}</p>
+        <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Dana Bersama</p>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"20px",flexWrap:"wrap"}}>
+          <div>
+            <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink,marginBottom:"8px"}}>Ringkasan Keuangan</h2>
+            <p style={{fontSize:"18px",color:T.muted}}>Per {d.lastSync} · Data dari Lusiana{syncedAt && <span style={{color:T.ghost}}> · Live {syncedAt.toLocaleTimeString("id-ID")}</span>}</p>
+          </div>
+          <div style={{flexShrink:0}}>
+            <button onClick={()=>{ if(revealed){setRevealed(false);} else {setPwOpen(o=>!o);setPwErr(false);} }} style={{display:"flex",alignItems:"center",gap:"8px",background:revealed?T.cream:"none",border:`1px solid ${revealed?T.forest:T.lineD}`,padding:"9px 16px",cursor:"pointer",fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:revealed?T.forest:T.muted}}>
+              {revealed
+                ? <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M1 1l22 22"/></svg>
+                : <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>}
+              {revealed ? "Sembunyikan" : "Lihat Angka"}
+            </button>
+            {pwOpen && !revealed && (
+              <div style={{marginTop:"12px",display:"flex",flexDirection:"column",gap:"8px",width:"220px",marginLeft:"auto"}}>
+                <input type="password" value={pw} onChange={e=>{setPw(e.target.value);setPwErr(false);}} onKeyDown={e=>e.key==="Enter"&&tryReveal()} placeholder="Password lihat dana" autoFocus
+                  style={{padding:"10px 12px",border:`1px solid ${pwErr?T.danger:T.lineD}`,background:"white",fontSize:"17px",color:T.ink,outline:"none"}}/>
+                <button onClick={tryReveal} style={{background:T.forest,color:"white",border:"none",padding:"10px",cursor:"pointer",fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:500}}>Buka</button>
+                {pwErr&&<p style={{fontSize:"15px",color:T.danger}}>Password salah.</p>}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"1px",background:T.line,marginBottom:"64px"}}>
         {[
-          {label:"Total Dana",val:fmt(d.totals.gross),sub:"Dana bersama"},
-          {label:"Per Peserta",val:fmt(d.perPax),sub:"Kontribusi"},
-          {label:"Terkumpul",val:fmt(d.totals.deposit),sub:`${collection}% dari target`,hi:T.settled},
-          {label:"Belum Lunas",val:fmt(Math.max(0,-d.totals.balance)),sub:"Outstanding",hi:d.totals.balance<0?T.danger:T.settled},
+          {label:"Total Dana",val:show(d.totals.gross),sub:"Dana bersama"},
+          {label:"Per Peserta",val:show(d.perPax),sub:"Kontribusi"},
+          {label:"Terkumpul",val:show(d.totals.deposit),sub:`${collection}% dari target`,hi:T.settled},
+          {label:"Belum Lunas",val:show(Math.max(0,-d.totals.balance)),sub:"Outstanding",hi:d.totals.balance<0?T.danger:T.settled},
         ].map(k=>(
           <div key={k.label} style={{background:T.cream,padding:"32px 28px"}}>
-            <p style={{fontSize:"12px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>{k.label}</p>
+            <p style={{fontSize:"16px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>{k.label}</p>
             <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"26px",fontWeight:400,color:k.hi||T.ink,lineHeight:1,marginBottom:"8px"}}>{k.val}</p>
-            <p style={{fontSize:"13px",color:T.muted}}>{k.sub}</p>
+            <p style={{fontSize:"17px",color:T.muted}}>{k.sub}</p>
           </div>
         ))}
       </div>
 
       <div style={{marginBottom:"64px"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:"12px"}}>
-          <p style={{fontSize:"12px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted}}>Tingkat Pelunasan</p>
-          <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.ink}}>{collection}%</p>
+          <p style={{fontSize:"16px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted}}>Tingkat Pelunasan</p>
+          <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"23px",color:T.ink}}>{collection}%</p>
         </div>
         <div style={{height:"1px",background:T.line,position:"relative"}}>
           <div style={{position:"absolute",top:0,left:0,height:"2px",width:`${collection}%`,background:T.forest,marginTop:"-0.5px",transition:"width 1s ease"}}/>
         </div>
         <div style={{display:"flex",justifyContent:"space-between",marginTop:"8px"}}>
-          <p style={{fontSize:"12px",color:T.muted}}>Terkumpul: {fmt(d.totals.deposit)}</p>
-          <p style={{fontSize:"12px",color:T.muted}}>Target: {fmt(d.totals.gross)}</p>
+          <p style={{fontSize:"16px",color:T.muted}}>Terkumpul: {show(d.totals.deposit)}</p>
+          <p style={{fontSize:"16px",color:T.muted}}>Target: {show(d.totals.gross)}</p>
         </div>
       </div>
 
       <div style={{marginBottom:"64px"}}>
-        <p style={{fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Posisi Per Household</p>
+        <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Posisi Per Household</p>
         <div style={{borderTop:`1px solid ${T.line}`}}>
           {d.households.map(hh=>{
             const isOwn=hh.id===myHH, absorbed=hh.absorbed;
             const settled=!absorbed&&hh.balance>=0;
             const statusColor=absorbed?T.abs:settled?T.settled:T.danger;
             const statusLabel=absorbed?"Absorbed":settled?"Settled":hh.deposit>0?"Belum Lunas":"Belum Bayar";
-            const show=isCoord||isOwn||settled;
+            const canSee=isCoord||isOwn||settled;
             return (
               <div key={hh.id} style={{borderBottom:`1px solid ${T.line}`,padding:"32px 0",position:"relative"}}>
                 {isOwn&&<div style={{position:"absolute",left:"-40px",top:0,bottom:0,width:"2px",background:T.gold}}/>}
                 <div style={{display:"grid",gridTemplateColumns:"1fr auto",gap:"24px",alignItems:"start"}}>
                   <div>
                     <div style={{display:"flex",alignItems:"center",gap:"16px",marginBottom:"6px",flexWrap:"wrap"}}>
-                      <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{hh.lead}</h3>
-                      {isOwn&&<span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.gold}`,padding:"2px 8px"}}>Anda</span>}
+                      <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{hh.lead}</h3>
+                      {isOwn&&<span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.gold}`,padding:"2px 8px"}}>Anda</span>}
                     </div>
-                    <p style={{fontSize:"13px",color:T.muted,marginBottom:show&&!absorbed?"20px":"0"}}>{hh.id} · {hh.pax} peserta · {hh.members.join(", ")}</p>
-                    {show&&!absorbed&&(
+                    <p style={{fontSize:"17px",color:T.muted,marginBottom:canSee&&!absorbed?"20px":"0"}}>{hh.id} · {hh.pax} peserta · {hh.members.join(", ")}</p>
+                    {canSee&&!absorbed&&(
                       <div style={{display:"grid",gridTemplateColumns:"repeat(3,160px)",gap:"24px"}}>
                         {[
-                          {l:"Total",v:fmt(hh.gross),c:T.ink},
-                          {l:"Dibayar",v:fmt(hh.deposit),c:T.settled},
-                          {l:hh.balance>=0?"Credit":"Sisa Bayar",v:fmt(Math.abs(hh.balance)),c:hh.balance>=0?T.settled:T.danger},
+                          {l:"Total",v:show(hh.gross),c:T.ink},
+                          {l:"Dibayar",v:show(hh.deposit),c:T.settled},
+                          {l:hh.balance>=0?"Credit":"Sisa Bayar",v:show(Math.abs(hh.balance)),c:hh.balance>=0?T.settled:T.danger},
                         ].map(f=>(
                           <div key={f.l}>
-                            <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{f.l}</p>
-                            <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:f.c,fontWeight:400}}>{f.v}</p>
+                            <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{f.l}</p>
+                            <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:f.c,fontWeight:400}}>{f.v}</p>
                             {hh.gross>0&&f.l==="Dibayar"&&<div style={{marginTop:"6px",height:"1px",background:T.line}}><div style={{height:"1px",width:`${pct(hh.deposit,hh.gross)}%`,background:T.settled}}/></div>}
                           </div>
                         ))}
@@ -1304,21 +1344,21 @@ const BudgetTab = memo(({user}) => {
                     )}
                     {isCoord&&hh.id==="HH4"&&hh.subRows?.length>0&&(
                       <div style={{marginTop:"20px",borderTop:`1px solid ${T.line}`,paddingTop:"16px"}}>
-                        <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Sub-unit HH4</p>
+                        <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Sub-unit HH4</p>
                         {hh.subRows.map((s,i)=>(
-                          <div key={i} style={{display:"grid",gridTemplateColumns:"1fr 60px 120px 100px",gap:"16px",padding:"8px 0",borderBottom:`1px solid ${T.line}`,fontSize:"14px",alignItems:"center"}}>
+                          <div key={i} style={{display:"grid",gridTemplateColumns:"1fr 60px 120px 100px",gap:"16px",padding:"8px 0",borderBottom:`1px solid ${T.line}`,fontSize:"18px",alignItems:"center"}}>
                             <span style={{color:T.mid}}>{s.members}</span>
                             <span style={{color:T.muted,textAlign:"right"}}>{s.pax}px</span>
-                            <span style={{color:T.settled,textAlign:"right"}}>{fmt(s.deposit)}</span>
-                            <span style={{color:s.balance>=0?T.settled:T.danger,textAlign:"right",fontWeight:500}}>{s.balance>=0?"+":""}{fmt(s.balance)}</span>
+                            <span style={{color:T.settled,textAlign:"right"}}>{show(s.deposit)}</span>
+                            <span style={{color:s.balance>=0?T.settled:T.danger,textAlign:"right",fontWeight:500}}>{s.balance>=0?"+":""}{revealed?fmt(s.balance):MASK}</span>
                           </div>
                         ))}
                       </div>
                     )}
-                    {absorbed&&<p style={{fontSize:"13px",color:T.abs,fontStyle:"italic",marginTop:"4px"}}>{hh.note}</p>}
-                    {!show&&!absorbed&&<p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"4px"}}>Detail hanya tersedia untuk household Anda.</p>}
+                    {absorbed&&<p style={{fontSize:"17px",color:T.abs,fontStyle:"italic",marginTop:"4px"}}>{hh.note}</p>}
+                    {!canSee&&!absorbed&&<p style={{fontSize:"17px",color:T.muted,fontStyle:"italic",marginTop:"4px"}}>Detail hanya tersedia untuk household Anda.</p>}
                   </div>
-                  <p style={{fontSize:"12px",letterSpacing:"1.5px",textTransform:"uppercase",color:statusColor,fontWeight:500,marginTop:"4px",whiteSpace:"nowrap"}}>{statusLabel}</p>
+                  <p style={{fontSize:"16px",letterSpacing:"1.5px",textTransform:"uppercase",color:statusColor,fontWeight:500,marginTop:"4px",whiteSpace:"nowrap"}}>{statusLabel}</p>
                 </div>
               </div>
             );
@@ -1328,15 +1368,15 @@ const BudgetTab = memo(({user}) => {
 
       <div style={{marginBottom:"64px"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:"32px"}}>
-          <p style={{fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted}}>Riwayat Transaksi</p>
-          {syncedAt&&<p style={{fontSize:"12px",color:T.ghost}}>Live · {syncedAt.toLocaleTimeString("id-ID")}</p>}
+          <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted}}>Riwayat Transaksi</p>
+          {syncedAt&&<p style={{fontSize:"16px",color:T.ghost}}>Live · {syncedAt.toLocaleTimeString("id-ID")}</p>}
         </div>
         {ledger.length===0
-          ? <p style={{fontSize:"14px",color:T.muted,fontStyle:"italic"}}>Memuat data transaksi…</p>
+          ? <p style={{fontSize:"18px",color:T.muted,fontStyle:"italic"}}>Memuat data transaksi…</p>
           : <>
             <div style={{display:"grid",gridTemplateColumns:"32px 100px 80px 1fr 120px 120px 130px",gap:"0 16px",padding:"0 0 10px",borderBottom:`2px solid ${T.line}`}}>
               {["No","Tanggal","Tipe","Keterangan","Deposit (+)","Refund (−)","Saldo"].map(h=>(
-                <p key={h} style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,textAlign:["Deposit (+)","Refund (−)","Saldo"].includes(h)?"right":"left"}}>{h}</p>
+                <p key={h} style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,textAlign:["Deposit (+)","Refund (−)","Saldo"].includes(h)?"right":"left"}}>{h}</p>
               ))}
             </div>
             {ledger.map((row,i)=>{
@@ -1345,39 +1385,39 @@ const BudgetTab = memo(({user}) => {
               const typeColor = isDeposit ? T.settled : isRefund ? T.warn : T.danger;
               return (
                 <div key={i} style={{display:"grid",gridTemplateColumns:"32px 100px 80px 1fr 120px 120px 130px",gap:"0 16px",padding:"13px 0",borderBottom:`1px solid ${T.line}`,alignItems:"center"}}>
-                  <p style={{fontSize:"13px",color:T.ghost}}>{row.no}</p>
-                  <p style={{fontSize:"13px",color:T.muted}}>{row.tanggal}</p>
-                  <p style={{fontSize:"12px",letterSpacing:"1px",textTransform:"uppercase",color:typeColor,fontWeight:500}}>{row.tipe}</p>
+                  <p style={{fontSize:"17px",color:T.ghost}}>{row.no}</p>
+                  <p style={{fontSize:"17px",color:T.muted}}>{row.tanggal}</p>
+                  <p style={{fontSize:"16px",letterSpacing:"1px",textTransform:"uppercase",color:typeColor,fontWeight:500}}>{row.tipe}</p>
                   <div>
-                    <p style={{fontSize:"14px",color:T.ink}}>{row.keterangan}</p>
-                    {row.note&&<p style={{fontSize:"12px",color:T.ghost,marginTop:"2px",fontStyle:"italic"}}>{row.note}</p>}
+                    <p style={{fontSize:"18px",color:T.ink}}>{row.keterangan}</p>
+                    {row.note&&<p style={{fontSize:"16px",color:T.ghost,marginTop:"2px",fontStyle:"italic"}}>{row.note}</p>}
                   </div>
-                  <p style={{fontSize:"14px",color:row.deposit>0?T.settled:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.deposit>0?`+${fmt(row.deposit)}`:"—"}</p>
-                  <p style={{fontSize:"14px",color:row.refund>0?T.warn:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.refund>0?`−${fmt(row.refund)}`:"—"}</p>
-                  <p style={{fontSize:"15px",color:T.ink,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif",fontWeight:i===ledger.length-1?500:400}}>{fmt(row.saldo)}</p>
+                  <p style={{fontSize:"18px",color:row.deposit>0?T.settled:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.deposit>0?(revealed?`+${fmt(row.deposit)}`:`+${MASK}`):"—"}</p>
+                  <p style={{fontSize:"18px",color:row.refund>0?T.warn:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.refund>0?(revealed?`−${fmt(row.refund)}`:`−${MASK}`):"—"}</p>
+                  <p style={{fontSize:"19px",color:T.ink,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif",fontWeight:i===ledger.length-1?500:400}}>{show(row.saldo)}</p>
                 </div>
               );
             })}
             <div style={{display:"grid",gridTemplateColumns:"32px 100px 80px 1fr 120px 120px 130px",gap:"0 16px",padding:"16px 0 0",borderTop:`2px solid ${T.lineD}`,marginTop:"4px"}}>
               <span/><span/><span/>
-              <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Saldo Kas</p>
+              <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Saldo Kas</p>
               <span/><span/>
-              <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest,textAlign:"right",fontWeight:500}}>{ledger.length>0?fmt(ledger[ledger.length-1].saldo):"—"}</p>
+              <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest,textAlign:"right",fontWeight:500}}>{ledger.length>0?show(ledger[ledger.length-1].saldo):"—"}</p>
             </div>
           </>
         }
       </div>
 
       <div style={{borderTop:`1px solid ${T.line}`,paddingTop:"32px"}}>
-        <p style={{fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>Catatan</p>
+        <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>Catatan</p>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px 40px"}}>
           {["Dana Bersama mencakup Transportasi, Aktivitas (Jeep, Nuvantara) & Merchandise.",
             "F&B seluruhnya disponsori per household — tidak termasuk di sini.",
             "Hotel & tiket Garuda diselesaikan mandiri per household.",
             "HH5 (Mariana, Olive, Nadia) diserap oleh HH2 + HH3 + HH4.",
-          ].map((n,i)=><p key={i} style={{fontSize:"13px",color:T.muted,lineHeight:"1.7"}}>— {n}</p>)}
+          ].map((n,i)=><p key={i} style={{fontSize:"17px",color:T.muted,lineHeight:"1.7"}}>— {n}</p>)}
         </div>
-        {isCoord&&<p style={{marginTop:"24px",fontSize:"13px"}}><a href="https://docs.google.com/spreadsheets/d/19vHRDue6attrpewZcFNBSq3g3UvxbalaWCog6v5x0d4/edit" target="_blank" rel="noopener noreferrer" style={{color:T.forest,textDecoration:"none",borderBottom:`1px solid ${T.forest}`}}>Buka Google Sheets Lusiana ↗</a></p>}
+        {isCoord&&<p style={{marginTop:"24px",fontSize:"17px"}}><a href="https://docs.google.com/spreadsheets/d/19vHRDue6attrpewZcFNBSq3g3UvxbalaWCog6v5x0d4/edit" target="_blank" rel="noopener noreferrer" style={{color:T.forest,textDecoration:"none",borderBottom:`1px solid ${T.forest}`}}>Buka Google Sheets Lusiana ↗</a></p>}
       </div>
     </div>
   );
@@ -1388,50 +1428,62 @@ const TYPE_COLOR = {dining:T.forest,excursion:T.gold,arrival:T.settled,departure
 
 const ItineraryTab = memo(() => {
   const [day,setDay] = useState(1);
+  const narrow = useIsNarrow();
   const d = ITINERARY.find(x=>x.day===day);
   return (
     <div className="fade-up">
       <div style={{marginBottom:"56px"}}>
-        <p style={{fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Jadwal Perjalanan</p>
+        <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Jadwal Perjalanan</p>
         <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Itinerary v20</h2>
-        <p style={{fontSize:"14px",color:T.muted,marginTop:"8px"}}>2–5 Juli 2026 · 23 Peserta · Hyatt Regency Yogyakarta</p>
+        <p style={{fontSize:"18px",color:T.muted,marginTop:"8px"}}>2–5 Juli 2026 · 23 Peserta · Hyatt Regency Yogyakarta</p>
       </div>
       <div style={{display:"flex",borderBottom:`1px solid ${T.line}`,marginBottom:"48px"}}>
         {ITINERARY.map(it=>(
           <button key={it.day} onClick={()=>setDay(it.day)} style={{background:"none",border:"none",padding:"0 32px 16px 0",cursor:"pointer",textAlign:"left"}}>
-            <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:day===it.day?T.forest:T.ghost,marginBottom:"4px"}}>{`Hari ${it.day}`}</p>
-            <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:day===it.day?T.forest:T.muted,fontWeight:day===it.day?500:400}}>{it.label}</p>
+            <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:day===it.day?T.forest:T.ghost,marginBottom:"4px"}}>{`Hari ${it.day}`}</p>
+            <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:day===it.day?T.forest:T.muted,fontWeight:day===it.day?500:400}}>{it.label}</p>
             {day===it.day&&<div style={{height:"2px",background:T.forest,marginTop:"14px",marginRight:"32px"}}/>}
           </button>
         ))}
       </div>
       {d&&<>
-        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"16px",fontStyle:"italic",color:T.muted,marginBottom:"40px"}}>{d.date}</p>
+        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontStyle:"italic",color:T.muted,marginBottom:"40px"}}>{d.date}</p>
         <div style={{borderTop:`1px solid ${T.line}`}}>
           {d.events.map((ev,i)=>(
-            <div key={i} style={{display:"grid",gridTemplateColumns:"80px 20px 1fr",gap:"0 24px",borderBottom:`1px solid ${T.line}`,padding:"28px 0",alignItems:"start"}}>
+            <div key={i} style={{display:"grid",gridTemplateColumns:narrow?"52px 16px 1fr":"80px 20px 1fr",gap:narrow?"0 14px":"0 24px",borderBottom:`1px solid ${T.line}`,padding:narrow?"22px 0":"28px 0",alignItems:"start"}}>
               <div style={{textAlign:"right",paddingTop:"2px"}}>
-                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:T.muted,fontStyle:"italic"}}>{ev.time}</p>
+                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.muted,fontStyle:"italic"}}>{ev.time}</p>
               </div>
               <div style={{display:"flex",flexDirection:"column",alignItems:"center",paddingTop:"6px"}}>
-                <span style={{fontSize:"16px",color:TYPE_COLOR[ev.type]||T.ghost,lineHeight:1}}>{TYPE_ICON[ev.type]||"◇"}</span>
+                <span style={{fontSize:"20px",color:TYPE_COLOR[ev.type]||T.ghost,lineHeight:1}}>{TYPE_ICON[ev.type]||"◇"}</span>
                 {i<d.events.length-1&&<div style={{flex:1,width:"1px",background:T.line,marginTop:"8px",minHeight:"20px"}}/>}
               </div>
               <div>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"16px",flexWrap:"wrap"}}>
-                  <h4 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{ev.act}</h4>
-                  {ev.sponsor&&<span style={{fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold,whiteSpace:"nowrap",marginTop:"4px"}}>♡ {ev.sponsor}</span>}
+                  <h4 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{ev.act}</h4>
+                  {ev.sponsor&&<span style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold,whiteSpace:"nowrap",marginTop:"4px"}}>♡ {ev.sponsor}</span>}
                 </div>
-                <p style={{fontSize:"13px",color:T.muted,marginTop:"4px"}}>{ev.loc}</p>
-                {ev.note&&<p style={{fontSize:"13px",color:T.muted,marginTop:"6px",fontStyle:"italic"}}>{ev.note}</p>}
+                <p style={{fontSize:"17px",color:T.muted,marginTop:"4px"}}>{ev.loc}</p>
+                {ev.note&&<p style={{fontSize:"17px",color:T.muted,marginTop:"6px",fontStyle:"italic"}}>{ev.note}</p>}
                 {ev.vehicles&&<div style={{marginTop:"12px",borderTop:`1px solid ${T.line}`}}>
-                  {ev.vehicles.map(c=>(
-                    <div key={c.mobil} style={{display:"grid",gridTemplateColumns:"60px 1fr auto",gap:"12px",alignItems:"baseline",padding:"9px 0",borderBottom:`1px solid ${T.line}`}}>
-                      <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"15px",color:T.forest}}>{c.mobil}</span>
-                      <span style={{fontSize:"14px",color:T.ink,lineHeight:1.45}}>{c.pax}</span>
-                      <span style={{fontSize:"10px",letterSpacing:"1px",textTransform:"uppercase",color:c.bagasi.startsWith("Tanpa")?T.muted:T.gold,whiteSpace:"nowrap"}}>{c.bagasi}</span>
-                    </div>
-                  ))}
+                  {ev.vehicles.map(c=>{
+                    const koperColor = c.bagasi.startsWith("Tanpa")?T.muted:T.gold;
+                    return narrow ? (
+                      <div key={c.mobil} style={{padding:"12px 0",borderBottom:`1px solid ${T.line}`}}>
+                        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",gap:"12px",marginBottom:"5px"}}>
+                          <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest}}>{c.mobil}</span>
+                          <span style={{fontSize:"14px",letterSpacing:"1px",textTransform:"uppercase",color:koperColor,whiteSpace:"nowrap"}}>{c.bagasi}</span>
+                        </div>
+                        <p style={{fontSize:"18px",color:T.ink,lineHeight:1.55,margin:0}}>{c.pax}</p>
+                      </div>
+                    ) : (
+                      <div key={c.mobil} style={{display:"grid",gridTemplateColumns:"60px 1fr auto",gap:"12px",alignItems:"baseline",padding:"9px 0",borderBottom:`1px solid ${T.line}`}}>
+                        <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"19px",color:T.forest}}>{c.mobil}</span>
+                        <span style={{fontSize:"18px",color:T.ink,lineHeight:1.45}}>{c.pax}</span>
+                        <span style={{fontSize:"14px",letterSpacing:"1px",textTransform:"uppercase",color:koperColor,whiteSpace:"nowrap"}}>{c.bagasi}</span>
+                      </div>
+                    );
+                  })}
                 </div>}
               </div>
             </div>
@@ -1448,100 +1500,286 @@ const TRANSFER_INFO = {
   bank:"Bank Jago",
   account:"102816180854",
 };
+const compressImage = (file, maxDim=1600, quality=0.8) => new Promise((resolve,reject)=>{
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      let {width,height} = img;
+      if(width>=height && width>maxDim){ height=Math.round(height*maxDim/width); width=maxDim; }
+      else if(height>width && height>maxDim){ width=Math.round(width*maxDim/height); height=maxDim; }
+      const c = document.createElement("canvas");
+      c.width=width; c.height=height;
+      c.getContext("2d").drawImage(img,0,0,width,height);
+      try { resolve(c.toDataURL("image/jpeg",quality).split(",")[1]); } catch(err){ reject(err); }
+    };
+    img.onerror = reject;
+    img.src = reader.result;
+  };
+  reader.onerror = reject;
+  reader.readAsDataURL(file);
+});
 
-const OlehOlehSummary = memo(({user,isCoord}) => {
+// ═══════════════════════════════════════════════════════════════════════════
+// PRE-ORDER F&B — Pesan Makanan & Oleh-Oleh (dua tab terpisah)
+// ═══════════════════════════════════════════════════════════════════════════
+const FB_DEADLINE = new Date("2026-06-25T23:59:59+07:00");
+const FB_DEADLINE_LABEL = "25 Juni 2026, 23:59 WIB";
+const FOOD_ORDER = ["solaria","kemangi","mbah-mo","ayom","desa-palagan","djiwana","summer-palace"];
+
+const DeadlineCountdown = memo(({target, label, openText="Pre-order ditutup dalam", closedText="Pre-order telah ditutup"}) => {
+  const [now,setNow] = useState(Date.now());
+  useEffect(()=>{ const id=setInterval(()=>setNow(Date.now()),1000); return ()=>clearInterval(id); },[]);
+  const diff = target.getTime() - now;
+  if(diff<=0) return (
+    <div style={{background:T.dangerBg,border:"1px solid #e8b4a8",borderLeft:`3px solid ${T.danger}`,padding:"18px 22px",marginBottom:"40px",display:"flex",alignItems:"center",gap:"12px",flexWrap:"wrap"}}>
+      <span style={{width:"8px",height:"8px",borderRadius:"50%",background:T.danger,display:"inline-block"}}/>
+      <p style={{fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:T.danger,fontWeight:500,margin:0}}>{closedText}</p>
+      <span style={{fontSize:"16px",color:T.muted}}>Deadline {label} terlewati</span>
+    </div>
+  );
+  const d=Math.floor(diff/86400000), h=Math.floor((diff%86400000)/3600000), m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
+  const urgent = diff < 86400000;
+  const accent = urgent ? T.danger : T.forest;
+  const units = [{n:d,l:"Hari"},{n:h,l:"Jam"},{n:m,l:"Menit"},{n:s,l:"Detik"}];
+  return (
+    <div style={{background:T.cream,border:`1px solid ${urgent?"#e8b4a8":T.line}`,borderLeft:`3px solid ${accent}`,padding:"20px 24px",marginBottom:"40px"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"18px"}}>
+        <div>
+          <p style={{fontSize:"14px",letterSpacing:"3px",textTransform:"uppercase",color:urgent?T.danger:T.muted,marginBottom:"4px",fontWeight:urgent?500:400}}>{urgent?"Segera ditutup":openText}</p>
+          <p style={{fontSize:"15px",color:T.muted}}>Deadline {label}</p>
+        </div>
+        <div style={{display:"flex",gap:"18px"}}>
+          {units.map((u,i)=>(
+            <div key={u.l} style={{display:"flex",alignItems:"flex-start",gap:"18px"}}>
+              <div style={{textAlign:"center",minWidth:"42px"}}>
+                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"30px",fontWeight:500,color:accent,lineHeight:1}}>{String(u.n).padStart(2,"0")}</p>
+                <p style={{fontSize:"14px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginTop:"6px"}}>{u.l}</p>
+              </div>
+              {i<units.length-1&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"26px",color:T.ghost,lineHeight:1.1}}>:</span>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// ─── TAB: PESAN MAKANAN (disponsori, diurut waktu makan) ─────────────────────
+const MakanTab = memo(({user}) => {
+  const [activeResto,setActiveResto] = useState(null);
+  const isCoord = COORDINATORS.includes(user);
+  if(activeResto) return <RestaurantView resto={activeResto} user={user} isCoord={isCoord} onBack={()=>setActiveResto(null)}/>;
+
+  const buffetIds = SET_MENUS.map(s=>s.id);
+  const items = FOOD_ORDER.map(id => RESTAURANTS.find(r=>r&&r.id===id) || SET_MENUS.find(s=>s&&s.id===id)).filter(Boolean);
+
+  return (
+    <div className="fade-up">
+      <div style={{marginBottom:"32px"}}>
+        <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pre-Order F&B</p>
+        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Pesan Makanan</h2>
+        <p style={{fontSize:"18px",color:T.muted,marginTop:"8px"}}>Seluruh hidangan disponsori per household. Diurut sesuai waktu makan. Pilih restoran untuk melihat menu & memesan; hidangan buffet sudah ditentukan dan tidak perlu dipesan.</p>
+      </div>
+
+      <DeadlineCountdown target={FB_DEADLINE} label={FB_DEADLINE_LABEL}/>
+
+      <div style={{borderTop:`1px solid ${T.line}`}}>
+        {items.map(m=>{
+          const buffet = buffetIds.includes(m.id);
+          if(buffet) return (
+            <div key={m.id} style={{borderBottom:`1px solid ${T.line}`,padding:"28px 0"}}>
+              <div style={{display:"flex",alignItems:"center",gap:"14px",flexWrap:"wrap",marginBottom:"6px"}}>
+                <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{m.name}</h3>
+                <span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.goldL}`,padding:"2px 8px"}}>Buffet · tanpa pesan</span>
+                {m.sponsor&&<span style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>♡ {m.sponsor}</span>}
+              </div>
+              <p style={{fontSize:"17px",color:T.muted}}>{m.subtitle}</p>
+              <p style={{fontSize:"17px",color:T.muted,fontStyle:"italic",marginTop:"2px"}}>{m.note}</p>
+              <div style={{marginTop:"14px"}}>
+                {m.sections.map(sec=>(
+                  <div key={sec.label} style={{marginBottom:"10px"}}>
+                    <p style={{fontSize:"14px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"4px"}}>{sec.label}</p>
+                    <p style={{fontSize:"17px",color:T.mid,lineHeight:1.7}}>{sec.items.join(" · ")}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+          return (
+            <div key={m.id} onClick={()=>setActiveResto(m)}
+              style={{display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",borderBottom:`1px solid ${T.line}`,padding:"28px 0",cursor:"pointer"}}
+              onMouseEnter={e=>e.currentTarget.style.background=T.cream}
+              onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+              <div>
+                <div style={{display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap",marginBottom:"6px"}}>
+                  <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{m.name}</h3>
+                  <span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.settled,borderBottom:`1px solid ${T.settled}`}}>Terbuka</span>
+                  {m.sponsor&&<span style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>♡ {m.sponsor}</span>}
+                </div>
+                <p style={{fontSize:"17px",color:T.muted}}>{m.subtitle}</p>
+                {m.note&&<p style={{fontSize:"17px",color:T.muted,fontStyle:"italic",marginTop:"2px"}}>{m.note}</p>}
+              </div>
+              <span style={{fontSize:"21px",color:T.muted}}>→</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+});
+
+// ─── TAB: OLEH-OLEH (bayar sendiri) ──────────────────────────────────────────
+const OlehOlehTab = memo(({user}) => {
+  const isCoord = COORDINATORS.includes(user);
   const takeawayRestos = RESTAURANTS.filter(r=>r.isTakeaway);
+  const [activeResto,setActiveResto] = useState(null);
   const [myOrders,setMyOrders]   = useState({});
   const [allPaxOrders,setAllPaxOrders] = useState({});
   const [loading,setLoading]     = useState(true);
+  const [myProof,setMyProof]     = useState(null);
+  const [allProofs,setAllProofs] = useState({});
+  const [uploading,setUploading] = useState(false);
+  const [uploadMsg,setUploadMsg] = useState(null);
+  const [viewProof,setViewProof] = useState(null);
 
-  useEffect(()=>{
-    (async()=>{
-      // Fetch current user's orders
-      const mine = {};
-      for(const r of takeawayRestos){
-        const key = `order.${r.id}.${user.replace(/\s+/g,"_")}`;
+  const reload = useCallback(async ()=>{
+    const mine={};
+    for(const r of takeawayRestos){
+      const key=`order.${r.id}.${user.replace(/\s+/g,"_")}`;
+      try{ const v=await sGet(key); if(v){ const p=JSON.parse(v); if(p.totalIDR>0) mine[r.id]={name:r.name,totalIDR:p.totalIDR,items:p.items||[]}; } }catch{}
+    }
+    setMyOrders(mine);
+    try{ const pv=await sGet(`oleholeh.proof.${user.replace(/\s+/g,"_")}`); if(pv) setMyProof(JSON.parse(pv)); }catch{}
+    if(isCoord){
+      const all={};
+      await Promise.all(takeawayRestos.flatMap(r => ALL_PAX.map(async pax => {
+        const key=`order.${r.id}.${pax.name.replace(/\s+/g,"_")}`;
         try{
-          const v = await sGet(key);
-          if(v){
-            const p = JSON.parse(v);
-            if(p.totalIDR>0) mine[r.id]={name:r.name,totalIDR:p.totalIDR,items:p.items||[]};
-          }
+          const v=await sGet(key);
+          if(v){ const p=JSON.parse(v); if(p.totalIDR>0){ if(!all[pax.name]) all[pax.name]={}; all[pax.name][r.id]={name:r.name,totalIDR:p.totalIDR,items:p.items||[]}; } }
         }catch{}
-      }
-      setMyOrders(mine);
-
-      // If coordinator, fetch all pax orders
-      if(isCoord){
-        const all = {};
-        for(const r of takeawayRestos){
-          try{
-            const keys = await sList(`order.${r.id}.`);
-            for(const k of keys){
-              const v = await sGet(k);
-              if(v){
-                const p = JSON.parse(v);
-                const pName = k.replace(`order.${r.id}.`,"").replace(/_/g," ");
-                if(!all[pName]) all[pName]={};
-                if(p.totalIDR>0) all[pName][r.id]={name:r.name,totalIDR:p.totalIDR};
-              }
-            }
-          }catch{}
-        }
-        setAllPaxOrders(all);
-      }
-      setLoading(false);
-    })();
+      })));
+      setAllPaxOrders(all);
+      try{ const pkeys=await sList("oleholeh.proof."); const proofs={}; for(const k of pkeys){ const v=await sGet(k); if(v){ proofs[k.replace("oleholeh.proof.","").replace(/_/g," ")]=JSON.parse(v); } } setAllProofs(proofs); }catch{}
+    }
+    setLoading(false);
   },[user,isCoord]);
+
+  useEffect(()=>{ reload(); },[reload]);
+
+  const onFile = async e => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if(!file) return;
+    setUploading(true); setUploadMsg(null);
+    try {
+      const dataBase64 = await compressImage(file, 1200, 0.72);
+      const now = new Date();
+      const pad = n=>String(n).padStart(2,"0");
+      const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}${pad(now.getMinutes())}`;
+      const filename = `TransferOlehOleh ${user} ${stamp}.jpg`;
+      const key = user.replace(/\s+/g,"_");
+      await sSet(`oleholeh.proofimg.${key}`, dataBase64);
+      const rec = {ts:now.toISOString(), filename};
+      await sSet(`oleholeh.proof.${key}`, JSON.stringify(rec));
+      setMyProof(rec);
+      setUploadMsg("✓ Bukti tersimpan. Terima kasih!");
+    } catch { setUploadMsg("Gagal menyimpan. Periksa koneksi & coba lagi."); }
+    setUploading(false);
+  };
+
+  const openProof = async (pName) => {
+    const fn = allProofs[pName]?.filename || `TransferOlehOleh ${pName}.jpg`;
+    setViewProof({name:pName, dataUrl:null, filename:fn, error:null});
+    try {
+      const b64 = await sGet(`oleholeh.proofimg.${pName.replace(/\s+/g,"_")}`);
+      if(b64) setViewProof(v=>v&&v.name===pName?{...v,dataUrl:`data:image/jpeg;base64,${b64}`}:v);
+      else setViewProof(v=>v&&v.name===pName?{...v,error:"Gambar tidak ditemukan."}:v);
+    } catch { setViewProof(v=>v&&v.name===pName?{...v,error:"Gagal memuat gambar."}:v); }
+  };
+
+  if(activeResto) return <RestaurantView resto={activeResto} user={user} isCoord={isCoord} onBack={()=>{setActiveResto(null);reload();}}/>;
 
   const myStores  = Object.values(myOrders);
   const myTotal   = myStores.reduce((s,o)=>s+Number(o.totalIDR),0);
   const paxWithOrders = Object.entries(allPaxOrders).filter(([,stores])=>Object.keys(stores).length>0);
-
-  if(loading) return null;
-  if(!isCoord && myStores.length===0) return null;
+  const proofCount = paxWithOrders.filter(([pName])=>allProofs[pName]).length;
+  const merchantAgg = takeawayRestos.map(r=>{
+    const tally={}; let subtotal=0;
+    paxWithOrders.forEach(([,stores])=>{ const o=stores[r.id]; if(o){ subtotal+=Number(o.totalIDR||0); (o.items||[]).forEach(i=>{ const k=i.config?`${i.name} [${i.config}]`:i.name; tally[k]=(tally[k]||0)+Number(i.qty); }); } });
+    return {id:r.id,name:r.name,subtotal,items:Object.entries(tally).sort((a,b)=>b[1]-a[1])};
+  }).filter(mm=>mm.items.length>0);
 
   return (
-    <div style={{marginBottom:"56px"}}>
-      {/* ── PARTICIPANT CARD ── */}
+    <div className="fade-up">
+      <div style={{marginBottom:"32px"}}>
+        <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pre-Order F&B</p>
+        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Oleh-Oleh</h2>
+        <p style={{fontSize:"18px",color:T.muted,marginTop:"8px"}}>Dibayar sendiri. Pilih merchant untuk memesan, lalu transfer ke koordinator dan unggah bukti di bawah.</p>
+      </div>
+
+      <DeadlineCountdown target={FB_DEADLINE} label={FB_DEADLINE_LABEL}/>
+
+      {/* ── MERCHANT CARDS ── */}
+      <div style={{marginBottom:"48px",borderTop:`1px solid ${T.line}`}}>
+        {takeawayRestos.map(r=>(
+          <div key={r.id} onClick={()=>setActiveResto(r)}
+            style={{display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",borderBottom:`1px solid ${T.line}`,padding:"28px 0",cursor:"pointer"}}
+            onMouseEnter={e=>e.currentTarget.style.background=T.cream}
+            onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+            <div>
+              <div style={{display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap",marginBottom:"6px"}}>
+                <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{r.name}</h3>
+                <span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,borderBottom:`1px solid ${T.gold}`}}>Terbuka</span>
+              </div>
+              <p style={{fontSize:"17px",color:T.muted}}>{r.subtitle}</p>
+              {myOrders[r.id]&&<p style={{fontSize:"16px",color:T.settled,marginTop:"4px"}}>✓ Anda sudah memesan · IDR {Number(myOrders[r.id].totalIDR).toLocaleString("id-ID")}</p>}
+            </div>
+            <span style={{fontSize:"21px",color:T.muted}}>→</span>
+          </div>
+        ))}
+      </div>
+
+      {/* ── PAYMENT CARD ── */}
       {myStores.length>0&&(
-        <div style={{border:`1px solid ${T.gold}`,marginBottom:"40px"}}>
+        <div style={{border:`1px solid ${T.gold}`,marginBottom:"48px"}}>
           <div style={{background:T.gold,padding:"14px 24px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:"white",fontWeight:500}}>Tagihan Oleh-Oleh · 5 Juli 2026</p>
-            <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:"rgba(255,255,255,0.8)"}}>Satu Transfer</p>
+            <p style={{fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:"white",fontWeight:500}}>Tagihan Oleh-Oleh · Bayar Langsung 5 Juli 2026</p>
+            <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:"rgba(255,255,255,0.8)"}}>Satu Transfer</p>
           </div>
           <div style={{background:T.cream,padding:"24px"}}>
             {myStores.map(o=>(
               <div key={o.name} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:`1px solid ${T.line}`}}>
-                <span style={{fontSize:"15px",color:T.ink}}>{o.name}</span>
-                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"17px",color:T.settled}}>IDR {Number(o.totalIDR).toLocaleString("id-ID")}</span>
+                <span style={{fontSize:"19px",color:T.ink}}>{o.name}</span>
+                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.settled}}>IDR {Number(o.totalIDR).toLocaleString("id-ID")}</span>
               </div>
             ))}
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"16px 0 0"}}>
-              <span style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Total Transfer</span>
+              <span style={{fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Total Transfer</span>
               <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"24px",color:T.forest,fontWeight:500}}>IDR {myTotal.toLocaleString("id-ID")}</span>
             </div>
             <div style={{marginTop:"20px",padding:"16px",background:T.stone,borderLeft:`3px solid ${T.gold}`}}>
-              <p style={{fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Transfer ke</p>
-              <p style={{fontSize:"16px",color:T.ink,fontWeight:500,marginBottom:"2px"}}>{TRANSFER_INFO.name}</p>
-              <p style={{fontSize:"15px",color:T.mid}}>{TRANSFER_INFO.bank} · {TRANSFER_INFO.account}</p>
-              <p style={{fontSize:"13px",color:T.muted,marginTop:"8px"}}>Berita: <span style={{color:T.ink,fontWeight:500}}>OLEHOLEH {user}</span></p>
+              <p style={{fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Transfer ke</p>
+              <p style={{fontSize:"20px",color:T.ink,fontWeight:500,marginBottom:"2px"}}>{TRANSFER_INFO.name}</p>
+              <p style={{fontSize:"19px",color:T.mid}}>{TRANSFER_INFO.bank} · {TRANSFER_INFO.account}</p>
+              <p style={{fontSize:"17px",color:T.muted,marginTop:"8px"}}>Berita: <span style={{color:T.ink,fontWeight:500}}>OLEHOLEH {user}</span></p>
             </div>
           </div>
         </div>
       )}
 
-      {/* ── COORDINATOR TABLE ── */}
+      {/* ── COORDINATOR: REKAP PER PESERTA (dengan total) ── */}
       {isCoord&&paxWithOrders.length>0&&(
-        <div>
-          <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Rekap Oleh-Oleh Per Peserta</p>
+        <div style={{marginBottom:"48px"}}>
+          <p style={{fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Rekap Per Peserta</p>
           <div style={{overflowX:"auto"}}>
-            <table style={{width:"100%",borderCollapse:"collapse",fontSize:"13px"}}>
+            <table style={{width:"100%",borderCollapse:"collapse",fontSize:"17px"}}>
               <thead>
                 <tr style={{borderBottom:`2px solid ${T.line}`}}>
-                  <th style={{textAlign:"left",padding:"8px 12px 8px 0",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"11px"}}>Peserta</th>
-                  {takeawayRestos.map(r=><th key={r.id} style={{textAlign:"right",padding:"8px 12px",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"11px",whiteSpace:"nowrap"}}>{r.name}</th>)}
-                  <th style={{textAlign:"right",padding:"8px 0 8px 12px",color:T.forest,fontWeight:500,letterSpacing:"1px",textTransform:"uppercase",fontSize:"11px"}}>Total</th>
+                  <th style={{textAlign:"left",padding:"8px 12px 8px 0",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"15px"}}>Peserta</th>
+                  {takeawayRestos.map(r=><th key={r.id} style={{textAlign:"right",padding:"8px 12px",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"15px",whiteSpace:"nowrap"}}>{r.name}</th>)}
+                  <th style={{textAlign:"right",padding:"8px 0 8px 12px",color:T.forest,fontWeight:500,letterSpacing:"1px",textTransform:"uppercase",fontSize:"15px"}}>Total</th>
                 </tr>
               </thead>
               <tbody>
@@ -1562,12 +1800,12 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
               </tbody>
               <tfoot>
                 <tr style={{borderTop:`2px solid ${T.lineD}`}}>
-                  <td style={{padding:"12px 12px 4px 0",fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Total</td>
+                  <td style={{padding:"12px 12px 4px 0",fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Total</td>
                   {takeawayRestos.map(r=>{
                     const storeTotal = paxWithOrders.reduce((s,[,stores])=>s+Number(stores[r.id]?.totalIDR||0),0);
                     return <td key={r.id} style={{textAlign:"right",padding:"12px 12px 4px",color:T.forest,fontFamily:"'Playfair Display',Georgia,serif",fontWeight:500}}>{storeTotal>0?`IDR ${storeTotal.toLocaleString("id-ID")}`:"—"}</td>;
                   })}
-                  <td style={{textAlign:"right",padding:"12px 0 4px 12px",fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:T.forest,fontWeight:500}}>
+                  <td style={{textAlign:"right",padding:"12px 0 4px 12px",fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.forest,fontWeight:500}}>
                     IDR {paxWithOrders.reduce((s,[,stores])=>s+Object.values(stores).reduce((ss,o)=>ss+Number(o.totalIDR),0),0).toLocaleString("id-ID")}
                   </td>
                 </tr>
@@ -1576,92 +1814,94 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
           </div>
         </div>
       )}
-    </div>
-  );
-});
 
-const FoodOrderTab = memo(({user}) => {
-  const [view,setView] = useState("list");
-  const [activeResto,setActiveResto] = useState(null);
-  const isCoord = COORDINATORS.includes(user);
-
-  if(view==="restaurant"&&activeResto) return <RestaurantView resto={activeResto} user={user} isCoord={isCoord} onBack={()=>{setView("list");setActiveResto(null);}}/>;
-
-  return (
-    <div className="fade-up">
-      <div style={{marginBottom:"56px"}}>
-        <p style={{fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pemesanan Makanan</p>
-        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Pre-Order F&B</h2>
-        <p style={{fontSize:"14px",color:T.muted,marginTop:"8px"}}>Pilih restoran untuk melihat menu dan melakukan pemesanan</p>
-      </div>
-      <OlehOlehSummary user={user} isCoord={isCoord}/>
-      <div style={{marginBottom:"56px"}}>
-        <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.forest,marginBottom:"24px",fontWeight:500}}>Pre-Order Tersedia</p>
-        <div style={{borderTop:`1px solid ${T.line}`}}>
-          {RESTAURANTS.map(r=>(
-            <div key={r.id} onClick={()=>{setActiveResto(r);setView("restaurant");}}
-              style={{display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",borderBottom:`1px solid ${T.line}`,padding:"28px 0",cursor:"pointer"}}
-              onMouseEnter={e=>e.currentTarget.style.background=T.cream}
-              onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-              <div>
-                <div style={{display:"flex",alignItems:"center",gap:"16px",marginBottom:"6px"}}>
-                  <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{r.name}</h3>
-                  <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.settled,borderBottom:`1px solid ${T.settled}`}}>Terbuka</span>
-                </div>
-                <p style={{fontSize:"13px",color:T.muted}}>{r.subtitle}</p>
-                <p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"2px"}}>{r.note}</p>
+      {/* ── COORDINATOR: REKAP TOTAL PER MERCHANT (tanpa nama) ── */}
+      {isCoord&&merchantAgg.length>0&&(
+        <div style={{marginBottom:"48px"}}>
+          <p style={{fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>Rekap Pesanan Per Merchant</p>
+          <p style={{fontSize:"16px",color:T.muted,marginBottom:"24px",fontStyle:"italic"}}>Gabungan seluruh peserta, tanpa nama — referensi koordinator memesan langsung ke toko.</p>
+          {merchantAgg.map(mm=>(
+            <div key={mm.id} style={{border:`1px solid ${T.line}`,marginBottom:"16px"}}>
+              <div style={{background:T.cream,padding:"12px 20px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.ink}}>{mm.name}</span>
+                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest,fontWeight:500}}>IDR {mm.subtotal.toLocaleString("id-ID")}</span>
               </div>
-              <span style={{fontSize:"20px",color:T.muted}}>→</span>
+              <div style={{padding:"6px 20px 16px"}}>
+                {mm.items.map(([n,q])=>(
+                  <div key={n} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${T.line}`}}>
+                    <span style={{fontSize:"18px",color:T.ink}}>{n}</span>
+                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest,whiteSpace:"nowrap"}}>{q}×</span>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
-      </div>
-      <div style={{marginBottom:"56px"}}>
-        <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.gold,marginBottom:"24px",fontWeight:500}}>Menu Buffet</p>
-        {SET_MENUS.map(m=>(
-          <div key={m.id} style={{border:`1px solid ${T.line}`,marginBottom:"24px"}}>
-            <div style={{background:T.cream,padding:"20px 24px",borderBottom:`1px solid ${T.line}`}}>
-              <div style={{display:"flex",alignItems:"center",gap:"14px",flexWrap:"wrap",marginBottom:"4px"}}>
-                <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{m.name}</h3>
-                <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.goldL}`,padding:"2px 8px"}}>Buffet</span>
-                {m.sponsor&&<span style={{fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>♡ {m.sponsor}</span>}
-              </div>
-              <p style={{fontSize:"13px",color:T.muted}}>{m.subtitle}</p>
-              <p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"4px"}}>{m.note}</p>
+      )}
+
+      {/* ── BUKTI TRANSFER (paling bawah) ── */}
+      {(myStores.length>0 || (isCoord&&paxWithOrders.length>0))&&(
+        <div style={{marginBottom:"56px"}}>
+          <p style={{fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Bukti Transfer</p>
+
+          {myStores.length>0&&(
+            <div style={{marginBottom:isCoord&&paxWithOrders.length>0?"32px":"0"}}>
+              {myProof
+                ? <div style={{background:T.settledBg,border:`1px solid ${T.settled}`,padding:"12px 16px",display:"flex",justifyContent:"space-between",alignItems:"center",gap:"12px",flexWrap:"wrap"}}>
+                    <p style={{fontSize:"16px",color:T.settled}}>✓ Bukti tersimpan · {new Date(myProof.ts).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</p>
+                    <label style={{fontSize:"14px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,cursor:uploading?"wait":"pointer",borderBottom:`1px solid ${T.lineD}`}}>{uploading?"Mengunggah…":"Ganti bukti"}<input type="file" accept="image/*" onChange={onFile} disabled={uploading} style={{display:"none"}}/></label>
+                  </div>
+                : <label style={{display:"block",textAlign:"center",border:`1px dashed ${T.gold}`,padding:"14px",cursor:uploading?"wait":"pointer",fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:uploading?T.muted:T.forest,background:"white"}}>{uploading?"Mengunggah…":"Upload Bukti Transfer"}<input type="file" accept="image/*" onChange={onFile} disabled={uploading} style={{display:"none"}}/></label>}
+              {uploadMsg&&<p style={{fontSize:"15px",color:uploadMsg.startsWith("✓")?T.settled:T.danger,marginTop:"8px"}}>{uploadMsg}</p>}
             </div>
-            <div style={{padding:"8px 24px 24px"}}>
-              {m.sections.map(sec=>(
-                <div key={sec.label} style={{marginTop:"20px"}}>
-                  <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>{sec.label}</p>
-                  {sec.items.map((it,i)=>(
-                    <div key={i} style={{display:"flex",alignItems:"baseline",gap:"12px",padding:"6px 0",borderBottom:`1px solid ${T.line}`}}>
-                      <span style={{fontSize:"15px",color:T.forest}}>◆</span>
-                      <span style={{fontSize:"15px",color:T.ink}}>{it}</span>
-                    </div>
+          )}
+
+          {isCoord&&paxWithOrders.length>0&&(
+            <div style={{overflowX:"auto"}}>
+              <table style={{width:"100%",borderCollapse:"collapse",fontSize:"17px"}}>
+                <thead>
+                  <tr style={{borderBottom:`2px solid ${T.line}`}}>
+                    <th style={{textAlign:"left",padding:"8px 12px 8px 0",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"15px"}}>Peserta</th>
+                    <th style={{textAlign:"left",padding:"8px 0 8px 12px",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"15px"}}>Bukti</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paxWithOrders.sort((a,b)=>a[0].localeCompare(b[0])).map(([pName])=>(
+                    <tr key={pName} style={{borderBottom:`1px solid ${T.line}`}}>
+                      <td style={{padding:"12px 12px 12px 0",color:T.ink}}>{pName}</td>
+                      <td style={{padding:"12px 0 12px 12px"}}>
+                        {allProofs[pName]
+                          ? <button onClick={()=>openProof(pName)} style={{background:"none",border:"none",cursor:"pointer",color:T.settled,fontSize:"16px",fontFamily:"inherit",textDecoration:"underline",padding:0}}>✓ {new Date(allProofs[pName].ts).toLocaleDateString("id-ID",{day:"numeric",month:"short"})} · Lihat / Unduh</button>
+                          : <span style={{fontSize:"16px",color:T.ghost}}>Belum upload</span>}
+                      </td>
+                    </tr>
                   ))}
-                </div>
-              ))}
+                </tbody>
+              </table>
+              <p style={{fontSize:"16px",color:T.muted,marginTop:"16px"}}>{proofCount}/{paxWithOrders.length} bukti terkumpul</p>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {UPCOMING_FB.length>0 && (
-      <div>
-        <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>F&B Lainnya</p>
-        <div style={{borderTop:`1px solid ${T.line}`}}>
-          {UPCOMING_FB.map(r=>(
-            <div key={r.name} style={{display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",borderBottom:`1px solid ${T.line}`,padding:"24px 0"}}>
-              <div>
-                <h4 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",fontWeight:400,color:T.muted,marginBottom:"4px"}}>{r.name}</h4>
-                <p style={{fontSize:"13px",color:T.ghost}}>{r.day} · {r.meal} · Sponsor: {r.sponsor}</p>
-              </div>
-              <span style={{fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.ghost}}>Belum Dibuka</span>
-            </div>
-          ))}
+          )}
         </div>
-        <p style={{fontSize:"13px",color:T.muted,marginTop:"20px",fontStyle:"italic"}}>{isCoord?"Menu akan dibuka oleh koordinator masing-masing.":"Koordinator akan membuka pre-order sebelum keberangkatan."}</p>
-      </div>
+      )}
+
+      {/* ── PROOF VIEWER MODAL ── */}
+      {viewProof&&(
+        <div onClick={()=>setViewProof(null)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.82)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
+          <div onClick={e=>e.stopPropagation()} style={{background:"white",maxWidth:"520px",width:"100%",maxHeight:"92vh",overflowY:"auto",padding:"20px"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"14px",gap:"12px"}}>
+              <p style={{fontSize:"17px",color:T.ink,fontWeight:500}}>Bukti Transfer · {viewProof.name}</p>
+              <button onClick={()=>setViewProof(null)} style={{background:"none",border:"none",cursor:"pointer",color:T.muted,fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase"}}>Tutup ✕</button>
+            </div>
+            {viewProof.error
+              ? <p style={{fontSize:"17px",color:T.danger,padding:"24px 0",textAlign:"center"}}>{viewProof.error}</p>
+              : viewProof.dataUrl
+                ? <>
+                    <img src={viewProof.dataUrl} alt="Bukti transfer" style={{width:"100%",height:"auto",border:`1px solid ${T.line}`,display:"block"}}/>
+                    <a href={viewProof.dataUrl} download={viewProof.filename} style={{display:"block",textAlign:"center",marginTop:"14px",background:T.forest,color:"white",padding:"12px",textDecoration:"none",fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase"}}>Unduh</a>
+                  </>
+                : <p style={{fontSize:"17px",color:T.muted,padding:"24px 0",textAlign:"center"}}>Memuat gambar…</p>}
+          </div>
+        </div>
       )}
     </div>
   );
@@ -1691,29 +1931,37 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
     try {
       const lockVal = await sGet(`lock.${resto.id}`);
       setLocked(lockVal==="true");
-      const keys = await sList(`order.${resto.id}.`);
+      const entries = await Promise.all(
+        resto.participants.map(async p => {
+          const key = `order.${resto.id}.${p.name.replace(/\s+/g,"_")}`;
+          try { const v = await sGet(key); return [p.name, v]; } catch { return [p.name, null]; }
+        })
+      );
       const grouped = {};
-      for(const k of keys){
-        const v = await sGet(k);
-        if(v){ const name=k.replace(`order.${resto.id}.`,"").replace(/_/g," "); grouped[name]=JSON.parse(v); }
-      }
+      entries.forEach(([name,v]) => { if(v){ try{ grouped[name]=JSON.parse(v); }catch{} } });
       setAllOrders(grouped);
       setLastSync(new Date());
     } catch { setSyncError("Gagal memuat data. Cek koneksi."); }
-  }, [resto.id]);
+  }, [resto.id, resto.participants]);
+
+  const withTimeoutR = (promise, ms=10000) => Promise.race([promise, new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),ms))]);
 
   useEffect(() => {
+    let cancelled=false;
+    const fallback=setTimeout(()=>{ if(!cancelled) setLoading(false); }, 12000);
     (async () => {
       setLoading(true);
       try {
-        const lockVal = await sGet(`lock.${resto.id}`);
+        const lockVal = await withTimeoutR(sGet(`lock.${resto.id}`));
         setLocked(lockVal==="true");
-        const keys = await sList(`order.${resto.id}.`);
+        const entries = await withTimeoutR(Promise.all(
+          resto.participants.map(async p => {
+            const key = `order.${resto.id}.${p.name.replace(/\s+/g,"_")}`;
+            try { const v = await sGet(key); return [p.name, v]; } catch { return [p.name, null]; }
+          })
+        ));
         const grouped = {};
-        for(const k of keys){
-          const v = await sGet(k);
-          if(v){ const name=k.replace(`order.${resto.id}.`,"").replace(/_/g," "); grouped[name]=JSON.parse(v); }
-        }
+        entries.forEach(([name,v]) => { if(v){ try{ grouped[name]=JSON.parse(v); }catch{} } });
         setAllOrders(grouped);
         setLastSync(new Date());
         if (grouped[user]) {
@@ -1722,7 +1970,6 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
           const cartById = {};
           resto.categories.forEach(c=>c.items.forEach(item=>{ if(myItems[item.name]) cartById[item.id]=myItems[item.name]; }));
           setCart(cartById);
-          // restore config selections from saved order
           const cfgById = {};
           (grouped[user].items||[]).forEach(it=>{
             const match = resto.categories.flatMap(c=>c.items).find(i=>i.name===it.name);
@@ -1738,9 +1985,10 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
           setSubmitted(true);
           setTab("recap");
         }
-      } catch { setSyncError("Gagal memuat data."); }
-      setLoading(false);
+      } catch(e) { setSyncError(e.message==="timeout" ? "Koneksi lambat — ketuk ↻ Refresh." : "Gagal memuat data."); }
+      if(!cancelled){ setLoading(false); clearTimeout(fallback); }
     })();
+    return ()=>{ cancelled=true; clearTimeout(fallback); };
   }, [resto.id, user]);
 
   useEffect(()=>{ const id=setInterval(refresh,30000); return ()=>clearInterval(id); },[refresh]);
@@ -1772,7 +2020,14 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
       const totalIDR = resto.taxRate ? Math.round(nettIDR*(1+resto.taxRate)) : nettIDR;
       const key = `order.${resto.id}.${user.replace(/\s+/g,"_")}`;
       const ok = await sSet(key, JSON.stringify({peserta:user,hh:ALL_PAX.find(p=>p.name===user)?.hh||"",items,totalIDR,submittedAt:new Date().toISOString()}));
-      if(ok){ setSubmitted(true); await refresh(); setTab("recap"); }
+      if(ok){
+        const newOrder={peserta:user,hh:ALL_PAX.find(p=>p.name===user)?.hh||"",items,totalIDR,submittedAt:new Date().toISOString()};
+        setSubmitted(true);
+        setAllOrders(prev=>({...prev,[user]:newOrder}));
+        setTab("recap");
+        // note: tidak memanggil refresh() di sini — refresh() langsung akan overwrite
+        // optimistic update sebelum Firebase write terpropagate. Auto-refresh 30 dtk sudah cukup.
+      }
       else setSyncError("Gagal menyimpan order. Coba lagi.");
     } catch { setSyncError("Gagal menyimpan order. Coba lagi."); }
     setSaving(false);
@@ -1811,61 +2066,61 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
 
   if(loading) return (
     <div style={{textAlign:"center",padding:"80px 0",color:T.muted}}>
-      <p style={{fontSize:"14px",letterSpacing:"2px",textTransform:"uppercase"}}>Memuat data dari Firebase…</p>
+      <p style={{fontSize:"18px",letterSpacing:"2px",textTransform:"uppercase"}}>Memuat data dari Firebase…</p>
     </div>
   );
 
   return (
     <div className="fade-up">
-      <button onClick={onBack} style={{background:"none",border:"none",cursor:"pointer",fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,padding:"0 0 32px",display:"flex",alignItems:"center",gap:"8px"}}>← Kembali</button>
+      <button onClick={onBack} style={{background:"none",border:"none",cursor:"pointer",fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,padding:"0 0 32px",display:"flex",alignItems:"center",gap:"8px"}}>← Kembali</button>
 
       <div style={{marginBottom:"48px"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:"16px",marginBottom:"8px"}}>
           <div>
             <div style={{display:"flex",alignItems:"center",gap:"16px",marginBottom:"6px"}}>
               <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"32px",fontWeight:400,color:T.ink}}>{resto.name}</h2>
-              <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",padding:"3px 8px",border:`1px solid ${locked?"#c88":T.settled}`,color:locked?T.danger:T.settled}}>{locked?"Ditutup":"Terbuka"}</span>
+              <span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",padding:"3px 8px",border:`1px solid ${locked?"#c88":T.settled}`,color:locked?T.danger:T.settled}}>{locked?"Ditutup":"Terbuka"}</span>
             </div>
-            <p style={{fontSize:"13px",color:T.muted}}>{resto.subtitle} · {resto.note}</p>
-            {resto.deadline&&<p style={{fontSize:"12px",color:T.warn,marginTop:"4px",letterSpacing:"0.5px"}}>Deadline pre-order: {resto.deadline}</p>}
-            {resto.taxRate&&<p style={{fontSize:"12px",color:T.muted,marginTop:"4px"}}>Harga nett · +11% pajak pemerintah & +10% service charge ditambahkan saat checkout</p>}
-            {lastSync&&<p style={{fontSize:"12px",color:T.ghost,marginTop:"4px"}}>Tersimpan: {lastSync.toLocaleTimeString("id-ID")} · Auto-refresh 30 dtk</p>}
+            <p style={{fontSize:"17px",color:T.muted}}>{resto.subtitle} · {resto.note}</p>
+            {resto.deadline&&<p style={{fontSize:"16px",color:T.warn,marginTop:"4px",letterSpacing:"0.5px"}}>Deadline pre-order: {resto.deadline}</p>}
+            {resto.taxRate&&<p style={{fontSize:"16px",color:T.muted,marginTop:"4px"}}>Harga nett · +11% pajak pemerintah & +10% service charge ditambahkan saat checkout</p>}
+            {lastSync&&<p style={{fontSize:"16px",color:T.ghost,marginTop:"4px"}}>Tersimpan: {lastSync.toLocaleTimeString("id-ID")} · Auto-refresh 30 dtk</p>}
           </div>
           <div style={{display:"flex",gap:"12px",alignItems:"center",flexWrap:"wrap"}}>
-            {isCoord&&<button onClick={toggleLock} style={{background:"none",border:`1px solid ${T.lineD}`,padding:"8px 18px",cursor:"pointer",fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:locked?T.settled:T.danger}}>{locked?"Buka Order":"Kunci Order"}</button>}
-            {isCoord&&<button onClick={exportCSV} style={{background:T.forest,border:"none",padding:"8px 18px",cursor:"pointer",fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:"white"}}>Export CSV</button>}
-            <button onClick={refresh} style={{background:"none",border:`1px solid ${T.line}`,padding:"8px 18px",cursor:"pointer",fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>↻ Refresh</button>
+            {isCoord&&<button onClick={toggleLock} style={{background:"none",border:`1px solid ${T.lineD}`,padding:"8px 18px",cursor:"pointer",fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:locked?T.settled:T.danger}}>{locked?"Buka Order":"Kunci Order"}</button>}
+            {isCoord&&<button onClick={exportCSV} style={{background:T.forest,border:"none",padding:"8px 18px",cursor:"pointer",fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:"white"}}>Export CSV</button>}
+            <button onClick={refresh} style={{background:"none",border:`1px solid ${T.line}`,padding:"8px 18px",cursor:"pointer",fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>↻ Refresh</button>
           </div>
         </div>
-        {syncError&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"10px 16px",marginTop:"8px"}}><p style={{fontSize:"13px",color:T.danger}}>{syncError}</p></div>}
+        {syncError&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"10px 16px",marginTop:"8px"}}><p style={{fontSize:"17px",color:T.danger}}>{syncError}</p></div>}
       </div>
 
       <div style={{display:"flex",borderBottom:`1px solid ${T.line}`,marginBottom:"40px"}}>
         {[{id:"order",label:"Order Saya"},{id:"recap",label:`Rekap Semua — ${ordered}/${total}`}].map(t=>(
-          <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",padding:"0 32px 16px 0",cursor:"pointer",fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:tab===t.id?500:300,color:tab===t.id?T.forest:T.muted,borderBottom:tab===t.id?`2px solid ${T.forest}`:"2px solid transparent",marginBottom:"-1px",transition:"all 0.2s"}}>{t.label}</button>
+          <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",padding:"0 32px 16px 0",cursor:"pointer",fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:tab===t.id?500:300,color:tab===t.id?T.forest:T.muted,borderBottom:tab===t.id?`2px solid ${T.forest}`:"2px solid transparent",marginBottom:"-1px",transition:"all 0.2s"}}>{t.label}</button>
         ))}
       </div>
 
       {tab==="order"&&<div>
-        {locked&&!isCoord&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"16px 20px",marginBottom:"24px"}}><p style={{fontSize:"13px",color:T.danger}}>Pre-order telah ditutup. Hubungi koordinator untuk perubahan.</p></div>}
+        {locked&&!isCoord&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"16px 20px",marginBottom:"24px"}}><p style={{fontSize:"17px",color:T.danger}}>Pre-order telah ditutup. Hubungi koordinator untuk perubahan.</p></div>}
         {submitted&&!deleteConfirm&&(
           <div style={{background:T.settledBg,border:`1px solid ${T.settled}`,padding:"14px 20px",marginBottom:"24px"}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-              <p style={{fontSize:"13px",color:T.settled}}>✓ Order Anda sudah terkirim.</p>
+              <p style={{fontSize:"17px",color:T.settled}}>✓ Order Anda sudah terkirim.</p>
               {!locked&&<div style={{display:"flex",gap:"10px"}}>
-                <button onClick={()=>{setSubmitted(false);setTab("order");}} style={{background:"none",border:`1px solid ${T.settled}`,padding:"5px 14px",cursor:"pointer",fontSize:"12px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.settled}}>Edit</button>
-                <button onClick={()=>setDeleteConfirm(true)} style={{background:"none",border:`1px solid ${T.danger}`,padding:"5px 14px",cursor:"pointer",fontSize:"12px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.danger}}>× Batalkan</button>
+                <button onClick={()=>{setSubmitted(false);setTab("order");}} style={{background:"none",border:`1px solid ${T.settled}`,padding:"5px 14px",cursor:"pointer",fontSize:"16px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.settled}}>Edit</button>
+                <button onClick={()=>setDeleteConfirm(true)} style={{background:"none",border:`1px solid ${T.danger}`,padding:"5px 14px",cursor:"pointer",fontSize:"16px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.danger}}>× Batalkan</button>
               </div>}
             </div>
           </div>
         )}
         {deleteConfirm&&(
           <div style={{background:T.dangerBg,border:`1px solid ${T.danger}`,padding:"18px 20px",marginBottom:"24px"}}>
-            <p style={{fontSize:"15px",color:T.danger,fontWeight:500,marginBottom:"4px"}}>Hapus seluruh pesanan ini?</p>
-            <p style={{fontSize:"13px",color:T.muted,marginBottom:"16px"}}>Tindakan ini tidak dapat dibatalkan.</p>
+            <p style={{fontSize:"19px",color:T.danger,fontWeight:500,marginBottom:"4px"}}>Hapus seluruh pesanan ini?</p>
+            <p style={{fontSize:"17px",color:T.muted,marginBottom:"16px"}}>Tindakan ini tidak dapat dibatalkan.</p>
             <div style={{display:"flex",gap:"10px"}}>
-              <button onClick={()=>setDeleteConfirm(false)} style={{background:"none",border:`1px solid ${T.lineD}`,padding:"8px 20px",cursor:"pointer",fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.mid}}>Tidak</button>
-              <button onClick={deleteOrder} disabled={deleting} style={{background:T.danger,border:"none",padding:"8px 20px",cursor:"pointer",fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:"white",fontWeight:500}}>
+              <button onClick={()=>setDeleteConfirm(false)} style={{background:"none",border:`1px solid ${T.lineD}`,padding:"8px 20px",cursor:"pointer",fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:T.mid}}>Tidak</button>
+              <button onClick={deleteOrder} disabled={deleting} style={{background:T.danger,border:"none",padding:"8px 20px",cursor:"pointer",fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:"white",fontWeight:500}}>
                 {deleting?"Menghapus…":"Ya, Hapus"}
               </button>
             </div>
@@ -1873,22 +2128,22 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
         )}
 
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"28px",paddingBottom:"16px",borderBottom:`1px solid ${T.line}`}}>
-          <p style={{fontSize:"13px",color:T.muted}}>Pemesanan sebagai <span style={{color:T.ink,fontWeight:500}}>{user}</span></p>
-          {cartCount>0&&<span style={{fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,fontWeight:500}}>{cartCount} item dipilih</span>}
+          <p style={{fontSize:"17px",color:T.muted}}>Pemesanan sebagai <span style={{color:T.ink,fontWeight:500}}>{user}</span></p>
+          {cartCount>0&&<span style={{fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,fontWeight:500}}>{cartCount} item dipilih</span>}
         </div>
 
         {/* ── Search bar ── */}
         <div style={{position:"relative",marginBottom:"24px"}}>
-          <span style={{position:"absolute",left:"14px",top:"50%",transform:"translateY(-50%)",fontSize:"16px",color:T.muted,pointerEvents:"none"}}>⌕</span>
+          <span style={{position:"absolute",left:"14px",top:"50%",transform:"translateY(-50%)",fontSize:"20px",color:T.muted,pointerEvents:"none"}}>⌕</span>
           <input
             type="text"
             value={searchQuery}
             onChange={e=>setSearchQuery(e.target.value)}
             placeholder="Cari menu…"
-            style={{width:"100%",padding:"10px 36px 10px 38px",border:`1px solid ${searchQuery?T.forest:T.lineD}`,background:searchQuery?T.cream:"transparent",fontSize:"15px",color:T.ink,outline:"none",fontFamily:"'Jost',sans-serif",fontWeight:300,letterSpacing:"0.3px",transition:"all 0.2s",boxSizing:"border-box"}}
+            style={{width:"100%",padding:"10px 36px 10px 38px",border:`1px solid ${searchQuery?T.forest:T.lineD}`,background:searchQuery?T.cream:"transparent",fontSize:"19px",color:T.ink,outline:"none",fontFamily:"'Jost',sans-serif",fontWeight:300,letterSpacing:"0.3px",transition:"all 0.2s",boxSizing:"border-box"}}
           />
           {searchQuery&&(
-            <button onClick={()=>setSearchQuery("")} style={{position:"absolute",right:"12px",top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:"18px",color:T.muted,lineHeight:1,padding:"2px 4px"}}>×</button>
+            <button onClick={()=>setSearchQuery("")} style={{position:"absolute",right:"12px",top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:"22px",color:T.muted,lineHeight:1,padding:"2px 4px"}}>×</button>
           )}
         </div>
 
@@ -1896,7 +2151,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
         {!searchQuery&&(
           <div style={{display:"flex",flexWrap:"wrap",borderBottom:`1px solid ${T.line}`,marginBottom:"32px"}}>
             {resto.categories.map(c=>(
-              <button key={c.id} onClick={()=>setCat(c.id)} style={{background:"none",border:"none",padding:"10px 20px 10px 0",cursor:"pointer",fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:cat===c.id?T.ink:T.muted,fontWeight:cat===c.id?500:300,borderBottom:cat===c.id?`2px solid ${T.ink}`:"2px solid transparent",marginBottom:"-1px",transition:"all 0.2s"}}>{c.name}</button>
+              <button key={c.id} onClick={()=>setCat(c.id)} style={{background:"none",border:"none",padding:"10px 20px 10px 0",cursor:"pointer",fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:cat===c.id?T.ink:T.muted,fontWeight:cat===c.id?500:300,borderBottom:cat===c.id?`2px solid ${T.ink}`:"2px solid transparent",marginBottom:"-1px",transition:"all 0.2s"}}>{c.name}</button>
             ))}
           </div>
         )}
@@ -1917,48 +2172,48 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
               <div key={item.id} style={{display:"grid",gridTemplateColumns:"1fr auto",gap:"24px",alignItems:"start",borderBottom:`1px solid ${T.line}`,padding:"20px",margin:"0 -20px",background:isDisabled?T.stone:inCart?T.cream:"transparent",opacity:isDisabled?0.45:1,transition:"background 0.2s"}}>
                 <div>
                   <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"2px",flexWrap:"wrap"}}>
-                    <p style={{fontSize:"16px",color:isDisabled?T.muted:T.ink,fontWeight:inCart?500:300,margin:0}}>{item.name}</p>
-                    {hasPrice&&resto.id!=="solaria"&&<span style={{fontSize:"12px",letterSpacing:"1px",color:T.gold,border:`1px solid ${T.goldL}`,padding:"1px 7px",fontWeight:500,whiteSpace:"nowrap"}}>IDR {displayPrice.toLocaleString("id-ID")}</span>}
-                    {!hasPrice&&priceRange&&!isDisabled&&<span style={{fontSize:"12px",letterSpacing:"1px",color:T.muted,border:`1px solid ${T.line}`,padding:"1px 7px",whiteSpace:"nowrap"}}>{priceRange}</span>}
-                    {q&&catLabel&&<span style={{fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.ghost,border:`1px solid ${T.line}`,padding:"1px 6px"}}>{catLabel}</span>}
+                    <p style={{fontSize:"20px",color:isDisabled?T.muted:T.ink,fontWeight:inCart?500:300,margin:0}}>{item.name}</p>
+                    {hasPrice&&resto.id!=="solaria"&&<span style={{fontSize:"16px",letterSpacing:"1px",color:T.gold,border:`1px solid ${T.goldL}`,padding:"1px 7px",fontWeight:500,whiteSpace:"nowrap"}}>IDR {displayPrice.toLocaleString("id-ID")}</span>}
+                    {!hasPrice&&priceRange&&!isDisabled&&<span style={{fontSize:"16px",letterSpacing:"1px",color:T.muted,border:`1px solid ${T.line}`,padding:"1px 7px",whiteSpace:"nowrap"}}>{priceRange}</span>}
+                    {q&&catLabel&&<span style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.ghost,border:`1px solid ${T.line}`,padding:"1px 6px"}}>{catLabel}</span>}
                   </div>
-                  {isDisabled&&<p style={{fontSize:"12px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — IDR ${item.price}k melebihi batas IDR 200k`:"Harga pasar — hubungi koordinator"}</p>}
-                  {item.desc&&<p style={{fontSize:"13px",color:isDisabled?T.ghost:T.muted,fontStyle:"italic"}}>{item.desc}</p>}
+                  {isDisabled&&<p style={{fontSize:"16px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — IDR ${item.price}k melebihi batas IDR 200k`:"Harga pasar — hubungi koordinator"}</p>}
+                  {item.desc&&<p style={{fontSize:"17px",color:isDisabled?T.ghost:T.muted,fontStyle:"italic"}}>{item.desc}</p>}
 
                   {hasVariants&&!isDisabled&&(
                     <div style={{marginTop:"10px"}}>
-                      <p style={{fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>Pilihan *</p>
+                      <p style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>Pilihan *</p>
                       <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
                         {item.variants.map(v=>(
-                          <button key={v.label} onClick={()=>setVariant(item.id,v.label)} style={{background:cfg.variant===v.label?T.forest:"transparent",border:`1px solid ${cfg.variant===v.label?T.forest:T.lineD}`,color:cfg.variant===v.label?"white":T.mid,padding:"5px 12px",cursor:"pointer",fontSize:"13px",letterSpacing:"0.5px",transition:"all 0.15s"}}>{v.label} · {(v.price/1000)}k</button>
+                          <button key={v.label} onClick={()=>setVariant(item.id,v.label)} style={{background:cfg.variant===v.label?T.forest:"transparent",border:`1px solid ${cfg.variant===v.label?T.forest:T.lineD}`,color:cfg.variant===v.label?"white":T.mid,padding:"5px 12px",cursor:"pointer",fontSize:"17px",letterSpacing:"0.5px",transition:"all 0.15s"}}>{v.label} · {(v.price/1000)}k</button>
                         ))}
                       </div>
                     </div>
                   )}
                   {item.options&&!isDisabled&&item.options.map(g=>(
                     <div key={g.id} style={{marginTop:"10px"}}>
-                      <p style={{fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{g.label}{g.required?" *":""}</p>
+                      <p style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{g.label}{g.required?" *":""}</p>
                       <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
                         {g.choices.map(ch=>(
-                          <button key={ch} onClick={()=>setOpt(item.id,g.id,ch)} style={{background:cfg.opts?.[g.id]===ch?T.forest:"transparent",border:`1px solid ${cfg.opts?.[g.id]===ch?T.forest:T.lineD}`,color:cfg.opts?.[g.id]===ch?"white":T.mid,padding:"5px 12px",cursor:"pointer",fontSize:"13px",letterSpacing:"0.5px",transition:"all 0.15s"}}>{ch}</button>
+                          <button key={ch} onClick={()=>setOpt(item.id,g.id,ch)} style={{background:cfg.opts?.[g.id]===ch?T.forest:"transparent",border:`1px solid ${cfg.opts?.[g.id]===ch?T.forest:T.lineD}`,color:cfg.opts?.[g.id]===ch?"white":T.mid,padding:"5px 12px",cursor:"pointer",fontSize:"17px",letterSpacing:"0.5px",transition:"all 0.15s"}}>{ch}</button>
                         ))}
                       </div>
                     </div>
                   ))}
-                  {configError[item.id]&&<p style={{fontSize:"12px",color:T.danger,marginTop:"8px",letterSpacing:"0.5px"}}>Pilih dulu opsi bertanda * sebelum menambah.</p>}
+                  {configError[item.id]&&<p style={{fontSize:"16px",color:T.danger,marginTop:"8px",letterSpacing:"0.5px"}}>Pilih dulu opsi bertanda * sebelum menambah.</p>}
 
                   {inCart&&!isDisabled&&<input value={notes[item.id]||inCart.notes||""} onChange={e=>{setNotes(n=>({...n,[item.id]:e.target.value}));setNote(item.id,e.target.value);}}
                     placeholder="Catatan khusus (opsional)"
-                    style={{marginTop:"10px",width:"100%",maxWidth:"360px",padding:"8px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"14px",color:T.mid,outline:"none"}}/>}
+                    style={{marginTop:"10px",width:"100%",maxWidth:"360px",padding:"8px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"18px",color:T.mid,outline:"none"}}/>}
                 </div>
                 <div style={{display:"flex",alignItems:"center",gap:"16px",paddingTop:"2px"}}>
                   {inCart&&!isDisabled&&<>
-                    <button onClick={()=>rem(item.id)} style={{background:"none",border:"none",cursor:"pointer",fontSize:"20px",color:T.muted,lineHeight:1,fontFamily:"serif",padding:"4px 8px"}}>−</button>
-                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.ink,minWidth:"24px",textAlign:"center"}}>{inCart.qty}</span>
+                    <button onClick={()=>rem(item.id)} style={{background:"none",border:"none",cursor:"pointer",fontSize:"21px",color:T.muted,lineHeight:1,fontFamily:"serif",padding:"4px 8px"}}>−</button>
+                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.ink,minWidth:"24px",textAlign:"center"}}>{inCart.qty}</span>
                   </>}
                   {isDisabled
-                    ? <span style={{fontSize:"13px",color:T.ghost,fontStyle:"italic",padding:"4px 10px",minWidth:"32px",textAlign:"center"}}>N/A</span>
-                    : <button onClick={()=>add(item)} disabled={locked&&!isCoord} style={{background:"none",border:`1px solid ${locked&&!isCoord?T.ghost:T.ink}`,cursor:locked&&!isCoord?"not-allowed":"pointer",fontSize:"18px",color:locked&&!isCoord?T.ghost:T.ink,fontFamily:"serif",padding:"4px 10px",transition:"all 0.2s"}}>+</button>
+                    ? <span style={{fontSize:"17px",color:T.ghost,fontStyle:"italic",padding:"4px 10px",minWidth:"32px",textAlign:"center"}}>N/A</span>
+                    : <button onClick={()=>add(item)} disabled={locked&&!isCoord} style={{background:"none",border:`1px solid ${locked&&!isCoord?T.ghost:T.ink}`,cursor:locked&&!isCoord?"not-allowed":"pointer",fontSize:"22px",color:locked&&!isCoord?T.ghost:T.ink,fontFamily:"serif",padding:"4px 10px",transition:"all 0.2s"}}>+</button>
                   }
                 </div>
               </div>
@@ -1977,13 +2232,13 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
             });
             if(!results.length) return (
               <div style={{padding:"40px 0",textAlign:"center"}}>
-                <p style={{fontSize:"15px",color:T.muted,fontStyle:"italic"}}>Tidak ada menu yang cocok dengan "<strong>{searchQuery}</strong>"</p>
-                <button onClick={()=>setSearchQuery("")} style={{marginTop:"12px",background:"none",border:`1px solid ${T.lineD}`,padding:"6px 18px",cursor:"pointer",fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.mid}}>Hapus Pencarian</button>
+                <p style={{fontSize:"19px",color:T.muted,fontStyle:"italic"}}>Tidak ada menu yang cocok dengan "<strong>{searchQuery}</strong>"</p>
+                <button onClick={()=>setSearchQuery("")} style={{marginTop:"12px",background:"none",border:`1px solid ${T.lineD}`,padding:"6px 18px",cursor:"pointer",fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:T.mid}}>Hapus Pencarian</button>
               </div>
             );
             return (
               <div>
-                <p style={{fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"16px",paddingBottom:"12px",borderBottom:`1px solid ${T.line}`}}>{results.length} hasil untuk "{searchQuery}"</p>
+                <p style={{fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"16px",paddingBottom:"12px",borderBottom:`1px solid ${T.line}`}}>{results.length} hasil untuk "{searchQuery}"</p>
                 <div style={{borderTop:`1px solid ${T.line}`}}>
                   {results.map(({item,catName})=>renderItem(item,catName))}
                 </div>
@@ -2000,7 +2255,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
         })()}
 
         {cartCount>0&&<div style={{marginTop:"40px",padding:"32px",background:T.cream,borderTop:`2px solid ${T.forest}`}}>
-          <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"20px"}}>Ringkasan Pesanan</p>
+          <p style={{fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"20px"}}>Ringkasan Pesanan</p>
           {(()=>{
             const cartEntries = Object.entries(cart);
             const hasPrices = cartEntries.some(([,item])=>item.price!=null);
@@ -2010,40 +2265,40 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
             return <>
               {cartEntries.map(([id,item])=>(
                 <div key={id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${T.line}`,gap:"12px"}}>
-                  <span style={{fontSize:"15px",color:T.ink,flex:1}}>{item.name}{item.config&&<span style={{color:T.gold}}> · {item.config}</span>}{item.notes&&<span style={{color:T.muted,fontStyle:"italic"}}> · {item.notes}</span>}</span>
-                  <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"17px",color:T.ink,minWidth:"32px",textAlign:"right"}}>×{item.qty}</span>
-                  {hasPrices&&item.price&&resto.id!=="solaria"&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"16px",color:T.settled,minWidth:"120px",textAlign:"right"}}>IDR {(item.price*item.qty).toLocaleString("id-ID")}</span>}
+                  <span style={{fontSize:"19px",color:T.ink,flex:1}}>{item.name}{item.config&&<span style={{color:T.gold}}> · {item.config}</span>}{item.notes&&<span style={{color:T.muted,fontStyle:"italic"}}> · {item.notes}</span>}</span>
+                  <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.ink,minWidth:"32px",textAlign:"right"}}>×{item.qty}</span>
+                  {hasPrices&&item.price&&resto.id!=="solaria"&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.settled,minWidth:"120px",textAlign:"right"}}>IDR {(item.price*item.qty).toLocaleString("id-ID")}</span>}
                 </div>
               ))}
               {hasPrices&&nettTotal>0&&resto.id!=="solaria"&&<>
                 {resto.taxRate&&<>
                   <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0 4px",borderTop:`1px solid ${T.line}`,marginTop:"8px"}}>
-                    <span style={{fontSize:"13px",color:T.muted}}>Subtotal (nett)</span>
-                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"16px",color:T.ink}}>IDR {nettTotal.toLocaleString("id-ID")}</span>
+                    <span style={{fontSize:"17px",color:T.muted}}>Subtotal (nett)</span>
+                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.ink}}>IDR {nettTotal.toLocaleString("id-ID")}</span>
                   </div>
                   <div style={{display:"flex",justifyContent:"space-between",padding:"4px 0 8px"}}>
-                    <span style={{fontSize:"13px",color:T.muted}}>Pajak 11% + Service 10%</span>
-                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"16px",color:T.muted}}>IDR {taxAmt.toLocaleString("id-ID")}</span>
+                    <span style={{fontSize:"17px",color:T.muted}}>Pajak 11% + Service 10%</span>
+                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.muted}}>IDR {taxAmt.toLocaleString("id-ID")}</span>
                   </div>
                 </>}
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 0 0",borderTop:`2px solid ${T.lineD}`}}>
-                  <span style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Perkiraan Harga (Sponsor)</span>
-                  <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.forest,fontWeight:500}}>IDR {grandTotal.toLocaleString("id-ID")}</span>
+                  <span style={{fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>{resto.isTakeaway?"Total":"Perkiraan Harga (Sponsor)"}</span>
+                  <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"23px",color:T.forest,fontWeight:500}}>IDR {grandTotal.toLocaleString("id-ID")}</span>
                 </div>
               </>}
             </>;
           })()}
-          <button onClick={submit} disabled={saving||locked} style={{marginTop:"24px",width:"100%",padding:"14px",background:locked?T.muted:T.forest,color:"white",border:"none",cursor:locked?"not-allowed":"pointer",fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500,transition:"background 0.2s"}}>
+          <button onClick={submit} disabled={saving||locked} style={{marginTop:"24px",width:"100%",padding:"14px",background:locked?T.muted:T.forest,color:"white",border:"none",cursor:locked?"not-allowed":"pointer",fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500,transition:"background 0.2s"}}>
             {saving?"Menyimpan ke Firebase…":locked?"Pemesanan Ditutup":"Konfirmasi Pesanan Saya"}
           </button>
         </div>}
       </div>}
 
       {tab==="recap"&&<div>
-        {!showRecap&&<p style={{fontSize:"14px",color:T.muted,fontStyle:"italic",padding:"20px 0"}}>Submit order Anda terlebih dahulu untuk melihat rekap semua peserta.</p>}
+        {!showRecap&&<p style={{fontSize:"18px",color:T.muted,fontStyle:"italic",padding:"20px 0"}}>Submit order Anda terlebih dahulu untuk melihat rekap semua peserta.</p>}
         {showRecap&&<>
           <div style={{marginBottom:"48px"}}>
-            <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Rekap Per Menu</p>
+            <p style={{fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Rekap Per Menu</p>
             {(()=>{
               const grandAllTotal = Object.values(allOrders).reduce((s,o)=>s+Number(o.totalIDR||0),0);
               const totalBoxes = Object.values(allOrders).reduce((s,o)=>s+(o.items||[]).reduce((ss,i)=>ss+Number(i.qty),0),0);
@@ -2051,13 +2306,13 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
               return (
                 <div style={{display:"grid",gridTemplateColumns:resto.id!=="solaria"?"1fr 1fr":"1fr",gap:"1px",background:T.line,marginBottom:"32px"}}>
                     <div style={{background:T.cream,padding:"20px 24px"}}>
-                      <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Total Item Dipesan</p>
-                      <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"28px",color:T.ink}}>{totalBoxes} <span style={{fontSize:"15px",color:T.muted}}>item</span></p>
+                      <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Total Item Dipesan</p>
+                      <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"28px",color:T.ink}}>{totalBoxes} <span style={{fontSize:"19px",color:T.muted}}>item</span></p>
                     </div>
                     {resto.id!=="solaria"&&grandAllTotal>0&&(
                       <div style={{background:T.cream,padding:"20px 24px"}}>
-                        <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Perkiraan Total (Sponsor)</p>
-                        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest}}>IDR {grandAllTotal.toLocaleString("id-ID")}</p>
+                        <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>{resto.isTakeaway?"Total Pesanan":"Perkiraan Total (Sponsor)"}</p>
+                        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest}}>IDR {grandAllTotal.toLocaleString("id-ID")}</p>
                       </div>
                     )}
                   </div>
@@ -2067,19 +2322,19 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
               const tally={};
               Object.values(allOrders).forEach(o=>(o.items||[]).forEach(i=>{const k=i.config?`${i.name} [${i.config}]`:i.name;tally[k]=(tally[k]||0)+Number(i.qty);}));
               const sorted=Object.entries(tally).sort((a,b)=>b[1]-a[1]);
-              if(!sorted.length) return <p style={{fontSize:"14px",color:T.muted,fontStyle:"italic"}}>Belum ada pesanan.</p>;
+              if(!sorted.length) return <p style={{fontSize:"18px",color:T.muted,fontStyle:"italic"}}>Belum ada pesanan.</p>;
               return <div style={{borderTop:`1px solid ${T.line}`}}>
                 {sorted.map(([name,qty])=>(
                   <div key={name} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 0",borderBottom:`1px solid ${T.line}`}}>
-                    <span style={{fontSize:"15px",color:T.ink}}>{name}</span>
-                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest}}>{qty}×</span>
+                    <span style={{fontSize:"19px",color:T.ink}}>{name}</span>
+                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest}}>{qty}×</span>
                   </div>
                 ))}
               </div>;
             })()}
           </div>
           <div>
-            <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Status Per Peserta — {ordered}/{total}</p>
+            <p style={{fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Status Per Peserta — {ordered}/{total}</p>
             <div style={{borderTop:`1px solid ${T.line}`}}>
               {resto.participants.map(p=>{
                 const o=allOrders[p.name];
@@ -2088,18 +2343,18 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                   <div key={p.name} style={{display:"grid",gridTemplateColumns:"1fr auto",gap:"16px",alignItems:"start",borderBottom:`1px solid ${T.line}`,padding:"16px 0",background:isMe?T.cream:"transparent"}}>
                     <div>
                       <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"4px",flexWrap:"wrap"}}>
-                        <span style={{fontSize:"15px",color:T.ink,fontWeight:o?500:300}}>{p.name}</span>
-                        {isMe&&<span style={{fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>Anda</span>}
-                        <span style={{fontSize:"12px",color:T.muted}}>({p.hh})</span>
+                        <span style={{fontSize:"19px",color:T.ink,fontWeight:o?500:300}}>{p.name}</span>
+                        {isMe&&<span style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>Anda</span>}
+                        <span style={{fontSize:"16px",color:T.muted}}>({p.hh})</span>
                       </div>
                       {o&&<div>
                         <div style={{display:"flex",flexWrap:"wrap",gap:"8px",marginBottom:"4px"}}>
-                          {(o.items||[]).map((it,i)=><span key={i} style={{fontSize:"12px",color:T.muted}}>• {it.name}{it.config&&` [${it.config}]`} ×{it.qty}{it.notes&&` (${it.notes})`}</span>)}
+                          {(o.items||[]).map((it,i)=><span key={i} style={{fontSize:"16px",color:T.muted}}>• {it.name}{it.config&&` [${it.config}]`} ×{it.qty}{it.notes&&` (${it.notes})`}</span>)}
                         </div>
-                        {o.totalIDR>0&&<p style={{fontSize:"14px",color:T.settled,fontFamily:"'Playfair Display',Georgia,serif",marginTop:"2px"}}>Total: IDR {Number(o.totalIDR).toLocaleString("id-ID")}</p>}
+                        {resto.isTakeaway&&o.totalIDR>0&&<p style={{fontSize:"18px",color:T.settled,fontFamily:"'Playfair Display',Georgia,serif",marginTop:"2px"}}>Total: IDR {Number(o.totalIDR).toLocaleString("id-ID")}</p>}
                       </div>}
                     </div>
-                    <p style={{fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:o?T.settled:T.ghost,marginTop:"3px",whiteSpace:"nowrap"}}>{o?"✓ Terkirim":"Belum Order"}</p>
+                    <p style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:o?T.settled:T.ghost,marginTop:"3px",whiteSpace:"nowrap"}}>{o?"✓ Terkirim":"Belum Order"}</p>
                   </div>
                 );
               })}
@@ -2119,12 +2374,12 @@ class ErrorBoundary extends Component {
       return (
         <div style={{minHeight:"100vh",background:"#f3ede4",display:"flex",alignItems:"center",justifyContent:"center",padding:"40px 24px"}}>
           <div style={{maxWidth:"600px",width:"100%"}}>
-            <p style={{fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",color:"#9c8e82",marginBottom:"16px"}}>Terjadi Kesalahan</p>
+            <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:"#9c8e82",marginBottom:"16px"}}>Terjadi Kesalahan</p>
             <h2 style={{fontFamily:"Georgia,serif",fontSize:"24px",color:"#1a1512",marginBottom:"24px"}}>App crashed — detail untuk koordinator:</h2>
-            <pre style={{background:"#fff",padding:"20px",fontSize:"13px",color:"#7a2e20",overflowX:"auto",border:"1px solid #e0d5c8",whiteSpace:"pre-wrap",wordBreak:"break-all"}}>
+            <pre style={{background:"#fff",padding:"20px",fontSize:"17px",color:"#7a2e20",overflowX:"auto",border:"1px solid #e0d5c8",whiteSpace:"pre-wrap",wordBreak:"break-all"}}>
               {this.state.error.toString()}{"\n\n"}{this.state.error.stack}
             </pre>
-            <button onClick={()=>window.location.reload()} style={{marginTop:"24px",background:"none",border:"1px solid #243d30",padding:"10px 24px",cursor:"pointer",fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:"#243d30"}}>Muat Ulang</button>
+            <button onClick={()=>window.location.reload()} style={{marginTop:"24px",background:"none",border:"1px solid #243d30",padding:"10px 24px",cursor:"pointer",fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:"#243d30"}}>Muat Ulang</button>
           </div>
         </div>
       );
@@ -2621,21 +2876,80 @@ const SizeTab = memo(({user}) => {
   );
 });
 
-export default function App() {
-  const [screen,setScreen] = useState("password");
-  const [user,setUser] = useState("");
-  const [tab,setTab] = useState("budget");
+const SESSION_KEY = "pos_session";
+const IDLE_MS = 15 * 60 * 1000; // 15 menit idle / tidak diakses
+const loadSession = () => {
+  try { const s = JSON.parse(localStorage.getItem(SESSION_KEY)||"null");
+    if(s && s.user && s.ts && (Date.now()-s.ts < IDLE_MS)) return s; } catch {}
+  return null;
+};
+const saveSession = user => { try { localStorage.setItem(SESSION_KEY, JSON.stringify({user, ts:Date.now()})); } catch {} };
+const touchSession = () => { try { const s=JSON.parse(localStorage.getItem(SESSION_KEY)||"null"); if(s&&s.user){ s.ts=Date.now(); localStorage.setItem(SESSION_KEY, JSON.stringify(s)); } } catch {} };
+const clearSession = () => { try { localStorage.removeItem(SESSION_KEY); } catch {} };
 
-  if(screen==="password") return <PasswordScreen onSuccess={()=>setScreen("name")}/>;
-  if(screen==="name") return <NameScreen onSuccess={n=>{setUser(n);setScreen("main");}}/>;
+export default function App() {
+  const initial = typeof window!=="undefined" ? loadSession() : null;
+  const [screen,setScreen] = useState(initial ? "main" : "password");
+  const [user,setUser] = useState(initial ? initial.user : "");
+  const [tab,setTab] = useState("itinerary");
+
+  const audioRef = useRef(null);
+  const [musicMuted,setMusicMuted] = useState(()=>{ try{ return localStorage.getItem("pos_music_muted")==="1"; }catch{ return false; } });
+  const startMusic = useCallback(()=>{
+    const a=audioRef.current; if(!a) return;
+    a.volume=0.5;
+    try{ a.muted = localStorage.getItem("pos_music_muted")==="1"; }catch{}
+    a.play().catch(()=>{});
+  },[]);
+  const toggleMute = useCallback(()=>{
+    setMusicMuted(m=>{
+      const nm=!m;
+      try{ localStorage.setItem("pos_music_muted", nm?"1":"0"); }catch{}
+      const a=audioRef.current;
+      if(a){ a.muted=nm; if(!nm){ a.volume=0.5; a.play().catch(()=>{}); } }
+      return nm;
+    });
+  },[]);
+
+  // Persistensi sesi: tetap login saat refresh; logout hanya setelah 15 menit idle / tidak diakses
+  useEffect(() => {
+    if(screen!=="main") return;
+    touchSession();
+    const logout = () => { clearSession(); setUser(""); setScreen("password"); };
+    let last = Date.now();
+    const onActivity = () => { const now=Date.now(); if(now-last>10000){ last=now; touchSession(); } };
+    const events = ["pointerdown","keydown","touchstart","scroll"];
+    events.forEach(e=>window.addEventListener(e,onActivity,{passive:true}));
+    const check = setInterval(()=>{ if(!loadSession()) logout(); }, 30000);
+    const onVisible = () => { if(document.visibilityState==="visible" && !loadSession()) logout(); };
+    document.addEventListener("visibilitychange",onVisible);
+    return () => { events.forEach(e=>window.removeEventListener(e,onActivity)); clearInterval(check); document.removeEventListener("visibilitychange",onVisible); };
+  }, [screen]);
+
+  useEffect(()=>{
+    if(screen!=="main") return;
+    startMusic();
+    const onFirst=()=>{ startMusic(); window.removeEventListener("pointerdown",onFirst); };
+    window.addEventListener("pointerdown",onFirst);
+    return ()=>window.removeEventListener("pointerdown",onFirst);
+  },[screen,startMusic]);
+
   return (
-    <ErrorBoundary>
-      <Shell user={user} tab={tab} setTab={setTab}>
-        {tab==="budget"    && <BudgetTab user={user}/>}
-        {tab==="itinerary" && <ItineraryTab/>}
-        {tab==="size"      && <SizeTab user={user}/>}
-        {tab==="food"      && <FoodOrderTab user={user}/>}
-      </Shell>
-    </ErrorBoundary>
+    <>
+      <audio ref={audioRef} src="/welcome-jogja2.mp3" loop preload="auto" />
+      {screen==="password" && <PasswordScreen onSuccess={()=>setScreen("name")}/>}
+      {screen==="name" && <NameScreen onSuccess={n=>{setUser(n);saveSession(n);setScreen("main");startMusic();}}/>}
+      {screen==="main" && (
+        <ErrorBoundary>
+          <Shell user={user} tab={tab} setTab={setTab} muted={musicMuted} onToggleMute={toggleMute}>
+            {tab==="budget"    && <BudgetTab user={user}/>}
+            {tab==="itinerary" && <ItineraryTab/>}
+            {tab==="size"      && <SizeTab user={user}/>}
+            {tab==="makan"     && <MakanTab user={user}/>}
+            {tab==="oleholeh"  && <OlehOlehTab user={user}/>}
+          </Shell>
+        </ErrorBoundary>
+      )}
+    </>
   );
 }
