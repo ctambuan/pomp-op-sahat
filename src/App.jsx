@@ -2553,8 +2553,8 @@ const SizeCountdown = memo(() => {
   if(diff<=0) return (
     <div style={{background:T.dangerBg,border:"1px solid #e8b4a8",borderLeft:`3px solid ${T.danger}`,padding:"18px 22px",marginBottom:"32px",display:"flex",alignItems:"center",gap:"12px",flexWrap:"wrap"}}>
       <span style={{width:"8px",height:"8px",borderRadius:"50%",background:T.danger,display:"inline-block"}}/>
-      <p style={{fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.danger,fontWeight:500,margin:0}}>Pengumpulan ukuran telah ditutup</p>
-      <span style={{fontSize:"12px",color:T.muted}}>Deadline {SIZE_DEADLINE_LABEL} terlewati</span>
+      <p style={{fontSize:"14px",letterSpacing:"2px",textTransform:"uppercase",color:T.danger,fontWeight:500,margin:0}}>Pengumpulan ukuran telah ditutup</p>
+      <span style={{fontSize:"14px",color:T.muted}}>Deadline {SIZE_DEADLINE_LABEL} terlewati</span>
     </div>
   );
 
@@ -2567,15 +2567,15 @@ const SizeCountdown = memo(() => {
     <div style={{background:T.cream,border:`1px solid ${urgent?"#e8b4a8":T.line}`,borderLeft:`3px solid ${accent}`,padding:"20px 24px",marginBottom:"32px"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"18px"}}>
         <div>
-          <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:urgent?T.danger:T.muted,marginBottom:"4px",fontWeight:urgent?500:400}}>{urgent?"Segera dikunci":"Form dikunci dalam"}</p>
-          <p style={{fontSize:"11px",color:T.muted}}>Deadline {SIZE_DEADLINE_LABEL}</p>
+          <p style={{fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",color:urgent?T.danger:T.muted,marginBottom:"4px",fontWeight:urgent?500:400}}>{urgent?"Segera dikunci":"Form dikunci dalam"}</p>
+          <p style={{fontSize:"13px",color:T.muted}}>Deadline {SIZE_DEADLINE_LABEL}</p>
         </div>
         <div style={{display:"flex",gap:"18px"}}>
           {units.map((u,i)=>(
             <div key={u.l} style={{display:"flex",alignItems:"flex-start",gap:"18px"}}>
               <div style={{textAlign:"center",minWidth:"42px"}}>
                 <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"30px",fontWeight:500,color:accent,lineHeight:1}}>{String(u.n).padStart(2,"0")}</p>
-                <p style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginTop:"6px"}}>{u.l}</p>
+                <p style={{fontSize:"12px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginTop:"6px"}}>{u.l}</p>
               </div>
               {i<units.length-1&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"26px",color:T.ghost,lineHeight:1.1}}>:</span>}
             </div>
@@ -2609,29 +2609,51 @@ const SizeTab = memo(({user}) => {
   // siapa saja yang bisa diisi user ini: diri sendiri + anggota household
   const fillableFor = ALL_PAX.filter(p => p.name===user || (isCoord ? true : p.hh===myHH));
 
+  // baca per-peserta langsung — TIDAK menggunakan sList (sList baca parent node, tidak reliable)
+  // pattern sama persis dengan food ordering yang sudah terbukti jalan
   const loadAll = useCallback(async () => {
     try {
-      const keys = await sList("size.");
+      const results = await Promise.all(
+        ALL_PAX.map(async p => {
+          const key = `size.${p.name.replace(/\s+/g,"_")}`;
+          const v = await sGet(key);
+          return [p.name, v];
+        })
+      );
       const grouped = {};
-      for(const k of keys){
-        const v = await sGet(k);
-        if(v){ const name=k.replace("size.","").replace(/_/g," "); grouped[name]=JSON.parse(v); }
-      }
+      results.forEach(([name, v]) => {
+        if(v){ try{ grouped[name] = JSON.parse(v); }catch{} }
+      });
       setAllSizes(grouped);
       setLastSync(new Date());
+      setSyncError(null);
     } catch { setSyncError("Gagal memuat data. Cek koneksi."); }
   }, []);
 
-  useEffect(()=>{ (async()=>{ setLoading(true); await loadAll(); setLoading(false); })(); }, [loadAll]);
+  useEffect(()=>{
+    let cancelled=false;
+    (async()=>{ setLoading(true); await loadAll(); if(!cancelled) setLoading(false); })();
+    return ()=>{ cancelled=true; };
+  }, [loadAll]);
   useEffect(()=>{ const id=setInterval(loadAll,30000); return ()=>clearInterval(id); },[loadAll]);
 
-  // saat target berganti, isi draft dari data tersimpan (kalau ada)
+  // target berubah → reset draft dari data tersimpan
   useEffect(()=>{
     const ex = allSizes[target];
     setDraft(ex ? {baju:ex.baju||"",celana:ex.celana||"",topi:ex.topi||"",sepatu:ex.sepatu||"",catatan:ex.catatan||""}
                 : {baju:"",celana:"",topi:"",sepatu:"",catatan:""});
     setOpenChart(null); setOpenHelper(null); setHelperResult(null); setHelperCm(""); setHelperBrand(""); setHelperBrandSize("");
-  }, [target, allSizes]);
+  }, [target]); // sengaja: allSizes TIDAK di deps — auto-refresh tidak boleh reset form yang sedang diisi
+
+  // allSizes berubah → hanya pre-fill jika draft masih kosong
+  useEffect(()=>{
+    const ex = allSizes[target];
+    if(!ex) return;
+    setDraft(prev => {
+      if(prev.baju || prev.celana || prev.topi || prev.sepatu) return prev; // user sedang mengisi
+      return {baju:ex.baju||"",celana:ex.celana||"",topi:ex.topi||"",sepatu:ex.sepatu||"",catatan:ex.catatan||""};
+    });
+  }, [allSizes]); // sengaja: target tidak di deps
 
   const setField = (gid,val) => setDraft(d=>({...d,[gid]:d[gid]===val?"":val}));
 
@@ -2646,8 +2668,17 @@ const SizeTab = memo(({user}) => {
         baju:draft.baju, celana:draft.celana, topi:draft.topi, sepatu:draft.sepatu,
         catatan:draft.catatan||"", filledBy:user, submittedAt:new Date().toISOString()};
       const ok = await sSet(key, JSON.stringify(rec));
-      if(ok){ await loadAll(); setTab("recap"); }
-      else setSyncError("Gagal menyimpan. Coba lagi.");
+      if(ok){
+        // verifikasi: baca kembali dari Firebase untuk pastikan data tersimpan di server
+        const verify = await sGet(key);
+        if(verify){
+          // update lokal langsung (tanpa re-loadAll yang rawan race condition)
+          setAllSizes(prev => ({...prev, [target]: rec}));
+          setTab("recap");
+        } else {
+          setSyncError("⚠ Tersimpan lokal tapi tidak terkonfirmasi server. Cek koneksi & coba lagi.");
+        }
+      } else setSyncError("Gagal menyimpan. Coba lagi.");
     } catch { setSyncError("Gagal menyimpan. Coba lagi."); }
     setSaving(false);
   };
@@ -2672,46 +2703,46 @@ const SizeTab = memo(({user}) => {
 
   const filledCount = ALL_PAX.filter(p=>allSizes[p.name]&&(allSizes[p.name].baju||allSizes[p.name].celana||allSizes[p.name].topi||allSizes[p.name].sepatu)).length;
 
-  if(loading) return (<div style={{textAlign:"center",padding:"80px 0",color:T.muted}}><p style={{fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase"}}>Memuat data dari Firebase…</p></div>);
+  if(loading) return (<div style={{textAlign:"center",padding:"80px 0",color:T.muted}}><p style={{fontSize:"14px",letterSpacing:"2px",textTransform:"uppercase"}}>Memuat data dari Firebase…</p></div>);
 
   return (
     <div className="fade-up">
       <div style={{marginBottom:"40px"}}>
-        <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pengumpulan Ukuran</p>
+        <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pengumpulan Ukuran</p>
         <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"36px",fontWeight:400,color:T.ink}}>Ukuran Pakaian</h2>
-        <p style={{fontSize:"13px",color:T.muted,marginTop:"8px"}}>Baju, celana, topi/blangkon & sepatu untuk seluruh peserta. Orang tua dapat mengisikan untuk anggota keluarga.</p>
-        <p style={{fontSize:"12px",color:pastDeadline?T.danger:T.warn,marginTop:"10px",letterSpacing:"0.3px"}}>{pastDeadline?`Pengumpulan ukuran telah ditutup (deadline ${SIZE_DEADLINE_LABEL}).`:`Deadline pengisian: ${SIZE_DEADLINE_LABEL} · dapat diubah & submit ulang kapan saja sebelum deadline.`}</p>
+        <p style={{fontSize:"15px",color:T.muted,marginTop:"8px"}}>Baju, celana, topi/blangkon & sepatu untuk seluruh peserta. Orang tua dapat mengisikan untuk anggota keluarga.</p>
+        <p style={{fontSize:"14px",color:pastDeadline?T.danger:T.warn,marginTop:"10px",letterSpacing:"0.3px"}}>{pastDeadline?`Pengumpulan ukuran telah ditutup (deadline ${SIZE_DEADLINE_LABEL}).`:`Deadline pengisian: ${SIZE_DEADLINE_LABEL} · dapat diubah & submit ulang kapan saja sebelum deadline.`}</p>
       </div>
 
       <SizeCountdown/>
 
       <div style={{display:"flex",borderBottom:`1px solid ${T.line}`,marginBottom:"40px"}}>
         {[{id:"form",label:"Form Ukuran"},{id:"recap",label:`Rekap — ${filledCount}/${ALL_PAX.length}`}].map(t=>(
-          <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",padding:"0 32px 16px 0",cursor:"pointer",fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:tab===t.id?500:300,color:tab===t.id?T.forest:T.muted,borderBottom:tab===t.id?`2px solid ${T.forest}`:"2px solid transparent",marginBottom:"-1px",transition:"all 0.2s"}}>{t.label}</button>
+          <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",padding:"0 32px 16px 0",cursor:"pointer",fontSize:"14px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:tab===t.id?500:300,color:tab===t.id?T.forest:T.muted,borderBottom:tab===t.id?`2px solid ${T.forest}`:"2px solid transparent",marginBottom:"-1px",transition:"all 0.2s"}}>{t.label}</button>
         ))}
       </div>
 
-      {syncError&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"12px 16px",marginBottom:"24px"}}><p style={{fontSize:"12px",color:T.danger}}>{syncError}</p></div>}
+      {syncError&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"12px 16px",marginBottom:"24px"}}><p style={{fontSize:"14px",color:T.danger}}>{syncError}</p></div>}
 
       {tab==="form"&&<div>
         {/* pilih untuk siapa */}
         <div style={{marginBottom:"32px"}}>
-          <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"14px"}}>Mengisi untuk</p>
+          <p style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"14px"}}>Mengisi untuk</p>
           <div style={{display:"flex",flexWrap:"wrap",gap:"8px"}}>
             {fillableFor.map(p=>{
               const done = allSizes[p.name]&&(allSizes[p.name].baju||allSizes[p.name].celana||allSizes[p.name].topi||allSizes[p.name].sepatu);
               const sel = target===p.name;
               return (
-                <button key={p.name} onClick={()=>setTarget(p.name)} style={{background:sel?T.forest:"transparent",border:`1px solid ${sel?T.forest:T.lineD}`,color:sel?"white":T.mid,padding:"7px 14px",cursor:"pointer",fontSize:"12px",letterSpacing:"0.3px",transition:"all 0.15s",display:"flex",alignItems:"center",gap:"7px"}}>
-                  {p.name===user?"Saya — ":""}{p.name.split(" ")[0]} {done&&<span style={{fontSize:"10px",color:sel?"#cfe0cc":T.settled}}>✓</span>}
+                <button key={p.name} onClick={()=>setTarget(p.name)} style={{background:sel?T.forest:"transparent",border:`1px solid ${sel?T.forest:T.lineD}`,color:sel?"white":T.mid,padding:"7px 14px",cursor:"pointer",fontSize:"14px",letterSpacing:"0.3px",transition:"all 0.15s",display:"flex",alignItems:"center",gap:"7px"}}>
+                  {p.name===user?"Saya — ":""}{p.name.split(" ")[0]} {done&&<span style={{fontSize:"12px",color:sel?"#cfe0cc":T.settled}}>✓</span>}
                 </button>
               );
             })}
           </div>
-          {target!==user&&<p style={{fontSize:"11px",color:T.muted,fontStyle:"italic",marginTop:"10px"}}>Anda mengisi untuk {target}. Akan tercatat "diisi oleh {user}".</p>}
+          {target!==user&&<p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"10px"}}>Anda mengisi untuk {target}. Akan tercatat "diisi oleh {user}".</p>}
           {allSizes[target]&&(allSizes[target].baju||allSizes[target].celana||allSizes[target].topi||allSizes[target].sepatu)&&(
             <div style={{background:T.settledBg,border:`1px solid ${T.settled}`,padding:"10px 14px",marginTop:"12px"}}>
-              <p style={{fontSize:"11px",color:T.settled}}>✓ Ukuran {target===user?"Anda":target.split(" ")[0]} sudah tersimpan. Anda dapat mengubah pilihan di bawah lalu konfirmasi ulang — data lama akan ditimpa.</p>
+              <p style={{fontSize:"13px",color:T.settled}}>✓ Ukuran {target===user?"Anda":target.split(" ")[0]} sudah tersimpan. Anda dapat mengubah pilihan di bawah lalu konfirmasi ulang — data lama akan ditimpa.</p>
             </div>
           )}
         </div>
@@ -2720,22 +2751,22 @@ const SizeTab = memo(({user}) => {
         {SIZE_GARMENTS.map(g=>(
           <div key={g.id} style={{marginBottom:"36px",paddingBottom:"32px",borderBottom:`1px solid ${T.line}`}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",flexWrap:"wrap",gap:"8px",marginBottom:"14px"}}>
-              <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{g.label}</h3>
+              <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",fontWeight:400,color:T.ink}}>{g.label}</h3>
               <div style={{display:"flex",gap:"16px"}}>
-                <button onClick={()=>{setOpenChart(openChart===g.id?null:g.id);}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"11px",letterSpacing:"1px",textTransform:"uppercase",color:T.muted,borderBottom:`1px solid ${openChart===g.id?T.forest:"transparent"}`,padding:"2px 0"}}>Panduan ukuran</button>
-                <button onClick={()=>{setOpenHelper(openHelper===g.id?null:g.id);setHelperMode("cm");setHelperResult(null);setHelperCm("");setHelperBrand("");setHelperBrandSize("");}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"11px",letterSpacing:"1px",textTransform:"uppercase",color:T.gold,borderBottom:`1px solid ${openHelper===g.id?T.gold:"transparent"}`,padding:"2px 0"}}>Bantu pilih ukuran</button>
+                <button onClick={()=>{setOpenChart(openChart===g.id?null:g.id);}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"13px",letterSpacing:"1px",textTransform:"uppercase",color:T.muted,borderBottom:`1px solid ${openChart===g.id?T.forest:"transparent"}`,padding:"2px 0"}}>Panduan ukuran</button>
+                <button onClick={()=>{setOpenHelper(openHelper===g.id?null:g.id);setHelperMode("cm");setHelperResult(null);setHelperCm("");setHelperBrand("");setHelperBrandSize("");}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"13px",letterSpacing:"1px",textTransform:"uppercase",color:T.gold,borderBottom:`1px solid ${openHelper===g.id?T.gold:"transparent"}`,padding:"2px 0"}}>Bantu pilih ukuran</button>
               </div>
             </div>
 
             {/* chart panel */}
             {openChart===g.id&&(
               <div style={{background:T.cream,padding:"18px 20px",marginBottom:"16px",border:`1px solid ${T.line}`}}>
-                <p style={{fontSize:"11px",color:T.muted,fontStyle:"italic",marginBottom:"14px"}}>{g.measure}</p>
+                <p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginBottom:"14px"}}>{g.measure}</p>
                 {g.groups.map(grp=>(
                   <div key={grp.name} style={{marginBottom:"14px"}}>
-                    <p style={{fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,marginBottom:"8px"}}>{grp.name}</p>
-                    <div style={{display:"grid",gridTemplateColumns:`90px repeat(${g.chartCols.length-1},1fr)`,gap:"2px 12px",fontSize:"12px"}}>
-                      {g.chartCols.map((c,i)=><span key={c} style={{fontSize:"10px",letterSpacing:"1px",textTransform:"uppercase",color:T.muted,paddingBottom:"4px",borderBottom:`1px solid ${T.lineD}`,textAlign:i===0?"left":"right"}}>{c}</span>)}
+                    <p style={{fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,marginBottom:"8px"}}>{grp.name}</p>
+                    <div style={{display:"grid",gridTemplateColumns:`90px repeat(${g.chartCols.length-1},1fr)`,gap:"2px 12px",fontSize:"14px"}}>
+                      {g.chartCols.map((c,i)=><span key={c} style={{fontSize:"12px",letterSpacing:"1px",textTransform:"uppercase",color:T.muted,paddingBottom:"4px",borderBottom:`1px solid ${T.lineD}`,textAlign:i===0?"left":"right"}}>{c}</span>)}
                       {grp.items.map(it=>(<Fragment key={it.v}>
                         <span style={{color:T.ink,paddingTop:"3px"}}>{it.v}</span>
                         {it.row.map((cell,j)=><span key={j} style={{color:T.mid,textAlign:"right",paddingTop:"3px",fontFamily:"'Playfair Display',Georgia,serif"}}>{cell}</span>)}
@@ -2750,44 +2781,44 @@ const SizeTab = memo(({user}) => {
             {openHelper===g.id&&(
               <div style={{background:"#f6f3ec",padding:"18px 20px",marginBottom:"16px",border:`1px solid ${T.goldL}`}}>
                 <div style={{display:"flex",gap:"6px",marginBottom:"14px"}}>
-                  <button onClick={()=>{setHelperMode("cm");setHelperResult(null);}} style={{flex:"0 0 auto",background:helperMode==="cm"?T.gold:"transparent",border:`1px solid ${T.goldL}`,color:helperMode==="cm"?"white":T.mid,padding:"5px 14px",cursor:"pointer",fontSize:"11px",letterSpacing:"1px",textTransform:"uppercase"}}>Ukur (cm)</button>
-                  {!g.noBrand&&<button onClick={()=>{setHelperMode("brand");setHelperResult(null);}} style={{flex:"0 0 auto",background:helperMode==="brand"?T.gold:"transparent",border:`1px solid ${T.goldL}`,color:helperMode==="brand"?"white":T.mid,padding:"5px 14px",cursor:"pointer",fontSize:"11px",letterSpacing:"1px",textTransform:"uppercase"}}>Dari merek lain</button>}
+                  <button onClick={()=>{setHelperMode("cm");setHelperResult(null);}} style={{flex:"0 0 auto",background:helperMode==="cm"?T.gold:"transparent",border:`1px solid ${T.goldL}`,color:helperMode==="cm"?"white":T.mid,padding:"5px 14px",cursor:"pointer",fontSize:"13px",letterSpacing:"1px",textTransform:"uppercase"}}>Ukur (cm)</button>
+                  {!g.noBrand&&<button onClick={()=>{setHelperMode("brand");setHelperResult(null);}} style={{flex:"0 0 auto",background:helperMode==="brand"?T.gold:"transparent",border:`1px solid ${T.goldL}`,color:helperMode==="brand"?"white":T.mid,padding:"5px 14px",cursor:"pointer",fontSize:"13px",letterSpacing:"1px",textTransform:"uppercase"}}>Dari merek lain</button>}
                 </div>
 
                 {helperMode==="cm"&&<div>
-                  <p style={{fontSize:"11px",color:T.muted,marginBottom:"10px"}}>{g.measure}</p>
+                  <p style={{fontSize:"13px",color:T.muted,marginBottom:"10px"}}>{g.measure}</p>
                   <div style={{display:"flex",gap:"10px",alignItems:"center",flexWrap:"wrap"}}>
                     <input value={helperCm} onChange={e=>setHelperCm(e.target.value)} inputMode="decimal" placeholder={g.helperLabel}
-                      style={{flex:"1 1 200px",padding:"10px 12px",border:`1px solid ${T.lineD}`,background:"white",fontSize:"13px",color:T.ink,outline:"none"}}/>
-                    <button onClick={()=>runHelper(g)} style={{background:T.gold,border:"none",color:"white",padding:"10px 20px",cursor:"pointer",fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase"}}>Sarankan</button>
+                      style={{flex:"1 1 200px",padding:"10px 12px",border:`1px solid ${T.lineD}`,background:"white",fontSize:"15px",color:T.ink,outline:"none"}}/>
+                    <button onClick={()=>runHelper(g)} style={{background:T.gold,border:"none",color:"white",padding:"10px 20px",cursor:"pointer",fontSize:"13px",letterSpacing:"1.5px",textTransform:"uppercase"}}>Sarankan</button>
                   </div>
                 </div>}
 
                 {helperMode==="brand"&&!g.noBrand&&<div>
-                  <p style={{fontSize:"11px",color:T.muted,marginBottom:"10px"}}>Pilih merek yang biasa Anda pakai, lalu ukuran existing Anda.</p>
+                  <p style={{fontSize:"13px",color:T.muted,marginBottom:"10px"}}>Pilih merek yang biasa Anda pakai, lalu ukuran existing Anda.</p>
                   <div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"10px"}}>
                     {Object.keys(g.brands).map(b=>(
-                      <button key={b} onClick={()=>{setHelperBrand(b);setHelperResult(null);}} style={{background:helperBrand===b?T.forest:"transparent",border:`1px solid ${helperBrand===b?T.forest:T.lineD}`,color:helperBrand===b?"white":T.mid,padding:"6px 14px",cursor:"pointer",fontSize:"12px"}}>{b}</button>
+                      <button key={b} onClick={()=>{setHelperBrand(b);setHelperResult(null);}} style={{background:helperBrand===b?T.forest:"transparent",border:`1px solid ${helperBrand===b?T.forest:T.lineD}`,color:helperBrand===b?"white":T.mid,padding:"6px 14px",cursor:"pointer",fontSize:"14px"}}>{b}</button>
                     ))}
                   </div>
                   {helperBrand&&<div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"12px"}}>
                     {g.brandSizes.map(s=>(
-                      <button key={s} onClick={()=>{setHelperBrandSize(s);setHelperResult(null);}} style={{background:helperBrandSize===s?T.gold:"transparent",border:`1px solid ${helperBrandSize===s?T.gold:T.lineD}`,color:helperBrandSize===s?"white":T.mid,padding:"6px 14px",cursor:"pointer",fontSize:"12px"}}>{g.id==="sepatu"?`EU ${s}`:s}</button>
+                      <button key={s} onClick={()=>{setHelperBrandSize(s);setHelperResult(null);}} style={{background:helperBrandSize===s?T.gold:"transparent",border:`1px solid ${helperBrandSize===s?T.gold:T.lineD}`,color:helperBrandSize===s?"white":T.mid,padding:"6px 14px",cursor:"pointer",fontSize:"14px"}}>{g.id==="sepatu"?`EU ${s}`:s}</button>
                     ))}
                   </div>}
-                  <button onClick={()=>runHelper(g)} disabled={!helperBrand||!helperBrandSize} style={{background:helperBrand&&helperBrandSize?T.gold:T.lineD,border:"none",color:"white",padding:"9px 20px",cursor:helperBrand&&helperBrandSize?"pointer":"not-allowed",fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase"}}>Sarankan</button>
-                  <p style={{fontSize:"10px",color:T.muted,fontStyle:"italic",marginTop:"10px"}}>Perkiraan — verifikasi dengan panduan cm. Potongan tiap merek berbeda.</p>
+                  <button onClick={()=>runHelper(g)} disabled={!helperBrand||!helperBrandSize} style={{background:helperBrand&&helperBrandSize?T.gold:T.lineD,border:"none",color:"white",padding:"9px 20px",cursor:helperBrand&&helperBrandSize?"pointer":"not-allowed",fontSize:"13px",letterSpacing:"1.5px",textTransform:"uppercase"}}>Sarankan</button>
+                  <p style={{fontSize:"12px",color:T.muted,fontStyle:"italic",marginTop:"10px"}}>Perkiraan — verifikasi dengan panduan cm. Potongan tiap merek berbeda.</p>
                 </div>}
 
                 {helperResult&&<div style={{marginTop:"14px",paddingTop:"14px",borderTop:`1px solid ${T.goldL}`}}>
                   {helperResult.size
                     ? <div style={{display:"flex",alignItems:"center",gap:"14px",flexWrap:"wrap"}}>
-                        <span style={{fontSize:"11px",color:T.muted}}>Saran ukuran:</span>
+                        <span style={{fontSize:"13px",color:T.muted}}>Saran ukuran:</span>
                         <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.forest,fontWeight:500}}>{g.id==="sepatu"?`EU ${helperResult.size}`:helperResult.size}</span>
-                        <button onClick={()=>setDraft(d=>({...d,[g.id]:helperResult.size}))} style={{background:"none",border:`1px solid ${T.forest}`,color:T.forest,padding:"6px 16px",cursor:"pointer",fontSize:"11px",letterSpacing:"1px",textTransform:"uppercase"}}>Pakai ini</button>
+                        <button onClick={()=>setDraft(d=>({...d,[g.id]:helperResult.size}))} style={{background:"none",border:`1px solid ${T.forest}`,color:T.forest,padding:"6px 16px",cursor:"pointer",fontSize:"13px",letterSpacing:"1px",textTransform:"uppercase"}}>Pakai ini</button>
                       </div>
-                    : <p style={{fontSize:"12px",color:T.danger}}>{helperResult.note}</p>}
-                  {helperResult.size&&helperResult.note&&<p style={{fontSize:"11px",color:T.muted,fontStyle:"italic",marginTop:"8px"}}>{helperResult.note}</p>}
+                    : <p style={{fontSize:"14px",color:T.danger}}>{helperResult.note}</p>}
+                  {helperResult.size&&helperResult.note&&<p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"8px"}}>{helperResult.note}</p>}
                 </div>}
               </div>
             )}
@@ -2795,11 +2826,11 @@ const SizeTab = memo(({user}) => {
             {/* pilihan ukuran */}
             {g.groups.map(grp=>(
               <div key={grp.name} style={{marginBottom:"12px"}}>
-                <p style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>{grp.name}</p>
+                <p style={{fontSize:"12px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>{grp.name}</p>
                 <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
                   {grp.items.map(it=>{
                     const sel=draft[g.id]===it.v;
-                    return <button key={it.v} onClick={()=>setField(g.id,it.v)} title={it.row.join(" · ")} style={{background:sel?T.forest:"transparent",border:`1px solid ${sel?T.forest:T.lineD}`,color:sel?"white":T.mid,padding:"7px 14px",cursor:"pointer",fontSize:"12px",letterSpacing:"0.3px",transition:"all 0.15s"}}>{g.id==="sepatu"?`EU ${it.v}`:it.v}</button>;
+                    return <button key={it.v} onClick={()=>setField(g.id,it.v)} title={it.row.join(" · ")} style={{background:sel?T.forest:"transparent",border:`1px solid ${sel?T.forest:T.lineD}`,color:sel?"white":T.mid,padding:"7px 14px",cursor:"pointer",fontSize:"14px",letterSpacing:"0.3px",transition:"all 0.15s"}}>{g.id==="sepatu"?`EU ${it.v}`:it.v}</button>;
                   })}
                 </div>
               </div>
@@ -2809,19 +2840,19 @@ const SizeTab = memo(({user}) => {
 
         {/* catatan */}
         <div style={{marginBottom:"32px"}}>
-          <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"10px"}}>Catatan (opsional)</p>
+          <p style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"10px"}}>Catatan (opsional)</p>
           <input value={draft.catatan} onChange={e=>setDraft(d=>({...d,catatan:e.target.value}))} placeholder="mis. suka fit longgar, alergi bahan tertentu"
-            style={{width:"100%",maxWidth:"460px",padding:"10px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"13px",color:T.mid,outline:"none"}}/>
+            style={{width:"100%",maxWidth:"460px",padding:"10px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"15px",color:T.mid,outline:"none"}}/>
         </div>
 
         {/* ringkasan + submit */}
         <div style={{background:T.cream,padding:"24px",borderTop:`2px solid ${T.forest}`}}>
-          <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>Ukuran {target===user?"Saya":target}</p>
+          <p style={{fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>Ukuran {target===user?"Saya":target}</p>
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(120px,1fr))",gap:"16px",marginBottom:"20px"}}>
             {SIZE_GARMENTS.map(g=>(
               <div key={g.id}>
-                <p style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"5px"}}>{g.label.split(" ")[0]}</p>
-                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"17px",color:draft[g.id]?T.ink:T.ghost}}>{draft[g.id]?(g.id==="sepatu"?`EU ${draft[g.id]}`:draft[g.id]):"—"}</p>
+                <p style={{fontSize:"12px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"5px"}}>{g.label.split(" ")[0]}</p>
+                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"19px",color:draft[g.id]?T.ink:T.ghost}}>{draft[g.id]?(g.id==="sepatu"?`EU ${draft[g.id]}`:draft[g.id]):"—"}</p>
               </div>
             ))}
           </div>
@@ -2830,7 +2861,7 @@ const SizeTab = memo(({user}) => {
             const blocked = pastDeadline&&!isCoord;
             const nm = target===user?"Saya":target.split(" ")[0];
             return (
-              <button onClick={submit} disabled={saving||blocked} style={{width:"100%",padding:"14px",background:blocked?T.muted:T.forest,color:"white",border:"none",cursor:blocked?"not-allowed":saving?"wait":"pointer",fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500}}>
+              <button onClick={submit} disabled={saving||blocked} style={{width:"100%",padding:"14px",background:blocked?T.muted:T.forest,color:"white",border:"none",cursor:blocked?"not-allowed":saving?"wait":"pointer",fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500}}>
                 {blocked?"Pengumpulan Ditutup":saving?"Menyimpan…":`${already?"Perbarui":"Konfirmasi"} Ukuran ${nm}`}
               </button>
             );
@@ -2840,16 +2871,16 @@ const SizeTab = memo(({user}) => {
 
       {tab==="recap"&&<div>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"24px",flexWrap:"wrap",gap:"12px"}}>
-          <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>{filledCount} dari {ALL_PAX.length} peserta sudah mengisi{lastSync&&<span style={{color:T.ghost}}> · {lastSync.toLocaleTimeString("id-ID")}</span>}</p>
+          <p style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>{filledCount} dari {ALL_PAX.length} peserta sudah mengisi{lastSync&&<span style={{color:T.ghost}}> · {lastSync.toLocaleTimeString("id-ID")}</span>}</p>
           <div style={{display:"flex",gap:"10px"}}>
-            <button onClick={loadAll} style={{background:"none",border:`1px solid ${T.line}`,padding:"7px 16px",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>↻ Refresh</button>
-            {isCoord&&<button onClick={exportCSV} style={{background:T.forest,border:"none",padding:"7px 16px",cursor:"pointer",fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:"white"}}>Export CSV</button>}
+            <button onClick={loadAll} style={{background:"none",border:`1px solid ${T.line}`,padding:"7px 16px",cursor:"pointer",fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>↻ Refresh</button>
+            {isCoord&&<button onClick={exportCSV} style={{background:T.forest,border:"none",padding:"7px 16px",cursor:"pointer",fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:"white"}}>Export CSV</button>}
           </div>
         </div>
         <div style={{overflowX:"auto"}}>
           <div style={{minWidth:"640px"}}>
             <div style={{display:"grid",gridTemplateColumns:"1.6fr 0.5fr 1fr 0.8fr 1fr 0.8fr",gap:"0 12px",padding:"0 0 10px",borderBottom:`2px solid ${T.lineD}`}}>
-              {["Nama","HH","Baju","Celana","Topi","Sepatu"].map(h=><p key={h} style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted}}>{h}</p>)}
+              {["Nama","HH","Baju","Celana","Topi","Sepatu"].map(h=><p key={h} style={{fontSize:"12px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted}}>{h}</p>)}
             </div>
             {ALL_PAX.map(p=>{
               const s=allSizes[p.name]||{};
@@ -2857,20 +2888,20 @@ const SizeTab = memo(({user}) => {
               return (
                 <div key={p.name} style={{display:"grid",gridTemplateColumns:"1.6fr 0.5fr 1fr 0.8fr 1fr 0.8fr",gap:"0 12px",padding:"12px 0",borderBottom:`1px solid ${T.line}`,alignItems:"center",opacity:done?1:0.55}}>
                   <div>
-                    <p style={{fontSize:"13px",color:T.ink}}>{p.name}{p.name===user&&<span style={{fontSize:"10px",color:T.gold}}> (Anda)</span>}</p>
-                    {s.filledBy&&s.filledBy!==p.name&&<p style={{fontSize:"10px",color:T.ghost,fontStyle:"italic"}}>diisi oleh {s.filledBy.split(" ")[0]}</p>}
+                    <p style={{fontSize:"15px",color:T.ink}}>{p.name}{p.name===user&&<span style={{fontSize:"12px",color:T.gold}}> (Anda)</span>}</p>
+                    {s.filledBy&&s.filledBy!==p.name&&<p style={{fontSize:"12px",color:T.ghost,fontStyle:"italic"}}>diisi oleh {s.filledBy.split(" ")[0]}</p>}
                   </div>
-                  <p style={{fontSize:"12px",color:T.muted}}>{p.hh}</p>
-                  <p style={{fontSize:"13px",color:s.baju?T.ink:T.ghost}}>{s.baju||"—"}</p>
-                  <p style={{fontSize:"13px",color:s.celana?T.ink:T.ghost}}>{s.celana||"—"}</p>
-                  <p style={{fontSize:"13px",color:s.topi?T.ink:T.ghost}}>{s.topi||"—"}</p>
-                  <p style={{fontSize:"13px",color:s.sepatu?T.ink:T.ghost}}>{s.sepatu?`EU ${s.sepatu}`:"—"}</p>
+                  <p style={{fontSize:"14px",color:T.muted}}>{p.hh}</p>
+                  <p style={{fontSize:"15px",color:s.baju?T.ink:T.ghost}}>{s.baju||"—"}</p>
+                  <p style={{fontSize:"15px",color:s.celana?T.ink:T.ghost}}>{s.celana||"—"}</p>
+                  <p style={{fontSize:"15px",color:s.topi?T.ink:T.ghost}}>{s.topi||"—"}</p>
+                  <p style={{fontSize:"15px",color:s.sepatu?T.ink:T.ghost}}>{s.sepatu?`EU ${s.sepatu}`:"—"}</p>
                 </div>
               );
             })}
           </div>
         </div>
-        <p style={{fontSize:"11px",color:T.muted,fontStyle:"italic",marginTop:"20px"}}>Catatan ukuran (bila ada) tersimpan & muncul di Export CSV.</p>
+        <p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"20px"}}>Catatan ukuran (bila ada) tersimpan & muncul di Export CSV.</p>
       </div>}
     </div>
   );
