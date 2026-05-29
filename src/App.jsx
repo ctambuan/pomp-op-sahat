@@ -1944,18 +1944,22 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
     } catch { setSyncError("Gagal memuat data. Cek koneksi."); }
   }, [resto.id, resto.participants]);
 
+  const withTimeoutR = (promise, ms=10000) => Promise.race([promise, new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),ms))]);
+
   useEffect(() => {
+    let cancelled=false;
+    const fallback=setTimeout(()=>{ if(!cancelled) setLoading(false); }, 12000);
     (async () => {
       setLoading(true);
       try {
-        const lockVal = await sGet(`lock.${resto.id}`);
+        const lockVal = await withTimeoutR(sGet(`lock.${resto.id}`));
         setLocked(lockVal==="true");
-        const entries = await Promise.all(
+        const entries = await withTimeoutR(Promise.all(
           resto.participants.map(async p => {
             const key = `order.${resto.id}.${p.name.replace(/\s+/g,"_")}`;
             try { const v = await sGet(key); return [p.name, v]; } catch { return [p.name, null]; }
           })
-        );
+        ));
         const grouped = {};
         entries.forEach(([name,v]) => { if(v){ try{ grouped[name]=JSON.parse(v); }catch{} } });
         setAllOrders(grouped);
@@ -1966,7 +1970,6 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
           const cartById = {};
           resto.categories.forEach(c=>c.items.forEach(item=>{ if(myItems[item.name]) cartById[item.id]=myItems[item.name]; }));
           setCart(cartById);
-          // restore config selections from saved order
           const cfgById = {};
           (grouped[user].items||[]).forEach(it=>{
             const match = resto.categories.flatMap(c=>c.items).find(i=>i.name===it.name);
@@ -1982,9 +1985,10 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
           setSubmitted(true);
           setTab("recap");
         }
-      } catch { setSyncError("Gagal memuat data."); }
-      setLoading(false);
+      } catch(e) { setSyncError(e.message==="timeout" ? "Koneksi lambat — ketuk ↻ Refresh." : "Gagal memuat data."); }
+      if(!cancelled){ setLoading(false); clearTimeout(fallback); }
     })();
+    return ()=>{ cancelled=true; clearTimeout(fallback); };
   }, [resto.id, user]);
 
   useEffect(()=>{ const id=setInterval(refresh,30000); return ()=>clearInterval(id); },[refresh]);
@@ -2609,20 +2613,32 @@ const SizeTab = memo(({user}) => {
   // siapa saja yang bisa diisi user ini: diri sendiri + anggota household
   const fillableFor = ALL_PAX.filter(p => p.name===user || (isCoord ? true : p.hh===myHH));
 
+  const withTimeout = (promise, ms=10000) => Promise.race([promise, new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),ms))]);
+
   const loadAll = useCallback(async () => {
     try {
-      const keys = await sList("size.");
+      const keys = await withTimeout(sList("size."));
       const grouped = {};
       for(const k of keys){
-        const v = await sGet(k);
+        const v = await withTimeout(sGet(k));
         if(v){ const name=k.replace("size.","").replace(/_/g," "); grouped[name]=JSON.parse(v); }
       }
       setAllSizes(grouped);
       setLastSync(new Date());
-    } catch { setSyncError("Gagal memuat data. Cek koneksi."); }
+      setSyncError(null);
+    } catch(e) {
+      setSyncError(e.message==="timeout"
+        ? "Koneksi lambat — ketuk Refresh untuk coba lagi."
+        : "Gagal memuat data. Cek koneksi.");
+    }
   }, []);
 
-  useEffect(()=>{ (async()=>{ setLoading(true); await loadAll(); setLoading(false); })(); }, [loadAll]);
+  useEffect(()=>{
+    let cancelled=false;
+    const fallback=setTimeout(()=>{ if(!cancelled) setLoading(false); }, 12000);
+    (async()=>{ setLoading(true); await loadAll(); if(!cancelled){ setLoading(false); clearTimeout(fallback); } })();
+    return ()=>{ cancelled=true; clearTimeout(fallback); };
+  }, [loadAll]);
   useEffect(()=>{ const id=setInterval(loadAll,30000); return ()=>clearInterval(id); },[loadAll]);
 
   // target berubah → selalu reload dari data tersimpan (atau kosongkan)
@@ -2685,7 +2701,16 @@ const SizeTab = memo(({user}) => {
 
   const filledCount = ALL_PAX.filter(p=>isSizeComplete(allSizes[p.name])).length;
 
-  if(loading) return (<div style={{textAlign:"center",padding:"80px 0",color:T.muted}}><p style={{fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase"}}>Memuat data dari Firebase…</p></div>);
+  if(loading) return (
+    <div style={{textAlign:"center",padding:"80px 24px",color:T.muted}}>
+      <p style={{fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",marginBottom:"24px"}}>Memuat data…</p>
+      {syncError&&<>
+        <p style={{fontSize:"16px",color:T.danger,marginBottom:"20px"}}>{syncError}</p>
+        <button onClick={()=>{ setSyncError(null); setLoading(true); loadAll().then(()=>setLoading(false)); }}
+          style={{background:T.forest,border:"none",color:"white",padding:"12px 28px",cursor:"pointer",fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase"}}>↻ Coba Lagi</button>
+      </>}
+    </div>
+  );
 
   return (
     <div className="fade-up">
