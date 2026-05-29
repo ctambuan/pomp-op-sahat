@@ -1497,7 +1497,6 @@ const TRANSFER_INFO = {
   bank:"Bank Jago",
   account:"102816180854",
 };
-const OLEHOLEH_UPLOAD_URL = "https://script.google.com/macros/s/AKfycbyV1sh8kD9z6PuwxsjqkyEUQ5OMTrrqPYYnIAfTTCDj6TXjO-tg1HSGfPyWavcwhN1O/exec";
 const compressImage = (file, maxDim=1600, quality=0.8) => new Promise((resolve,reject)=>{
   const reader = new FileReader();
   reader.onload = () => {
@@ -1527,6 +1526,7 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
   const [allProofs,setAllProofs] = useState({});
   const [uploading,setUploading] = useState(false);
   const [uploadMsg,setUploadMsg] = useState(null);
+  const [viewProof,setViewProof] = useState(null);
 
   useEffect(()=>{
     (async()=>{
@@ -1584,21 +1584,29 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
     if(!file) return;
     setUploading(true); setUploadMsg(null);
     try {
-      const dataBase64 = await compressImage(file);
+      const dataBase64 = await compressImage(file, 1200, 0.72);
       const now = new Date();
       const pad = n=>String(n).padStart(2,"0");
       const stamp = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}${pad(now.getMinutes())}`;
       const filename = `TransferOlehOleh ${user} ${stamp}.jpg`;
-      // Apps Script responds via a redirect without CORS headers, so the response
-      // can't be read cross-origin. Use no-cors fire-and-forget: the request still
-      // reaches the script and the file is saved; we treat no network error as success.
-      await fetch(OLEHOLEH_UPLOAD_URL, { method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify({filename, mimeType:"image/jpeg", dataBase64}) });
+      const key = user.replace(/\s+/g,"_");
+      await sSet(`oleholeh.proofimg.${key}`, dataBase64);
       const rec = {ts:now.toISOString(), filename};
-      await sSet(`oleholeh.proof.${user.replace(/\s+/g,"_")}`, JSON.stringify(rec));
+      await sSet(`oleholeh.proof.${key}`, JSON.stringify(rec));
       setMyProof(rec);
-      setUploadMsg("✓ Bukti terkirim. Terima kasih!");
-    } catch { setUploadMsg("Gagal mengunggah. Periksa koneksi & coba lagi."); }
+      setUploadMsg("✓ Bukti tersimpan. Terima kasih!");
+    } catch { setUploadMsg("Gagal menyimpan. Periksa koneksi & coba lagi."); }
     setUploading(false);
+  };
+
+  const openProof = async (pName) => {
+    const fn = allProofs[pName]?.filename || `TransferOlehOleh ${pName}.jpg`;
+    setViewProof({name:pName, dataUrl:null, filename:fn, error:null});
+    try {
+      const b64 = await sGet(`oleholeh.proofimg.${pName.replace(/\s+/g,"_")}`);
+      if(b64) setViewProof(v=>v&&v.name===pName?{...v,dataUrl:`data:image/jpeg;base64,${b64}`}:v);
+      else setViewProof(v=>v&&v.name===pName?{...v,error:"Gambar tidak ditemukan."}:v);
+    } catch { setViewProof(v=>v&&v.name===pName?{...v,error:"Gagal memuat gambar."}:v); }
   };
 
   const myStores  = Object.values(myOrders);
@@ -1673,7 +1681,7 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
                         </td>
                       ))}
                       <td style={{textAlign:"right",padding:"10px 0 10px 12px",color:T.forest,fontFamily:"'Playfair Display',Georgia,serif",fontWeight:500}}>IDR {rowTotal.toLocaleString("id-ID")}</td>
-                      <td style={{textAlign:"center",padding:"10px 0 10px 16px",whiteSpace:"nowrap"}}>{allProofs[pName]?<span style={{color:T.settled,fontSize:"12px"}}>✓ {new Date(allProofs[pName].ts).toLocaleDateString("id-ID",{day:"numeric",month:"short"})}</span>:<span style={{color:T.ghost}}>—</span>}</td>
+                      <td style={{textAlign:"center",padding:"10px 0 10px 16px",whiteSpace:"nowrap"}}>{allProofs[pName]?<button onClick={()=>openProof(pName)} style={{background:"none",border:"none",cursor:"pointer",color:T.settled,fontSize:"12px",fontFamily:"inherit",textDecoration:"underline",padding:0}}>✓ {new Date(allProofs[pName].ts).toLocaleDateString("id-ID",{day:"numeric",month:"short"})}</button>:<span style={{color:T.ghost}}>—</span>}</td>
                     </tr>
                   );
                 })}
@@ -1692,6 +1700,26 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
                 </tr>
               </tfoot>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* ── PROOF VIEWER MODAL (coordinator) ── */}
+      {viewProof&&(
+        <div onClick={()=>setViewProof(null)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.82)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
+          <div onClick={e=>e.stopPropagation()} style={{background:"white",maxWidth:"520px",width:"100%",maxHeight:"92vh",overflowY:"auto",padding:"20px"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"14px",gap:"12px"}}>
+              <p style={{fontSize:"13px",color:T.ink,fontWeight:500}}>Bukti Transfer · {viewProof.name}</p>
+              <button onClick={()=>setViewProof(null)} style={{background:"none",border:"none",cursor:"pointer",color:T.muted,fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase"}}>Tutup ✕</button>
+            </div>
+            {viewProof.error
+              ? <p style={{fontSize:"13px",color:T.danger,padding:"24px 0",textAlign:"center"}}>{viewProof.error}</p>
+              : viewProof.dataUrl
+                ? <>
+                    <img src={viewProof.dataUrl} alt="Bukti transfer" style={{width:"100%",height:"auto",border:`1px solid ${T.line}`,display:"block"}}/>
+                    <a href={viewProof.dataUrl} download={viewProof.filename} style={{display:"block",textAlign:"center",marginTop:"14px",background:T.forest,color:"white",padding:"12px",textDecoration:"none",fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase"}}>Unduh</a>
+                  </>
+                : <p style={{fontSize:"13px",color:T.muted,padding:"24px 0",textAlign:"center"}}>Memuat gambar…</p>}
           </div>
         </div>
       )}
