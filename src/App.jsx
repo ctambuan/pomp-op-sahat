@@ -542,7 +542,6 @@ const RESTAURANTS = [
       ]},
     ]
   },
-,
   // ─── DJIWANA CAFE & EATERY ────────────────────────────────────────────────────
   {
     id:"djiwana",name:"Djiwana Cafe & Eatery",subtitle:"D3 · Makan Siang · 4 Juli 2026, 12.00",
@@ -945,7 +944,6 @@ const RESTAURANTS = [
       ]},
     ]
   },
-,
   // ─── JUWARA SATOE ─────────────────────────────────────────────────────────────
   {
     id:"juwara",name:"Juwara Satoe",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
@@ -1012,7 +1010,6 @@ const RESTAURANTS = [
       ]},
     ]
   },
-,
   // ─── WAHYU AUSTIN PASTRY ──────────────────────────────────────────────────────
   {
     id:"wahyu-austin",name:"Wahyu Austin Pastry",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
@@ -1032,7 +1029,6 @@ const RESTAURANTS = [
       ]},
     ]
   },
-,
   // ─── PUTU RADJA BOLU PISANG ───────────────────────────────────────────────────
   {
     id:"putu-radja",name:"Putu Radja Bolu Pisang",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
@@ -1569,7 +1565,7 @@ const MakanTab = memo(({user}) => {
   if(activeResto) return <RestaurantView resto={activeResto} user={user} isCoord={isCoord} onBack={()=>setActiveResto(null)}/>;
 
   const buffetIds = SET_MENUS.map(s=>s.id);
-  const items = FOOD_ORDER.map(id => RESTAURANTS.find(r=>r.id===id) || SET_MENUS.find(s=>s.id===id)).filter(Boolean);
+  const items = FOOD_ORDER.map(id => RESTAURANTS.find(r=>r&&r.id===id) || SET_MENUS.find(s=>s&&s.id===id)).filter(Boolean);
 
   return (
     <div className="fade-up">
