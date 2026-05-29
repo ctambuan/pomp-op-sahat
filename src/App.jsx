@@ -1176,7 +1176,7 @@ const NameScreen = memo(({onSuccess}) => {
 });
 
 const Shell = ({user,tab,setTab,children}) => {
-  const TABS = [{id:"itinerary",label:"Itinerary"},{id:"size",label:"Ukuran Pakaian"},{id:"food",label:"Pre-Order F&B"},{id:"budget",label:"Dana"}];
+  const TABS = [{id:"itinerary",label:"Itinerary"},{id:"size",label:"Ukuran Pakaian"},{id:"makan",label:"Pesan Makanan"},{id:"oleholeh",label:"Oleh-Oleh"},{id:"budget",label:"Dana"}];
   return (
     <div style={{minHeight:"100vh",background:T.stone}}>
       <GlobalStyles/>
@@ -1517,8 +1517,120 @@ const compressImage = (file, maxDim=1600, quality=0.8) => new Promise((resolve,r
   reader.readAsDataURL(file);
 });
 
-const OlehOlehSummary = memo(({user,isCoord}) => {
+// ═══════════════════════════════════════════════════════════════════════════
+// PRE-ORDER F&B — Pesan Makanan & Oleh-Oleh (dua tab terpisah)
+// ═══════════════════════════════════════════════════════════════════════════
+const FB_DEADLINE = new Date("2026-06-25T23:59:59+07:00");
+const FB_DEADLINE_LABEL = "25 Juni 2026, 23:59 WIB";
+const FOOD_ORDER = ["solaria","kemangi","mbah-mo","ayom","desa-palagan","djiwana","summer-palace"];
+
+const DeadlineCountdown = memo(({target, label, openText="Pre-order ditutup dalam", closedText="Pre-order telah ditutup"}) => {
+  const [now,setNow] = useState(Date.now());
+  useEffect(()=>{ const id=setInterval(()=>setNow(Date.now()),1000); return ()=>clearInterval(id); },[]);
+  const diff = target.getTime() - now;
+  if(diff<=0) return (
+    <div style={{background:T.dangerBg,border:"1px solid #e8b4a8",borderLeft:`3px solid ${T.danger}`,padding:"18px 22px",marginBottom:"40px",display:"flex",alignItems:"center",gap:"12px",flexWrap:"wrap"}}>
+      <span style={{width:"8px",height:"8px",borderRadius:"50%",background:T.danger,display:"inline-block"}}/>
+      <p style={{fontSize:"12px",letterSpacing:"2px",textTransform:"uppercase",color:T.danger,fontWeight:500,margin:0}}>{closedText}</p>
+      <span style={{fontSize:"12px",color:T.muted}}>Deadline {label} terlewati</span>
+    </div>
+  );
+  const d=Math.floor(diff/86400000), h=Math.floor((diff%86400000)/3600000), m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
+  const urgent = diff < 86400000;
+  const accent = urgent ? T.danger : T.forest;
+  const units = [{n:d,l:"Hari"},{n:h,l:"Jam"},{n:m,l:"Menit"},{n:s,l:"Detik"}];
+  return (
+    <div style={{background:T.cream,border:`1px solid ${urgent?"#e8b4a8":T.line}`,borderLeft:`3px solid ${accent}`,padding:"20px 24px",marginBottom:"40px"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"18px"}}>
+        <div>
+          <p style={{fontSize:"10px",letterSpacing:"3px",textTransform:"uppercase",color:urgent?T.danger:T.muted,marginBottom:"4px",fontWeight:urgent?500:400}}>{urgent?"Segera ditutup":openText}</p>
+          <p style={{fontSize:"11px",color:T.muted}}>Deadline {label}</p>
+        </div>
+        <div style={{display:"flex",gap:"18px"}}>
+          {units.map((u,i)=>(
+            <div key={u.l} style={{display:"flex",alignItems:"flex-start",gap:"18px"}}>
+              <div style={{textAlign:"center",minWidth:"42px"}}>
+                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"30px",fontWeight:500,color:accent,lineHeight:1}}>{String(u.n).padStart(2,"0")}</p>
+                <p style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginTop:"6px"}}>{u.l}</p>
+              </div>
+              {i<units.length-1&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"26px",color:T.ghost,lineHeight:1.1}}>:</span>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// ─── TAB: PESAN MAKANAN (disponsori, diurut waktu makan) ─────────────────────
+const MakanTab = memo(({user}) => {
+  const [activeResto,setActiveResto] = useState(null);
+  const isCoord = COORDINATORS.includes(user);
+  if(activeResto) return <RestaurantView resto={activeResto} user={user} isCoord={isCoord} onBack={()=>setActiveResto(null)}/>;
+
+  const buffetIds = SET_MENUS.map(s=>s.id);
+  const items = FOOD_ORDER.map(id => RESTAURANTS.find(r=>r.id===id) || SET_MENUS.find(s=>s.id===id)).filter(Boolean);
+
+  return (
+    <div className="fade-up">
+      <div style={{marginBottom:"32px"}}>
+        <p style={{fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pre-Order F&B</p>
+        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Pesan Makanan</h2>
+        <p style={{fontSize:"14px",color:T.muted,marginTop:"8px"}}>Seluruh hidangan disponsori per household. Diurut sesuai waktu makan. Pilih restoran untuk melihat menu & memesan; hidangan buffet sudah ditentukan dan tidak perlu dipesan.</p>
+      </div>
+
+      <DeadlineCountdown target={FB_DEADLINE} label={FB_DEADLINE_LABEL}/>
+
+      <div style={{borderTop:`1px solid ${T.line}`}}>
+        {items.map(m=>{
+          const buffet = buffetIds.includes(m.id);
+          if(buffet) return (
+            <div key={m.id} style={{borderBottom:`1px solid ${T.line}`,padding:"28px 0"}}>
+              <div style={{display:"flex",alignItems:"center",gap:"14px",flexWrap:"wrap",marginBottom:"6px"}}>
+                <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{m.name}</h3>
+                <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.goldL}`,padding:"2px 8px"}}>Buffet · tanpa pesan</span>
+                {m.sponsor&&<span style={{fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>♡ {m.sponsor}</span>}
+              </div>
+              <p style={{fontSize:"13px",color:T.muted}}>{m.subtitle}</p>
+              <p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"2px"}}>{m.note}</p>
+              <div style={{marginTop:"14px"}}>
+                {m.sections.map(sec=>(
+                  <div key={sec.label} style={{marginBottom:"10px"}}>
+                    <p style={{fontSize:"10px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"4px"}}>{sec.label}</p>
+                    <p style={{fontSize:"13px",color:T.mid,lineHeight:1.7}}>{sec.items.join(" · ")}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+          return (
+            <div key={m.id} onClick={()=>setActiveResto(m)}
+              style={{display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",borderBottom:`1px solid ${T.line}`,padding:"28px 0",cursor:"pointer"}}
+              onMouseEnter={e=>e.currentTarget.style.background=T.cream}
+              onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+              <div>
+                <div style={{display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap",marginBottom:"6px"}}>
+                  <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{m.name}</h3>
+                  <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.settled,borderBottom:`1px solid ${T.settled}`}}>Terbuka</span>
+                  {m.sponsor&&<span style={{fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>♡ {m.sponsor}</span>}
+                </div>
+                <p style={{fontSize:"13px",color:T.muted}}>{m.subtitle}</p>
+                {m.note&&<p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"2px"}}>{m.note}</p>}
+              </div>
+              <span style={{fontSize:"20px",color:T.muted}}>→</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+});
+
+// ─── TAB: OLEH-OLEH (bayar sendiri) ──────────────────────────────────────────
+const OlehOlehTab = memo(({user}) => {
+  const isCoord = COORDINATORS.includes(user);
   const takeawayRestos = RESTAURANTS.filter(r=>r.isTakeaway);
+  const [activeResto,setActiveResto] = useState(null);
   const [myOrders,setMyOrders]   = useState({});
   const [allPaxOrders,setAllPaxOrders] = useState({});
   const [loading,setLoading]     = useState(true);
@@ -1528,55 +1640,29 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
   const [uploadMsg,setUploadMsg] = useState(null);
   const [viewProof,setViewProof] = useState(null);
 
-  useEffect(()=>{
-    (async()=>{
-      // Fetch current user's orders
-      const mine = {};
+  const reload = useCallback(async ()=>{
+    const mine={};
+    for(const r of takeawayRestos){
+      const key=`order.${r.id}.${user.replace(/\s+/g,"_")}`;
+      try{ const v=await sGet(key); if(v){ const p=JSON.parse(v); if(p.totalIDR>0) mine[r.id]={name:r.name,totalIDR:p.totalIDR,items:p.items||[]}; } }catch{}
+    }
+    setMyOrders(mine);
+    try{ const pv=await sGet(`oleholeh.proof.${user.replace(/\s+/g,"_")}`); if(pv) setMyProof(JSON.parse(pv)); }catch{}
+    if(isCoord){
+      const all={};
       for(const r of takeawayRestos){
-        const key = `order.${r.id}.${user.replace(/\s+/g,"_")}`;
         try{
-          const v = await sGet(key);
-          if(v){
-            const p = JSON.parse(v);
-            if(p.totalIDR>0) mine[r.id]={name:r.name,totalIDR:p.totalIDR,items:p.items||[]};
-          }
+          const keys=await sList(`order.${r.id}.`);
+          for(const k of keys){ const v=await sGet(k); if(v){ const p=JSON.parse(v); const pName=k.replace(`order.${r.id}.`,"").replace(/_/g," "); if(!all[pName]) all[pName]={}; if(p.totalIDR>0) all[pName][r.id]={name:r.name,totalIDR:p.totalIDR,items:p.items||[]}; } }
         }catch{}
       }
-      setMyOrders(mine);
-
-      // proof of transfer — self
-      try { const pv = await sGet(`oleholeh.proof.${user.replace(/\s+/g,"_")}`); if(pv) setMyProof(JSON.parse(pv)); } catch {}
-
-      // If coordinator, fetch all pax orders
-      if(isCoord){
-        const all = {};
-        for(const r of takeawayRestos){
-          try{
-            const keys = await sList(`order.${r.id}.`);
-            for(const k of keys){
-              const v = await sGet(k);
-              if(v){
-                const p = JSON.parse(v);
-                const pName = k.replace(`order.${r.id}.`,"").replace(/_/g," ");
-                if(!all[pName]) all[pName]={};
-                if(p.totalIDR>0) all[pName][r.id]={name:r.name,totalIDR:p.totalIDR};
-              }
-            }
-          }catch{}
-        }
-        setAllPaxOrders(all);
-
-        // all proofs for coordinator
-        try {
-          const pkeys = await sList("oleholeh.proof.");
-          const proofs = {};
-          for(const k of pkeys){ const v = await sGet(k); if(v){ proofs[k.replace("oleholeh.proof.","").replace(/_/g," ")] = JSON.parse(v); } }
-          setAllProofs(proofs);
-        } catch {}
-      }
-      setLoading(false);
-    })();
+      setAllPaxOrders(all);
+      try{ const pkeys=await sList("oleholeh.proof."); const proofs={}; for(const k of pkeys){ const v=await sGet(k); if(v){ proofs[k.replace("oleholeh.proof.","").replace(/_/g," ")]=JSON.parse(v); } } setAllProofs(proofs); }catch{}
+    }
+    setLoading(false);
   },[user,isCoord]);
+
+  useEffect(()=>{ reload(); },[reload]);
 
   const onFile = async e => {
     const file = e.target.files?.[0];
@@ -1609,20 +1695,53 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
     } catch { setViewProof(v=>v&&v.name===pName?{...v,error:"Gagal memuat gambar."}:v); }
   };
 
+  if(activeResto) return <RestaurantView resto={activeResto} user={user} isCoord={isCoord} onBack={()=>{setActiveResto(null);reload();}}/>;
+
   const myStores  = Object.values(myOrders);
   const myTotal   = myStores.reduce((s,o)=>s+Number(o.totalIDR),0);
   const paxWithOrders = Object.entries(allPaxOrders).filter(([,stores])=>Object.keys(stores).length>0);
-
-  if(loading) return null;
-  if(!isCoord && myStores.length===0) return null;
+  const proofCount = paxWithOrders.filter(([pName])=>allProofs[pName]).length;
+  const merchantAgg = takeawayRestos.map(r=>{
+    const tally={}; let subtotal=0;
+    paxWithOrders.forEach(([,stores])=>{ const o=stores[r.id]; if(o){ subtotal+=Number(o.totalIDR||0); (o.items||[]).forEach(i=>{ const k=i.config?`${i.name} [${i.config}]`:i.name; tally[k]=(tally[k]||0)+Number(i.qty); }); } });
+    return {id:r.id,name:r.name,subtotal,items:Object.entries(tally).sort((a,b)=>b[1]-a[1])};
+  }).filter(mm=>mm.items.length>0);
 
   return (
-    <div style={{marginBottom:"56px"}}>
-      {/* ── PARTICIPANT CARD ── */}
+    <div className="fade-up">
+      <div style={{marginBottom:"32px"}}>
+        <p style={{fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pre-Order F&B</p>
+        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Oleh-Oleh</h2>
+        <p style={{fontSize:"14px",color:T.muted,marginTop:"8px"}}>Dibayar sendiri. Pilih merchant untuk memesan, lalu transfer ke koordinator dan unggah bukti di bawah.</p>
+      </div>
+
+      <DeadlineCountdown target={FB_DEADLINE} label={FB_DEADLINE_LABEL}/>
+
+      {/* ── MERCHANT CARDS ── */}
+      <div style={{marginBottom:"48px",borderTop:`1px solid ${T.line}`}}>
+        {takeawayRestos.map(r=>(
+          <div key={r.id} onClick={()=>setActiveResto(r)}
+            style={{display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",borderBottom:`1px solid ${T.line}`,padding:"28px 0",cursor:"pointer"}}
+            onMouseEnter={e=>e.currentTarget.style.background=T.cream}
+            onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+            <div>
+              <div style={{display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap",marginBottom:"6px"}}>
+                <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{r.name}</h3>
+                <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,borderBottom:`1px solid ${T.gold}`}}>Terbuka</span>
+              </div>
+              <p style={{fontSize:"13px",color:T.muted}}>{r.subtitle}</p>
+              {myOrders[r.id]&&<p style={{fontSize:"12px",color:T.settled,marginTop:"4px"}}>✓ Anda sudah memesan · IDR {Number(myOrders[r.id].totalIDR).toLocaleString("id-ID")}</p>}
+            </div>
+            <span style={{fontSize:"20px",color:T.muted}}>→</span>
+          </div>
+        ))}
+      </div>
+
+      {/* ── PAYMENT CARD ── */}
       {myStores.length>0&&(
-        <div style={{border:`1px solid ${T.gold}`,marginBottom:"40px"}}>
+        <div style={{border:`1px solid ${T.gold}`,marginBottom:"48px"}}>
           <div style={{background:T.gold,padding:"14px 24px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:"white",fontWeight:500}}>Tagihan Oleh-Oleh · 5 Juli 2026</p>
+            <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:"white",fontWeight:500}}>Tagihan Oleh-Oleh · Bayar Langsung 5 Juli 2026</p>
             <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:"rgba(255,255,255,0.8)"}}>Satu Transfer</p>
           </div>
           <div style={{background:T.cream,padding:"24px"}}>
@@ -1642,23 +1761,14 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
               <p style={{fontSize:"15px",color:T.mid}}>{TRANSFER_INFO.bank} · {TRANSFER_INFO.account}</p>
               <p style={{fontSize:"13px",color:T.muted,marginTop:"8px"}}>Berita: <span style={{color:T.ink,fontWeight:500}}>OLEHOLEH {user}</span></p>
             </div>
-            <div style={{marginTop:"16px"}}>
-              {myProof
-                ? <div style={{background:T.settledBg,border:`1px solid ${T.settled}`,padding:"12px 16px",display:"flex",justifyContent:"space-between",alignItems:"center",gap:"12px",flexWrap:"wrap"}}>
-                    <p style={{fontSize:"12px",color:T.settled}}>✓ Bukti terkirim · {new Date(myProof.ts).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</p>
-                    <label style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:uploading?T.muted:T.muted,cursor:uploading?"wait":"pointer",borderBottom:`1px solid ${T.lineD}`}}>{uploading?"Mengunggah…":"Ganti bukti"}<input type="file" accept="image/*" onChange={onFile} disabled={uploading} style={{display:"none"}}/></label>
-                  </div>
-                : <label style={{display:"block",textAlign:"center",border:`1px dashed ${T.gold}`,padding:"14px",cursor:uploading?"wait":"pointer",fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:uploading?T.muted:T.forest,background:"white"}}>{uploading?"Mengunggah…":"Upload Bukti Transfer"}<input type="file" accept="image/*" onChange={onFile} disabled={uploading} style={{display:"none"}}/></label>}
-              {uploadMsg&&<p style={{fontSize:"11px",color:uploadMsg.startsWith("✓")?T.settled:T.danger,marginTop:"8px"}}>{uploadMsg}</p>}
-            </div>
           </div>
         </div>
       )}
 
-      {/* ── COORDINATOR TABLE ── */}
+      {/* ── COORDINATOR: REKAP PER PESERTA (dengan total) ── */}
       {isCoord&&paxWithOrders.length>0&&(
-        <div>
-          <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Rekap Oleh-Oleh Per Peserta</p>
+        <div style={{marginBottom:"48px"}}>
+          <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Rekap Per Peserta</p>
           <div style={{overflowX:"auto"}}>
             <table style={{width:"100%",borderCollapse:"collapse",fontSize:"13px"}}>
               <thead>
@@ -1666,7 +1776,6 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
                   <th style={{textAlign:"left",padding:"8px 12px 8px 0",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"11px"}}>Peserta</th>
                   {takeawayRestos.map(r=><th key={r.id} style={{textAlign:"right",padding:"8px 12px",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"11px",whiteSpace:"nowrap"}}>{r.name}</th>)}
                   <th style={{textAlign:"right",padding:"8px 0 8px 12px",color:T.forest,fontWeight:500,letterSpacing:"1px",textTransform:"uppercase",fontSize:"11px"}}>Total</th>
-                  <th style={{textAlign:"center",padding:"8px 0 8px 16px",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"11px",whiteSpace:"nowrap"}}>Bukti</th>
                 </tr>
               </thead>
               <tbody>
@@ -1681,7 +1790,6 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
                         </td>
                       ))}
                       <td style={{textAlign:"right",padding:"10px 0 10px 12px",color:T.forest,fontFamily:"'Playfair Display',Georgia,serif",fontWeight:500}}>IDR {rowTotal.toLocaleString("id-ID")}</td>
-                      <td style={{textAlign:"center",padding:"10px 0 10px 16px",whiteSpace:"nowrap"}}>{allProofs[pName]?<button onClick={()=>openProof(pName)} style={{background:"none",border:"none",cursor:"pointer",color:T.settled,fontSize:"12px",fontFamily:"inherit",textDecoration:"underline",padding:0}}>✓ {new Date(allProofs[pName].ts).toLocaleDateString("id-ID",{day:"numeric",month:"short"})}</button>:<span style={{color:T.ghost}}>—</span>}</td>
                     </tr>
                   );
                 })}
@@ -1696,7 +1804,6 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
                   <td style={{textAlign:"right",padding:"12px 0 4px 12px",fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",color:T.forest,fontWeight:500}}>
                     IDR {paxWithOrders.reduce((s,[,stores])=>s+Object.values(stores).reduce((ss,o)=>ss+Number(o.totalIDR),0),0).toLocaleString("id-ID")}
                   </td>
-                  <td style={{textAlign:"center",padding:"12px 0 4px 16px",fontSize:"12px",color:T.muted,whiteSpace:"nowrap"}}>{paxWithOrders.filter(([pName])=>allProofs[pName]).length}/{paxWithOrders.length}</td>
                 </tr>
               </tfoot>
             </table>
@@ -1704,7 +1811,76 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
         </div>
       )}
 
-      {/* ── PROOF VIEWER MODAL (coordinator) ── */}
+      {/* ── COORDINATOR: REKAP TOTAL PER MERCHANT (tanpa nama) ── */}
+      {isCoord&&merchantAgg.length>0&&(
+        <div style={{marginBottom:"48px"}}>
+          <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>Rekap Pesanan Per Merchant</p>
+          <p style={{fontSize:"12px",color:T.muted,marginBottom:"24px",fontStyle:"italic"}}>Gabungan seluruh peserta, tanpa nama — referensi koordinator memesan langsung ke toko.</p>
+          {merchantAgg.map(mm=>(
+            <div key={mm.id} style={{border:`1px solid ${T.line}`,marginBottom:"16px"}}>
+              <div style={{background:T.cream,padding:"12px 20px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"17px",color:T.ink}}>{mm.name}</span>
+                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"17px",color:T.forest,fontWeight:500}}>IDR {mm.subtotal.toLocaleString("id-ID")}</span>
+              </div>
+              <div style={{padding:"6px 20px 16px"}}>
+                {mm.items.map(([n,q])=>(
+                  <div key={n} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${T.line}`}}>
+                    <span style={{fontSize:"14px",color:T.ink}}>{n}</span>
+                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"17px",color:T.forest,whiteSpace:"nowrap"}}>{q}×</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ── BUKTI TRANSFER (paling bawah) ── */}
+      {(myStores.length>0 || (isCoord&&paxWithOrders.length>0))&&(
+        <div style={{marginBottom:"56px"}}>
+          <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Bukti Transfer</p>
+
+          {myStores.length>0&&(
+            <div style={{marginBottom:isCoord&&paxWithOrders.length>0?"32px":"0"}}>
+              {myProof
+                ? <div style={{background:T.settledBg,border:`1px solid ${T.settled}`,padding:"12px 16px",display:"flex",justifyContent:"space-between",alignItems:"center",gap:"12px",flexWrap:"wrap"}}>
+                    <p style={{fontSize:"12px",color:T.settled}}>✓ Bukti tersimpan · {new Date(myProof.ts).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}</p>
+                    <label style={{fontSize:"10px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,cursor:uploading?"wait":"pointer",borderBottom:`1px solid ${T.lineD}`}}>{uploading?"Mengunggah…":"Ganti bukti"}<input type="file" accept="image/*" onChange={onFile} disabled={uploading} style={{display:"none"}}/></label>
+                  </div>
+                : <label style={{display:"block",textAlign:"center",border:`1px dashed ${T.gold}`,padding:"14px",cursor:uploading?"wait":"pointer",fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:uploading?T.muted:T.forest,background:"white"}}>{uploading?"Mengunggah…":"Upload Bukti Transfer"}<input type="file" accept="image/*" onChange={onFile} disabled={uploading} style={{display:"none"}}/></label>}
+              {uploadMsg&&<p style={{fontSize:"11px",color:uploadMsg.startsWith("✓")?T.settled:T.danger,marginTop:"8px"}}>{uploadMsg}</p>}
+            </div>
+          )}
+
+          {isCoord&&paxWithOrders.length>0&&(
+            <div style={{overflowX:"auto"}}>
+              <table style={{width:"100%",borderCollapse:"collapse",fontSize:"13px"}}>
+                <thead>
+                  <tr style={{borderBottom:`2px solid ${T.line}`}}>
+                    <th style={{textAlign:"left",padding:"8px 12px 8px 0",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"11px"}}>Peserta</th>
+                    <th style={{textAlign:"left",padding:"8px 0 8px 12px",color:T.muted,fontWeight:400,letterSpacing:"1px",textTransform:"uppercase",fontSize:"11px"}}>Bukti</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paxWithOrders.sort((a,b)=>a[0].localeCompare(b[0])).map(([pName])=>(
+                    <tr key={pName} style={{borderBottom:`1px solid ${T.line}`}}>
+                      <td style={{padding:"12px 12px 12px 0",color:T.ink}}>{pName}</td>
+                      <td style={{padding:"12px 0 12px 12px"}}>
+                        {allProofs[pName]
+                          ? <button onClick={()=>openProof(pName)} style={{background:"none",border:"none",cursor:"pointer",color:T.settled,fontSize:"12px",fontFamily:"inherit",textDecoration:"underline",padding:0}}>✓ {new Date(allProofs[pName].ts).toLocaleDateString("id-ID",{day:"numeric",month:"short"})} · Lihat / Unduh</button>
+                          : <span style={{fontSize:"12px",color:T.ghost}}>Belum upload</span>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p style={{fontSize:"12px",color:T.muted,marginTop:"16px"}}>{proofCount}/{paxWithOrders.length} bukti terkumpul</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── PROOF VIEWER MODAL ── */}
       {viewProof&&(
         <div onClick={()=>setViewProof(null)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.82)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
           <div onClick={e=>e.stopPropagation()} style={{background:"white",maxWidth:"520px",width:"100%",maxHeight:"92vh",overflowY:"auto",padding:"20px"}}>
@@ -1722,106 +1898,6 @@ const OlehOlehSummary = memo(({user,isCoord}) => {
                 : <p style={{fontSize:"13px",color:T.muted,padding:"24px 0",textAlign:"center"}}>Memuat gambar…</p>}
           </div>
         </div>
-      )}
-    </div>
-  );
-});
-
-const FoodOrderTab = memo(({user}) => {
-  const [view,setView] = useState("list");
-  const [activeResto,setActiveResto] = useState(null);
-  const isCoord = COORDINATORS.includes(user);
-
-  if(view==="restaurant"&&activeResto) return <RestaurantView resto={activeResto} user={user} isCoord={isCoord} onBack={()=>{setView("list");setActiveResto(null);}}/>;
-
-  return (
-    <div className="fade-up">
-      <div style={{marginBottom:"56px"}}>
-        <p style={{fontSize:"12px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pemesanan Makanan</p>
-        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Pre-Order F&B</h2>
-        <p style={{fontSize:"14px",color:T.muted,marginTop:"8px"}}>Pilih restoran untuk melihat menu dan melakukan pemesanan</p>
-      </div>
-      <OlehOlehSummary user={user} isCoord={isCoord}/>
-      {(()=>{
-        const row = r => (
-          <div key={r.id} onClick={()=>{setActiveResto(r);setView("restaurant");}}
-            style={{display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",borderBottom:`1px solid ${T.line}`,padding:"28px 0",cursor:"pointer"}}
-            onMouseEnter={e=>e.currentTarget.style.background=T.cream}
-            onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-            <div>
-              <div style={{display:"flex",alignItems:"center",gap:"16px",marginBottom:"6px"}}>
-                <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{r.name}</h3>
-                <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.settled,borderBottom:`1px solid ${T.settled}`}}>Terbuka</span>
-              </div>
-              <p style={{fontSize:"13px",color:T.muted}}>{r.subtitle}</p>
-              <p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"2px"}}>{r.note}</p>
-            </div>
-            <span style={{fontSize:"20px",color:T.muted}}>→</span>
-          </div>
-        );
-        const sponsored = RESTAURANTS.filter(r=>!r.isTakeaway);
-        const oleholeh  = RESTAURANTS.filter(r=>r.isTakeaway);
-        return (
-          <>
-            <div style={{marginBottom:"56px"}}>
-              <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.forest,marginBottom:"6px",fontWeight:500}}>Makanan & Minuman</p>
-              <p style={{fontSize:"12px",color:T.muted,marginBottom:"24px",fontStyle:"italic"}}>Seluruhnya disponsori per household — tidak dibayar peserta.</p>
-              <div style={{borderTop:`1px solid ${T.line}`}}>{sponsored.map(row)}</div>
-            </div>
-            <div style={{marginBottom:"56px",borderTop:`2px solid ${T.gold}`,paddingTop:"40px"}}>
-              <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.gold,marginBottom:"6px",fontWeight:500}}>Pre-Order Oleh-Oleh</p>
-              <p style={{fontSize:"12px",color:T.muted,marginBottom:"24px",fontStyle:"italic"}}>Dibayar sendiri — transfer ke koordinator, total tergabung di kartu "Tagihan Oleh-Oleh" di atas.</p>
-              <div style={{borderTop:`1px solid ${T.line}`}}>{oleholeh.map(row)}</div>
-            </div>
-          </>
-        );
-      })()}
-      <div style={{marginBottom:"56px"}}>
-        <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.gold,marginBottom:"24px",fontWeight:500}}>Menu Buffet</p>
-        {SET_MENUS.map(m=>(
-          <div key={m.id} style={{border:`1px solid ${T.line}`,marginBottom:"24px"}}>
-            <div style={{background:T.cream,padding:"20px 24px",borderBottom:`1px solid ${T.line}`}}>
-              <div style={{display:"flex",alignItems:"center",gap:"14px",flexWrap:"wrap",marginBottom:"4px"}}>
-                <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{m.name}</h3>
-                <span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.goldL}`,padding:"2px 8px"}}>Buffet</span>
-                {m.sponsor&&<span style={{fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>♡ {m.sponsor}</span>}
-              </div>
-              <p style={{fontSize:"13px",color:T.muted}}>{m.subtitle}</p>
-              <p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"4px"}}>{m.note}</p>
-            </div>
-            <div style={{padding:"8px 24px 24px"}}>
-              {m.sections.map(sec=>(
-                <div key={sec.label} style={{marginTop:"20px"}}>
-                  <p style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>{sec.label}</p>
-                  {sec.items.map((it,i)=>(
-                    <div key={i} style={{display:"flex",alignItems:"baseline",gap:"12px",padding:"6px 0",borderBottom:`1px solid ${T.line}`}}>
-                      <span style={{fontSize:"15px",color:T.forest}}>◆</span>
-                      <span style={{fontSize:"15px",color:T.ink}}>{it}</span>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {UPCOMING_FB.length>0 && (
-      <div>
-        <p style={{fontSize:"11px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>F&B Lainnya</p>
-        <div style={{borderTop:`1px solid ${T.line}`}}>
-          {UPCOMING_FB.map(r=>(
-            <div key={r.name} style={{display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",borderBottom:`1px solid ${T.line}`,padding:"24px 0"}}>
-              <div>
-                <h4 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"18px",fontWeight:400,color:T.muted,marginBottom:"4px"}}>{r.name}</h4>
-                <p style={{fontSize:"13px",color:T.ghost}}>{r.day} · {r.meal} · Sponsor: {r.sponsor}</p>
-              </div>
-              <span style={{fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.ghost}}>Belum Dibuka</span>
-            </div>
-          ))}
-        </div>
-        <p style={{fontSize:"13px",color:T.muted,marginTop:"20px",fontStyle:"italic"}}>{isCoord?"Menu akan dibuka oleh koordinator masing-masing.":"Koordinator akan membuka pre-order sebelum keberangkatan."}</p>
-      </div>
       )}
     </div>
   );
@@ -2256,7 +2332,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                         <div style={{display:"flex",flexWrap:"wrap",gap:"8px",marginBottom:"4px"}}>
                           {(o.items||[]).map((it,i)=><span key={i} style={{fontSize:"12px",color:T.muted}}>• {it.name}{it.config&&` [${it.config}]`} ×{it.qty}{it.notes&&` (${it.notes})`}</span>)}
                         </div>
-                        {o.totalIDR>0&&<p style={{fontSize:"14px",color:T.settled,fontFamily:"'Playfair Display',Georgia,serif",marginTop:"2px"}}>Total: IDR {Number(o.totalIDR).toLocaleString("id-ID")}</p>}
+                        {resto.isTakeaway&&o.totalIDR>0&&<p style={{fontSize:"14px",color:T.settled,fontFamily:"'Playfair Display',Georgia,serif",marginTop:"2px"}}>Total: IDR {Number(o.totalIDR).toLocaleString("id-ID")}</p>}
                       </div>}
                     </div>
                     <p style={{fontSize:"11px",letterSpacing:"1.5px",textTransform:"uppercase",color:o?T.settled:T.ghost,marginTop:"3px",whiteSpace:"nowrap"}}>{o?"✓ Terkirim":"Belum Order"}</p>
@@ -2828,7 +2904,8 @@ export default function App() {
         {tab==="budget"    && <BudgetTab user={user}/>}
         {tab==="itinerary" && <ItineraryTab/>}
         {tab==="size"      && <SizeTab user={user}/>}
-        {tab==="food"      && <FoodOrderTab user={user}/>}
+        {tab==="makan"     && <MakanTab user={user}/>}
+        {tab==="oleholeh"  && <OlehOlehTab user={user}/>}
       </Shell>
     </ErrorBoundary>
   );
