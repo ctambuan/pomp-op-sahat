@@ -2021,7 +2021,8 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
         setSubmitted(true);
         setAllOrders(prev=>({...prev,[user]:newOrder}));
         setTab("recap");
-        refresh();
+        // note: tidak memanggil refresh() di sini — refresh() langsung akan overwrite
+        // optimistic update sebelum Firebase write terpropagate. Auto-refresh 30 dtk sudah cukup.
       }
       else setSyncError("Gagal menyimpan order. Coba lagi.");
     } catch { setSyncError("Gagal menyimpan order. Coba lagi."); }
@@ -2832,9 +2833,12 @@ const SizeTab = memo(({user}) => {
             const blocked = pastDeadline&&!isCoord;
             const nm = target===user?"Saya":target.split(" ")[0];
             return (
-              <button onClick={submit} disabled={saving||blocked} style={{width:"100%",padding:"14px",background:blocked?T.muted:T.forest,color:"white",border:"none",cursor:blocked?"not-allowed":saving?"wait":"pointer",fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500}}>
-                {blocked?"Pengumpulan Ditutup":saving?"Menyimpan…":`${already?"Perbarui":"Konfirmasi"} Ukuran ${nm}`}
-              </button>
+              <>
+                {syncError&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"10px 14px",marginBottom:"12px"}}><p style={{fontSize:"16px",color:T.danger}}>{syncError}</p></div>}
+                <button onClick={submit} disabled={saving||blocked} style={{width:"100%",padding:"14px",background:blocked?T.muted:T.forest,color:"white",border:"none",cursor:blocked?"not-allowed":saving?"wait":"pointer",fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",fontWeight:500}}>
+                  {blocked?"Pengumpulan Ditutup":saving?"Menyimpan…":`${already?"Perbarui":"Konfirmasi"} Ukuran ${nm}`}
+                </button>
+              </>
             );
           })()}
         </div>
