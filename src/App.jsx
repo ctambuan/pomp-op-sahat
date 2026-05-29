@@ -1313,7 +1313,7 @@ const BudgetTab = memo(({user}) => {
             const settled=!absorbed&&hh.balance>=0;
             const statusColor=absorbed?T.abs:settled?T.settled:T.danger;
             const statusLabel=absorbed?"Absorbed":settled?"Settled":hh.deposit>0?"Belum Lunas":"Belum Bayar";
-            const show=isCoord||isOwn||settled;
+            const canSee=isCoord||isOwn||settled;
             return (
               <div key={hh.id} style={{borderBottom:`1px solid ${T.line}`,padding:"32px 0",position:"relative"}}>
                 {isOwn&&<div style={{position:"absolute",left:"-40px",top:0,bottom:0,width:"2px",background:T.gold}}/>}
@@ -1323,8 +1323,8 @@ const BudgetTab = memo(({user}) => {
                       <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontWeight:400,color:T.ink}}>{hh.lead}</h3>
                       {isOwn&&<span style={{fontSize:"11px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.gold}`,padding:"2px 8px"}}>Anda</span>}
                     </div>
-                    <p style={{fontSize:"13px",color:T.muted,marginBottom:show&&!absorbed?"20px":"0"}}>{hh.id} · {hh.pax} peserta · {hh.members.join(", ")}</p>
-                    {show&&!absorbed&&(
+                    <p style={{fontSize:"13px",color:T.muted,marginBottom:canSee&&!absorbed?"20px":"0"}}>{hh.id} · {hh.pax} peserta · {hh.members.join(", ")}</p>
+                    {canSee&&!absorbed&&(
                       <div style={{display:"grid",gridTemplateColumns:"repeat(3,160px)",gap:"24px"}}>
                         {[
                           {l:"Total",v:show(hh.gross),c:T.ink},
@@ -1353,7 +1353,7 @@ const BudgetTab = memo(({user}) => {
                       </div>
                     )}
                     {absorbed&&<p style={{fontSize:"13px",color:T.abs,fontStyle:"italic",marginTop:"4px"}}>{hh.note}</p>}
-                    {!show&&!absorbed&&<p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"4px"}}>Detail hanya tersedia untuk household Anda.</p>}
+                    {!canSee&&!absorbed&&<p style={{fontSize:"13px",color:T.muted,fontStyle:"italic",marginTop:"4px"}}>Detail hanya tersedia untuk household Anda.</p>}
                   </div>
                   <p style={{fontSize:"12px",letterSpacing:"1.5px",textTransform:"uppercase",color:statusColor,fontWeight:500,marginTop:"4px",whiteSpace:"nowrap"}}>{statusLabel}</p>
                 </div>
