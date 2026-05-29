@@ -1653,12 +1653,13 @@ const OlehOlehTab = memo(({user}) => {
     try{ const pv=await sGet(`oleholeh.proof.${user.replace(/\s+/g,"_")}`); if(pv) setMyProof(JSON.parse(pv)); }catch{}
     if(isCoord){
       const all={};
-      for(const r of takeawayRestos){
+      await Promise.all(takeawayRestos.flatMap(r => ALL_PAX.map(async pax => {
+        const key=`order.${r.id}.${pax.name.replace(/\s+/g,"_")}`;
         try{
-          const keys=await sList(`order.${r.id}.`);
-          for(const k of keys){ const v=await sGet(k); if(v){ const p=JSON.parse(v); const pName=k.replace(`order.${r.id}.`,"").replace(/_/g," "); if(!all[pName]) all[pName]={}; if(p.totalIDR>0) all[pName][r.id]={name:r.name,totalIDR:p.totalIDR,items:p.items||[]}; } }
+          const v=await sGet(key);
+          if(v){ const p=JSON.parse(v); if(p.totalIDR>0){ if(!all[pax.name]) all[pax.name]={}; all[pax.name][r.id]={name:r.name,totalIDR:p.totalIDR,items:p.items||[]}; } }
         }catch{}
-      }
+      })));
       setAllPaxOrders(all);
       try{ const pkeys=await sList("oleholeh.proof."); const proofs={}; for(const k of pkeys){ const v=await sGet(k); if(v){ proofs[k.replace("oleholeh.proof.","").replace(/_/g," ")]=JSON.parse(v); } } setAllProofs(proofs); }catch{}
     }
@@ -1930,16 +1931,18 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
     try {
       const lockVal = await sGet(`lock.${resto.id}`);
       setLocked(lockVal==="true");
-      const keys = await sList(`order.${resto.id}.`);
+      const entries = await Promise.all(
+        resto.participants.map(async p => {
+          const key = `order.${resto.id}.${p.name.replace(/\s+/g,"_")}`;
+          try { const v = await sGet(key); return [p.name, v]; } catch { return [p.name, null]; }
+        })
+      );
       const grouped = {};
-      for(const k of keys){
-        const v = await sGet(k);
-        if(v){ const name=k.replace(`order.${resto.id}.`,"").replace(/_/g," "); grouped[name]=JSON.parse(v); }
-      }
+      entries.forEach(([name,v]) => { if(v){ try{ grouped[name]=JSON.parse(v); }catch{} } });
       setAllOrders(grouped);
       setLastSync(new Date());
     } catch { setSyncError("Gagal memuat data. Cek koneksi."); }
-  }, [resto.id]);
+  }, [resto.id, resto.participants]);
 
   useEffect(() => {
     (async () => {
@@ -1947,12 +1950,14 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
       try {
         const lockVal = await sGet(`lock.${resto.id}`);
         setLocked(lockVal==="true");
-        const keys = await sList(`order.${resto.id}.`);
+        const entries = await Promise.all(
+          resto.participants.map(async p => {
+            const key = `order.${resto.id}.${p.name.replace(/\s+/g,"_")}`;
+            try { const v = await sGet(key); return [p.name, v]; } catch { return [p.name, null]; }
+          })
+        );
         const grouped = {};
-        for(const k of keys){
-          const v = await sGet(k);
-          if(v){ const name=k.replace(`order.${resto.id}.`,"").replace(/_/g," "); grouped[name]=JSON.parse(v); }
-        }
+        entries.forEach(([name,v]) => { if(v){ try{ grouped[name]=JSON.parse(v); }catch{} } });
         setAllOrders(grouped);
         setLastSync(new Date());
         if (grouped[user]) {
@@ -2011,7 +2016,13 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
       const totalIDR = resto.taxRate ? Math.round(nettIDR*(1+resto.taxRate)) : nettIDR;
       const key = `order.${resto.id}.${user.replace(/\s+/g,"_")}`;
       const ok = await sSet(key, JSON.stringify({peserta:user,hh:ALL_PAX.find(p=>p.name===user)?.hh||"",items,totalIDR,submittedAt:new Date().toISOString()}));
-      if(ok){ setSubmitted(true); await refresh(); setTab("recap"); }
+      if(ok){
+        const newOrder={peserta:user,hh:ALL_PAX.find(p=>p.name===user)?.hh||"",items,totalIDR,submittedAt:new Date().toISOString()};
+        setSubmitted(true);
+        setAllOrders(prev=>({...prev,[user]:newOrder}));
+        setTab("recap");
+        refresh();
+      }
       else setSyncError("Gagal menyimpan order. Coba lagi.");
     } catch { setSyncError("Gagal menyimpan order. Coba lagi."); }
     setSaving(false);
