@@ -1097,10 +1097,6 @@ const RESTAURANTS = [
   },
 ];
 
-// ── PATCH 1: Tentrem Summer Palace removed from UPCOMING_FB ─────────────────
-const UPCOMING_FB = [
-];
-
 const SET_MENUS = [
   {
     id:"mbah-mo", name:"Mbah Mo", subtitle:"D2 · Makan Siang · 3 Juli 2026, 12.00",
@@ -1587,7 +1583,7 @@ const FB_DEADLINE_LABEL = "25 Juni 2026, 23:59 WIB";
 const FOOD_ORDER = ["solaria","kemangi","mbah-mo","ayom","desa-palagan","djiwana","summer-palace"];
 
 const DeadlineCountdown = memo(({target, label, openText="Pre-order ditutup dalam", closedText="Pre-order telah ditutup"}) => {
-  const [now,setNow] = useState(Date.now());
+  const [now,setNow] = useState(() => Date.now());
   useEffect(()=>{ const id=setInterval(()=>setNow(Date.now()),1000); return ()=>clearInterval(id); },[]);
   const diff = target.getTime() - now;
   if(diff<=0) return (
@@ -1695,7 +1691,7 @@ const OlehOlehTab = memo(({user}) => {
   const [activeResto,setActiveResto] = useState(null);
   const [myOrders,setMyOrders]   = useState({});
   const [allPaxOrders,setAllPaxOrders] = useState({});
-  const [loading,setLoading]     = useState(true);
+  const [,setLoading]     = useState(true);
   const [myProof,setMyProof]     = useState(null);
   const [allProofs,setAllProofs] = useState({});
   const [uploading,setUploading] = useState(false);
@@ -1706,10 +1702,10 @@ const OlehOlehTab = memo(({user}) => {
     const mine={};
     for(const r of takeawayRestos){
       const key=`order.${r.id}.${user.replace(/\s+/g,"_")}`;
-      try{ const v=await sGet(key); if(v){ const p=JSON.parse(v); if(p.totalIDR>0) mine[r.id]={name:r.name,totalIDR:p.totalIDR,items:p.items||[]}; } }catch{}
+      try{ const v=await sGet(key); if(v){ const p=JSON.parse(v); if(p.totalIDR>0) mine[r.id]={name:r.name,totalIDR:p.totalIDR,items:p.items||[]}; } }catch{ /* abaikan */ }
     }
     setMyOrders(mine);
-    try{ const pv=await sGet(`oleholeh.proof.${user.replace(/\s+/g,"_")}`); if(pv) setMyProof(JSON.parse(pv)); }catch{}
+    try{ const pv=await sGet(`oleholeh.proof.${user.replace(/\s+/g,"_")}`); if(pv) setMyProof(JSON.parse(pv)); }catch{ /* abaikan */ }
     if(isCoord){
       const all={};
       await Promise.all(takeawayRestos.flatMap(r => ALL_PAX.map(async pax => {
@@ -1717,14 +1713,16 @@ const OlehOlehTab = memo(({user}) => {
         try{
           const v=await sGet(key);
           if(v){ const p=JSON.parse(v); if(p.totalIDR>0){ if(!all[pax.name]) all[pax.name]={}; all[pax.name][r.id]={name:r.name,totalIDR:p.totalIDR,items:p.items||[]}; } }
-        }catch{}
+        }catch{ /* abaikan */ }
       })));
       setAllPaxOrders(all);
-      try{ const pkeys=await sList("oleholeh.proof."); const proofs={}; for(const k of pkeys){ const v=await sGet(k); if(v){ proofs[k.replace("oleholeh.proof.","").replace(/_/g," ")]=JSON.parse(v); } } setAllProofs(proofs); }catch{}
+      try{ const pkeys=await sList("oleholeh.proof."); const proofs={}; for(const k of pkeys){ const v=await sGet(k); if(v){ proofs[k.replace("oleholeh.proof.","").replace(/_/g," ")]=JSON.parse(v); } } setAllProofs(proofs); }catch{ /* abaikan */ }
     }
     setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- takeawayRestos turunan konstanta (stabil)
   },[user,isCoord]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- muat data awal saat mount
   useEffect(()=>{ reload(); },[reload]);
 
   const onFile = async e => {
@@ -1997,7 +1995,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
         })
       );
       const grouped = {};
-      entries.forEach(([name,v]) => { if(v){ try{ grouped[name]=JSON.parse(v); }catch{} } });
+      entries.forEach(([name,v]) => { if(v){ try{ grouped[name]=JSON.parse(v); }catch{ /* abaikan */ } } });
       setAllOrders(grouped);
       setLastSync(new Date());
     } catch { setSyncError("Gagal memuat data. Cek koneksi."); }
@@ -2020,7 +2018,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
           })
         ));
         const grouped = {};
-        entries.forEach(([name,v]) => { if(v){ try{ grouped[name]=JSON.parse(v); }catch{} } });
+        entries.forEach(([name,v]) => { if(v){ try{ grouped[name]=JSON.parse(v); }catch{ /* abaikan */ } } });
         setAllOrders(grouped);
         setLastSync(new Date());
         if (grouped[user]) {
@@ -2048,6 +2046,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
       if(!cancelled){ setLoading(false); clearTimeout(fallback); }
     })();
     return ()=>{ cancelled=true; clearTimeout(fallback); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- cukup re-load saat resto.id/user berubah
   }, [resto.id, user]);
 
   useEffect(()=>{ const id=setInterval(refresh,30000); return ()=>clearInterval(id); },[refresh]);
@@ -2090,6 +2089,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
       else setSyncError("Gagal menyimpan order. Coba lagi.");
     } catch { setSyncError("Gagal menyimpan order. Coba lagi."); }
     setSaving(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- resto.taxRate stabil (prop)
   },[cart,cartCount,resto.id,user,refresh,saving]);
 
   const deleteOrder = useCallback(async () => {
@@ -2103,7 +2103,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
       setSubmitted(false);
       setDeleteConfirm(false);
       await refresh();
-    } catch { }
+    } catch { /* abaikan */ }
     setDeleting(false);
   },[resto.id,user,refresh]);
 
@@ -2605,7 +2605,7 @@ const suggestByBrand = (garment, brand, brandSize) => {
 };
 
 const SizeCountdown = memo(() => {
-  const [now,setNow] = useState(Date.now());
+  const [now,setNow] = useState(() => Date.now());
   useEffect(()=>{ const id=setInterval(()=>setNow(Date.now()),1000); return ()=>clearInterval(id); },[]);
   const diff = SIZE_DEADLINE.getTime() - now;
 
@@ -2681,7 +2681,7 @@ const SizeTab = memo(({user}) => {
       );
       const grouped = {};
       results.forEach(([name, v]) => {
-        if(v){ try{ grouped[name] = JSON.parse(v); }catch{} }
+        if(v){ try{ grouped[name] = JSON.parse(v); }catch{ /* abaikan */ } }
       });
       setAllSizes(grouped);
       setLastSync(new Date());
@@ -2696,6 +2696,7 @@ const SizeTab = memo(({user}) => {
   }, [loadAll]);
   useEffect(()=>{ const id=setInterval(loadAll,30000); return ()=>clearInterval(id); },[loadAll]);
 
+  /* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps -- pola reset/pre-fill draft disengaja: deps dibatasi agar auto-refresh tak reset form yang sedang diisi */
   // target berubah → reset draft dari data tersimpan
   useEffect(()=>{
     const ex = allSizes[target];
@@ -2713,6 +2714,7 @@ const SizeTab = memo(({user}) => {
       return {baju:ex.baju||"",celana:ex.celana||"",topi:ex.topi||"",sepatu:ex.sepatu||"",catatan:ex.catatan||""};
     });
   }, [allSizes]); // sengaja: target tidak di deps
+  /* eslint-enable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
 
   const setField = (gid,val) => setDraft(d=>({...d,[gid]:d[gid]===val?"":val}));
 
@@ -2970,12 +2972,12 @@ const SESSION_KEY = "pos_session";
 const IDLE_MS = 15 * 60 * 1000; // 15 menit idle / tidak diakses
 const loadSession = () => {
   try { const s = JSON.parse(localStorage.getItem(SESSION_KEY)||"null");
-    if(s && s.user && s.ts && (Date.now()-s.ts < IDLE_MS)) return s; } catch {}
+    if(s && s.user && s.ts && (Date.now()-s.ts < IDLE_MS)) return s; } catch { /* abaikan */ }
   return null;
 };
-const saveSession = user => { try { localStorage.setItem(SESSION_KEY, JSON.stringify({user, ts:Date.now()})); } catch {} };
-const touchSession = () => { try { const s=JSON.parse(localStorage.getItem(SESSION_KEY)||"null"); if(s&&s.user){ s.ts=Date.now(); localStorage.setItem(SESSION_KEY, JSON.stringify(s)); } } catch {} };
-const clearSession = () => { try { localStorage.removeItem(SESSION_KEY); } catch {} };
+const saveSession = user => { try { localStorage.setItem(SESSION_KEY, JSON.stringify({user, ts:Date.now()})); } catch { /* abaikan */ } };
+const touchSession = () => { try { const s=JSON.parse(localStorage.getItem(SESSION_KEY)||"null"); if(s&&s.user){ s.ts=Date.now(); localStorage.setItem(SESSION_KEY, JSON.stringify(s)); } } catch { /* abaikan */ } };
+const clearSession = () => { try { localStorage.removeItem(SESSION_KEY); } catch { /* abaikan */ } };
 
 export default function App() {
   const initial = typeof window!=="undefined" ? loadSession() : null;
@@ -2988,13 +2990,13 @@ export default function App() {
   const startMusic = useCallback(()=>{
     const a=audioRef.current; if(!a) return;
     a.volume=0.5;
-    try{ a.muted = localStorage.getItem("pos_music_muted")==="1"; }catch{}
+    try{ a.muted = localStorage.getItem("pos_music_muted")==="1"; }catch{ /* abaikan */ }
     a.play().catch(()=>{});
   },[]);
   const toggleMute = useCallback(()=>{
     setMusicMuted(m=>{
       const nm=!m;
-      try{ localStorage.setItem("pos_music_muted", nm?"1":"0"); }catch{}
+      try{ localStorage.setItem("pos_music_muted", nm?"1":"0"); }catch{ /* abaikan */ }
       const a=audioRef.current;
       if(a){ a.muted=nm; if(!nm){ a.volume=0.5; a.play().catch(()=>{}); } }
       return nm;
