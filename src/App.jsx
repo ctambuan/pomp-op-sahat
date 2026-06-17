@@ -1323,16 +1323,16 @@ const BudgetTab = memo(({user}) => {
         </div>
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"16px",marginBottom:"24px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:"16px",marginBottom:"24px"}}>
         {[
           {label:"Total Kontribusi",val:show(net.kontribusi),sub:"Setoran ke Rekening Bersama"},
           {label:"Biaya / Komitmen",val:show(net.biaya),sub:"Realisasi trip"},
           {label:"Saldo Kas",val:show(ledger.saldoAkhir),sub:"Bank Jago",hi:T.settled},
           {label:"Posisi Bersih",val:showSigned(net.posisiAkhir),sub:net.posisiAkhir>=0?"RB berutang ke anggota":"Anggota berutang ke RB",hi:signColor(net.posisiAkhir)},
         ].map(k=>(
-          <div key={k.label} style={{background:T.white,padding:"28px 28px",borderRadius:"12px",boxShadow:"0 0 30px 0 rgba(33,46,77,0.06)"}}>
+          <div key={k.label} style={{background:T.white,padding:"22px 22px",borderRadius:"12px",boxShadow:"0 0 30px 0 rgba(33,46,77,0.06)"}}>
             <p style={{fontSize:"13px",fontWeight:600,letterSpacing:"1px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>{k.label}</p>
-            <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"28px",fontWeight:700,color:k.hi||T.ink,lineHeight:1.1,marginBottom:"6px",letterSpacing:"-0.5px"}}>{k.val}</p>
+            <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"22px",fontWeight:700,color:k.hi||T.ink,lineHeight:1.15,marginBottom:"6px",letterSpacing:"-0.5px",whiteSpace:"nowrap"}}>{k.val}</p>
             <p style={{fontSize:"13px",color:T.muted,fontWeight:500}}>{k.sub}</p>
           </div>
         ))}
