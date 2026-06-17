@@ -1,13 +1,6 @@
 import { useState, useEffect, useCallback, useRef, memo, Component, Fragment } from "react";
 import { sGet, sSet, sList, onValue, ref, db } from "./firebase";
-
-const T = {
-  stone:"#f3ede4",cream:"#faf7f2",white:"#ffffff",ink:"#1a1512",mid:"#5c5048",
-  muted:"#9c8e82",ghost:"#c8bdb4",forest:"#243d30",forestL:"#3a5c49",
-  gold:"#9a7a40",goldL:"#c4a870",settled:"#2c5038",settledBg:"#edf4ef",
-  warn:"#6b4c1e",warnBg:"#f9f2e8",danger:"#7a2e20",dangerBg:"#f8efed",
-  abs:"#3a4a6a",absBg:"#eef0f6",line:"#e0d5c8",lineD:"#ccc0b0",
-};
+import { T, formatRupiah } from "./design-system";
 
 const PASSWORD = "opsahat2026";
 const COORDINATORS = ["Christine Tambunan","Nhaomy Panjaitan","Intan Tambunan","Rany Yamemia","Lusiana"];
@@ -1141,7 +1134,7 @@ const SET_MENUS = [
   },
 ];
 
-const fmt = n => "Rp" + Math.abs(Number(n)).toLocaleString("id-ID");
+const fmt = formatRupiah;
 
 const useIsNarrow = (bp=640) => {
   const [narrow,setNarrow] = useState(typeof window!=="undefined" && window.innerWidth < bp);
