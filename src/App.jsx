@@ -1148,6 +1148,7 @@ const GlobalStyles = () => (
   <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { max-width: 100%; overflow-x: hidden; }
     body { background: ${T.stone}; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 400; color: ${T.ink}; -webkit-font-smoothing: antialiased; }
     ::selection { background: ${T.forest}; color: white; }
     input, select, button, textarea { font-family: inherit; }
@@ -1155,6 +1156,16 @@ const GlobalStyles = () => (
     @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
     .fade-up { animation: fadeUp 0.6s ease forwards; }
     .tab-card { background: #fff; border-radius: 12px; box-shadow: 0 0 30px 0 rgba(33,46,77,0.06); padding: 28px 30px; }
+    /* Nav tab bisa di-scroll horizontal (anti-overflow di HP) */
+    .shell-nav { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .shell-nav::-webkit-scrollbar { display: none; }
+    .shell-nav button { flex-shrink: 0; white-space: nowrap; }
+    /* Responsif HP: rapatkan padding & tab */
+    @media (max-width: 640px) {
+      .shell-head { padding: 0 16px !important; }
+      .shell-main { padding: 32px 16px !important; }
+      .shell-nav button { padding: 14px 16px 12px !important; }
+    }
   `}</style>
 );
 
@@ -1206,7 +1217,7 @@ const Shell = ({user,tab,setTab,children,muted,onToggleMute}) => {
     <div style={{minHeight:"100vh",background:T.stone}}>
       <GlobalStyles/>
       <header style={{background:T.stone,borderBottom:`1px solid ${T.line}`,position:"sticky",top:0,zIndex:100}}>
-        <div style={{maxWidth:"960px",margin:"0 auto",padding:"0 40px"}}>
+        <div className="shell-head" style={{maxWidth:"960px",margin:"0 auto",padding:"0 40px"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"20px 0 16px",borderBottom:`1px solid ${T.line}`}}>
             <div>
               <h1 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"18px",fontWeight:400,color:T.ink,letterSpacing:"-0.3px"}}>Pomp Op Sahat</h1>
@@ -1221,14 +1232,14 @@ const Shell = ({user,tab,setTab,children,muted,onToggleMute}) => {
               <p style={{fontSize:"14px",color:T.muted}}>Halo, <span style={{color:T.ink,fontWeight:500}}>{user}</span></p>
             </div>
           </div>
-          <nav style={{display:"flex"}}>
+          <nav className="shell-nav" style={{display:"flex"}}>
             {TABS.map(t=>(
               <button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",padding:"16px 28px 14px",cursor:"pointer",fontSize:"14px",letterSpacing:"2px",textTransform:"uppercase",fontWeight:tab===t.id?500:300,color:tab===t.id?T.forest:T.muted,borderBottom:tab===t.id?`2px solid ${T.forest}`:"2px solid transparent",transition:"all 0.2s",marginBottom:"-1px"}}>{t.label}</button>
             ))}
           </nav>
         </div>
       </header>
-      <main style={{maxWidth:"960px",margin:"0 auto",padding:"60px 40px"}}>{children}</main>
+      <main className="shell-main" style={{maxWidth:"960px",margin:"0 auto",padding:"60px 40px"}}>{children}</main>
       <footer style={{borderTop:`1px solid ${T.line}`,padding:"32px 40px",textAlign:"center"}}>
         <p style={{fontSize:"14px",letterSpacing:"2px",textTransform:"uppercase",color:T.ghost}}>Konfidensial · Pomp Op Sahat 2026 · Yogyakarta</p>
       </footer>
@@ -1312,7 +1323,7 @@ const BudgetTab = memo(({user}) => {
         </div>
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"16px",marginBottom:"24px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:"16px",marginBottom:"24px"}}>
         {[
           {label:"Total Kontribusi",val:show(net.kontribusi),sub:"Setoran ke Rekening Bersama"},
           {label:"Biaya / Komitmen",val:show(net.biaya),sub:"Realisasi trip"},
@@ -1492,9 +1503,9 @@ const ItineraryTab = memo(() => {
         <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"26px",fontWeight:400,color:T.ink}}>Itinerary v20</h2>
         <p style={{fontSize:"15px",color:T.muted,marginTop:"8px"}}>2–5 Juli 2026 · 23 Peserta · Hyatt Regency Yogyakarta</p>
       </div>
-      <div style={{display:"flex",borderBottom:`1px solid ${T.line}`,marginBottom:"48px"}}>
+      <div style={{display:"flex",borderBottom:`1px solid ${T.line}`,marginBottom:"48px",overflowX:"auto"}}>
         {ITINERARY.map(it=>(
-          <button key={it.day} onClick={()=>setDay(it.day)} style={{background:"none",border:"none",padding:"0 32px 16px 0",cursor:"pointer",textAlign:"left"}}>
+          <button key={it.day} onClick={()=>setDay(it.day)} style={{background:"none",border:"none",padding:"0 32px 16px 0",cursor:"pointer",textAlign:"left",flexShrink:0,whiteSpace:"nowrap"}}>
             <p style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:day===it.day?T.forest:T.ghost,marginBottom:"4px"}}>{`Hari ${it.day}`}</p>
             <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"17px",color:day===it.day?T.forest:T.muted,fontWeight:day===it.day?500:400}}>{it.label}</p>
             {day===it.day&&<div style={{height:"2px",background:T.forest,marginTop:"14px",marginRight:"32px"}}/>}
