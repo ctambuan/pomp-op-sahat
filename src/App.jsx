@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef, memo, Component, Fragment } from "react";
-import { sGet, sSet, sList, onValue, ref, db } from "./firebase";
+import { sGet, sSet, sList } from "./firebase";
 import { T, formatRupiah } from "./design-system";
 
 const PASSWORD = "opsahat2026";
@@ -1135,6 +1135,8 @@ const SET_MENUS = [
 ];
 
 const fmt = formatRupiah;
+// Gaya kartu Metronic (putih, rounded, soft shadow) untuk section per tab.
+const CARD = {background:T.white,borderRadius:"12px",boxShadow:"0 0 30px 0 rgba(33,46,77,0.06)",padding:"24px 28px"};
 
 const useIsNarrow = (bp=640) => {
   const [narrow,setNarrow] = useState(typeof window!=="undefined" && window.innerWidth < bp);
@@ -1488,7 +1490,7 @@ const ItineraryTab = memo(() => {
   const narrow = useIsNarrow();
   const d = ITINERARY.find(x=>x.day===day);
   return (
-    <div className="fade-up tab-card">
+    <div className="fade-up">
       <div style={{marginBottom:"56px"}}>
         <p style={{fontSize:"14px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Jadwal Perjalanan</p>
         <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"26px",fontWeight:400,color:T.ink}}>Itinerary v20</h2>
@@ -1503,9 +1505,9 @@ const ItineraryTab = memo(() => {
           </button>
         ))}
       </div>
-      {d&&<>
-        <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"16px",fontStyle:"italic",color:T.muted,marginBottom:"40px"}}>{d.date}</p>
-        <div style={{borderTop:`1px solid ${T.line}`}}>
+      {d&&<div style={{...CARD,padding:"20px 28px"}}>
+        <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"16px",fontStyle:"italic",color:T.muted,marginBottom:"8px"}}>{d.date}</p>
+        <div>
           {d.events.map((ev,i)=>(
             <div key={i} style={{display:"grid",gridTemplateColumns:narrow?"52px 16px 1fr":"80px 20px 1fr",gap:narrow?"0 14px":"0 24px",borderBottom:`1px solid ${T.line}`,padding:narrow?"22px 0":"28px 0",alignItems:"start"}}>
               <div style={{textAlign:"right",paddingTop:"2px"}}>
@@ -1546,7 +1548,7 @@ const ItineraryTab = memo(() => {
             </div>
           ))}
         </div>
-      </>}
+      </div>}
     </div>
   );
 });
@@ -1632,7 +1634,7 @@ const MakanTab = memo(({user}) => {
   const items = FOOD_ORDER.map(id => RESTAURANTS.find(r=>r&&r.id===id) || SET_MENUS.find(s=>s&&s.id===id)).filter(Boolean);
 
   return (
-    <div className="fade-up tab-card">
+    <div className="fade-up">
       <div style={{marginBottom:"32px"}}>
         <p style={{fontSize:"14px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pre-Order F&B</p>
         <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"26px",fontWeight:400,color:T.ink}}>Pesan Makanan</h2>
@@ -1641,7 +1643,7 @@ const MakanTab = memo(({user}) => {
 
       <DeadlineCountdown target={FB_DEADLINE} label={FB_DEADLINE_LABEL}/>
 
-      <div style={{borderTop:`1px solid ${T.line}`}}>
+      <div>
         {items.map(m=>{
           const buffet = buffetIds.includes(m.id);
           if(buffet) return (
@@ -1665,9 +1667,9 @@ const MakanTab = memo(({user}) => {
           );
           return (
             <div key={m.id} onClick={()=>setActiveResto(m)}
-              style={{display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",borderBottom:`1px solid ${T.line}`,padding:"28px 0",cursor:"pointer"}}
-              onMouseEnter={e=>e.currentTarget.style.background=T.cream}
-              onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+              style={{...CARD,display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",cursor:"pointer",marginBottom:"16px",transition:"box-shadow 0.15s ease"}}
+              onMouseEnter={e=>e.currentTarget.style.boxShadow="0 0 40px 0 rgba(33,46,77,0.12)"}
+              onMouseLeave={e=>e.currentTarget.style.boxShadow="0 0 30px 0 rgba(33,46,77,0.06)"}>
               <div>
                 <div style={{display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap",marginBottom:"6px"}}>
                   <h3 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"17px",fontWeight:400,color:T.ink}}>{m.name}</h3>
@@ -1769,7 +1771,7 @@ const OlehOlehTab = memo(({user}) => {
   }).filter(mm=>mm.items.length>0);
 
   return (
-    <div className="fade-up tab-card">
+    <div className="fade-up">
       <div style={{marginBottom:"32px"}}>
         <p style={{fontSize:"14px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pre-Order F&B</p>
         <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"26px",fontWeight:400,color:T.ink}}>Oleh-Oleh</h2>
@@ -1779,12 +1781,12 @@ const OlehOlehTab = memo(({user}) => {
       <DeadlineCountdown target={FB_DEADLINE} label={FB_DEADLINE_LABEL}/>
 
       {/* ── MERCHANT CARDS ── */}
-      <div style={{marginBottom:"48px",borderTop:`1px solid ${T.line}`}}>
+      <div style={{marginBottom:"8px"}}>
         {takeawayRestos.map(r=>(
           <div key={r.id} onClick={()=>setActiveResto(r)}
-            style={{display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",borderBottom:`1px solid ${T.line}`,padding:"28px 0",cursor:"pointer"}}
-            onMouseEnter={e=>e.currentTarget.style.background=T.cream}
-            onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+            style={{...CARD,display:"grid",gridTemplateColumns:"1fr auto",alignItems:"center",gap:"24px",cursor:"pointer",marginBottom:"16px",transition:"box-shadow 0.15s ease"}}
+            onMouseEnter={e=>e.currentTarget.style.boxShadow="0 0 40px 0 rgba(33,46,77,0.12)"}
+            onMouseLeave={e=>e.currentTarget.style.boxShadow="0 0 30px 0 rgba(33,46,77,0.06)"}>
             <div>
               <div style={{display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap",marginBottom:"6px"}}>
                 <h3 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"17px",fontWeight:400,color:T.ink}}>{r.name}</h3>
@@ -1800,7 +1802,7 @@ const OlehOlehTab = memo(({user}) => {
 
       {/* ── PAYMENT CARD ── */}
       {myStores.length>0&&(
-        <div style={{border:`1px solid ${T.gold}`,marginBottom:"48px"}}>
+        <div style={{...CARD,padding:0,overflow:"hidden",border:`1px solid ${T.line}`,marginBottom:"16px"}}>
           <div style={{background:T.gold,padding:"14px 24px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
             <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:"white",fontWeight:500}}>Tagihan Oleh-Oleh · Bayar Langsung 5 Juli 2026</p>
             <p style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:"rgba(255,255,255,0.8)"}}>Satu Transfer</p>
@@ -1828,7 +1830,7 @@ const OlehOlehTab = memo(({user}) => {
 
       {/* ── COORDINATOR: REKAP PER PESERTA (dengan total) ── */}
       {isCoord&&paxWithOrders.length>0&&(
-        <div style={{marginBottom:"48px"}}>
+        <div style={{...CARD,marginBottom:"16px"}}>
           <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Rekap Per Peserta</p>
           <div style={{overflowX:"auto"}}>
             <table style={{width:"100%",borderCollapse:"collapse",fontSize:"14px"}}>
@@ -1874,7 +1876,7 @@ const OlehOlehTab = memo(({user}) => {
 
       {/* ── COORDINATOR: REKAP TOTAL PER MERCHANT (tanpa nama) ── */}
       {isCoord&&merchantAgg.length>0&&(
-        <div style={{marginBottom:"48px"}}>
+        <div style={{...CARD,marginBottom:"16px"}}>
           <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>Rekap Pesanan Per Merchant</p>
           <p style={{fontSize:"14px",color:T.muted,marginBottom:"24px",fontStyle:"italic"}}>Gabungan seluruh peserta, tanpa nama — referensi koordinator memesan langsung ke toko.</p>
           {merchantAgg.map(mm=>(
@@ -1898,7 +1900,7 @@ const OlehOlehTab = memo(({user}) => {
 
       {/* ── BUKTI TRANSFER (paling bawah) ── */}
       {(myStores.length>0 || (isCoord&&paxWithOrders.length>0))&&(
-        <div style={{marginBottom:"56px"}}>
+        <div style={{...CARD,marginBottom:"16px"}}>
           <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Bukti Transfer</p>
 
           {myStores.length>0&&(
@@ -2073,8 +2075,8 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
     setSaving(true); setSyncError(null);
     try {
       const items = Object.values(cart).map(i=>({name:i.name,qty:i.qty,notes:i.notes||"",price:i.price||0,config:i.config||""}));
-      const nettRp = items.reduce((s,i)=>s+(i.price||0)*i.qty,0);
-      const totalRp= resto.taxRate ? Math.round(nettIDR*(1+resto.taxRate)) : nettIDR;
+      const nettIDR = items.reduce((s,i)=>s+(i.price||0)*i.qty,0);
+      const totalIDR = resto.taxRate ? Math.round(nettIDR*(1+resto.taxRate)) : nettIDR;
       const key = `order.${resto.id}.${user.replace(/\s+/g,"_")}`;
       const ok = await sSet(key, JSON.stringify({peserta:user,hh:ALL_PAX.find(p=>p.name===user)?.hh||"",items,totalIDR,submittedAt:new Date().toISOString()}));
       if(ok){
@@ -2128,7 +2130,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
   );
 
   return (
-    <div className="fade-up tab-card">
+    <div className="fade-up">
       <button onClick={onBack} style={{background:"none",border:"none",cursor:"pointer",fontSize:"14px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,padding:"0 0 32px",display:"flex",alignItems:"center",gap:"8px"}}>← Kembali</button>
 
       <div style={{marginBottom:"48px"}}>
@@ -2158,7 +2160,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
         ))}
       </div>
 
-      {tab==="order"&&<div>
+      {tab==="order"&&<div style={{...CARD}}>
         {locked&&!isCoord&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"16px 20px",marginBottom:"24px"}}><p style={{fontSize:"14px",color:T.danger}}>Pre-order telah ditutup. Hubungi koordinator untuk perubahan.</p></div>}
         {submitted&&!deleteConfirm&&(
           <div style={{background:T.settledBg,border:`1px solid ${T.settled}`,padding:"14px 20px",marginBottom:"24px"}}>
@@ -2351,7 +2353,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
         </div>}
       </div>}
 
-      {tab==="recap"&&<div>
+      {tab==="recap"&&<div style={{...CARD}}>
         {!showRecap&&<p style={{fontSize:"15px",color:T.muted,fontStyle:"italic",padding:"20px 0"}}>Submit order Anda terlebih dahulu untuk melihat rekap semua peserta.</p>}
         {showRecap&&<>
           <div style={{marginBottom:"48px"}}>
@@ -2763,7 +2765,7 @@ const SizeTab = memo(({user}) => {
   if(loading) return (<div style={{textAlign:"center",padding:"80px 0",color:T.muted}}><p style={{fontSize:"14px",letterSpacing:"2px",textTransform:"uppercase"}}>Memuat data dari Firebase…</p></div>);
 
   return (
-    <div className="fade-up tab-card">
+    <div className="fade-up">
       <div style={{marginBottom:"40px"}}>
         <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pengumpulan Ukuran</p>
         <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"28px",fontWeight:400,color:T.ink}}>Ukuran Pakaian</h2>
@@ -2781,7 +2783,7 @@ const SizeTab = memo(({user}) => {
 
       {syncError&&<div style={{background:T.dangerBg,border:"1px solid #e8b4a8",padding:"12px 16px",marginBottom:"24px"}}><p style={{fontSize:"14px",color:T.danger}}>{syncError}</p></div>}
 
-      {tab==="form"&&<div>
+      {tab==="form"&&<div style={{...CARD}}>
         {/* pilih untuk siapa */}
         <div style={{marginBottom:"32px"}}>
           <p style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"14px"}}>Mengisi untuk</p>
@@ -2926,7 +2928,7 @@ const SizeTab = memo(({user}) => {
         </div>
       </div>}
 
-      {tab==="recap"&&<div>
+      {tab==="recap"&&<div style={{...CARD}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"24px",flexWrap:"wrap",gap:"12px"}}>
           <p style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>{filledCount} dari {ALL_PAX.length} peserta sudah mengisi{lastSync&&<span style={{color:T.ghost}}> · {lastSync.toLocaleTimeString("id-ID")}</span>}</p>
           <div style={{display:"flex",gap:"10px"}}>
