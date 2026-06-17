@@ -22,29 +22,66 @@ const ALL_PAX = [
   {name:"Mariana Tambunan",hh:"HH5"},{name:"Olive Tambunan",hh:"HH5"},{name:"Nadia Tambunan",hh:"HH5"},
 ];
 
-const BUDGET_DEFAULT = {
-  perPax:3150000, lastSync:"21 Mei 2026",
-  totals:{pax:20,gross:85904001,deposit:91142600,balance:5238599},
-  households:[
-    {id:"HH1",lead:"Christine Tambunan",members:["Christine Tambunan","Agustianto Batubara","Alexander Batubara"],
-     pax:3,gross:9450000,deposit:13148850,balance:3698850,absorbed:false,subRows:[]},
-    {id:"HH2",lead:"Agustinus Tambunan",members:["Agustinus Tambunan","Linda Napitupulu","Adolf Tambunan","Intan Tambunan"],
-     pax:4,gross:21084667,deposit:21189000,balance:104333,absorbed:false,subRows:[]},
-    {id:"HH3",lead:"Monang Panjaitan",members:["Monang Panjaitan","Rohana Tambunan","Nhaomy Panjaitan"],
-     pax:3,gross:17934667,deposit:18020000,balance:85333,absorbed:false,subRows:[]},
-    {id:"HH4",lead:"Gerard Sahat Pardomuan",members:["Gerard Sahat","Diana Pardede","Ferdiana Sondang","Ronald Daniel","Ivana Panjaitan","Leandro Ratu","Rany Yamemia","Arlo Ratu","Alora Ratu","Lusiana"],
-     pax:10,gross:37434667,deposit:38784750,balance:1350083,absorbed:false,
-     subRows:[
-       {members:"Gerard Sahat & Diana Pardede",pax:2,gross:14784667,deposit:14821500,balance:36833},
-       {members:"Ferdiana, Ronald, Ivana",pax:3,gross:8600000,deposit:8600000,balance:0},
-       {members:"Leandro, Rany, Arlo, Alora",pax:4,gross:10900000,deposit:10900000,balance:0},
-       {members:"Lusiana",pax:1,gross:3150000,deposit:4463250,balance:1313250},
-     ]},
-    {id:"HH5",lead:"Mariana Tambunan",members:["Mariana Tambunan","Olive Tambunan","Nadia Tambunan"],
-     pax:3,gross:0,deposit:0,balance:0,absorbed:true,subRows:[],
-     note:"Biaya diserap rata oleh HH2 + HH3 + HH4. HH1 dikecualikan."},
-  ]
+// Snapshot Rekonsiliasi Rekening Bersama (per 17 Juni 2026) — dipakai sebagai
+// fallback build-time. Saat /api/budget aktif, data ini ditimpa otomatis dari
+// Google Sheets. Footnote/Catatan TIDAK ikut ditarik (lihat CATATAN_DANA).
+const BUDGET_SNAPSHOT = {
+  asOf: "17 Juni 2026",
+  recon: {
+    rows: [
+      {code:"HH1", label:"Christine / Agustianto",      kontribusi:12648850, biaya:9450000,  talangan:12571267, kekurangan:0,        posisiAkhir:15770117,  status:"Jumlah Akan Dibayarkan ke HH oleh Rekening Bersama"},
+      {code:"HH2", label:"Agustinus / Adolf / Intan",   kontribusi:21189000, biaya:21084667, talangan:0,        kekurangan:800000,   posisiAkhir:-695667,   status:"Jumlah Terutang ke Rekening Bersama"},
+      {code:"HH3", label:"Monang / Nhaomy",             kontribusi:18020000, biaya:17934667, talangan:0,        kekurangan:10202483, posisiAkhir:-10117150, status:"Jumlah Terutang ke Rekening Bersama"},
+      {code:"HH4", label:"Gerard / Lusiana (10 jiwa)",  kontribusi:38784750, biaya:37434667, talangan:0,        kekurangan:1868784,  posisiAkhir:-518701,   status:"Jumlah Terutang ke Rekening Bersama"},
+      {code:"HH5", label:"Mariana (diserap HH2+3+4)",   kontribusi:0,        biaya:0,        talangan:0,        kekurangan:0,        posisiAkhir:0,         status:"—"},
+    ],
+    net: {kontribusi:90642600, biaya:85904001, talangan:12571267, kekurangan:12871267, posisiAkhir:4438599},
+  },
+  talangan: {
+    rows: [
+      {item:"DP Ayom (D2)",                    dibayarOleh:"Christine",        beban:"HH3", jumlah:500000,  mekanisme:"HH3 → Christine (via Rekening Bersama)"},
+      {item:"DP Djiwana (D3)",                 dibayarOleh:"Christine",        beban:"HH2", jumlah:500000,  mekanisme:"HH2 → Christine (via Rekening Bersama)"},
+      {item:"DP Desa Palagan (D3)",            dibayarOleh:"Rekening Bersama", beban:"HH2", jumlah:300000,  mekanisme:"HH2 → Rekening Bersama"},
+      {item:"Kamar Monang & Rohana",           dibayarOleh:"Christine",        beban:"HH3", jumlah:7833699, mekanisme:"HH3 → Christine (via Rekening Bersama)"},
+      {item:"Kamar Lusiana & Nhaomy — ½ Nhaomy", dibayarOleh:"Christine",      beban:"HH3", jumlah:1868784, mekanisme:"HH3 → Christine (via Rekening Bersama)"},
+      {item:"Kamar Lusiana & Nhaomy — ½ Lusiana", dibayarOleh:"Christine",     beban:"HH4", jumlah:1868784, mekanisme:"HH4 → Christine (via Rekening Bersama)"},
+    ],
+    total: 12871267,
+  },
+  ledger: {
+    subtitle: "Rekening kustodian No. 102816180854 a.n. Christine Tambunan · 10 Mei – 17 Juni 2026 · Rupiah",
+    rows: [
+      {tanggal:"2026-05-10", keterangan:"Setoran Kontribusi HH1",                       kategori:"Kontribusi",       masuk:12648850, keluar:0,        saldo:12648850, catatan:""},
+      {tanggal:"2026-05-11", keterangan:"Setoran Kontribusi HH3",                       kategori:"Kontribusi",       masuk:13389750, keluar:0,        saldo:26038600, catatan:""},
+      {tanggal:"2026-05-11", keterangan:"Setoran Kontribusi HH4",                       kategori:"Kontribusi",       masuk:4463250,  keluar:0,        saldo:30501850, catatan:""},
+      {tanggal:"2026-05-11", keterangan:"Setoran Kontribusi HH4",                       kategori:"Kontribusi",       masuk:40169250, keluar:0,        saldo:70671100, catatan:""},
+      {tanggal:"2026-05-13", keterangan:"DP 2 Hiace 3–5 Jul ke rekening an. Divaldi",   kategori:"Transportasi",     masuk:0,        keluar:1000000,  saldo:69671100, catatan:""},
+      {tanggal:"2026-05-15", keterangan:"Pengembalian setoran 1 ke rekening Ferdiana (HH4)", kategori:"Pengembalian", masuk:0,    keluar:5347750,  saldo:64323350, catatan:""},
+      {tanggal:"2026-05-16", keterangan:"Pengembalian setoran 2 ke rekening Ferdiana (HH4)", kategori:"Pengembalian", masuk:0,    keluar:5000000,  saldo:59323350, catatan:""},
+      {tanggal:"2026-05-16", keterangan:"Setoran Kontribusi HH2",                       kategori:"Kontribusi",       masuk:15693000, keluar:0,        saldo:75016350, catatan:""},
+      {tanggal:"2026-05-17", keterangan:"Pembayaran Matras Yoga",                       kategori:"Aktivitas",        masuk:0,        keluar:440000,   saldo:74576350, catatan:""},
+      {tanggal:"2026-05-19", keterangan:"DP1 custom tour ke Nuvantara",                 kategori:"Aktivitas",        masuk:0,        keluar:7000000,  saldo:67576350, catatan:""},
+      {tanggal:"2026-05-19", keterangan:"DP sarapan Desa Palagan 4 Jul",               kategori:"F&B",              masuk:0,        keluar:300000,   saldo:67276350, catatan:""},
+      {tanggal:"2026-05-19", keterangan:"Blockseat Panoramic 2 Jul 22 pax ke KAI",      kategori:"Transportasi",     masuk:0,        keluar:4716250,  saldo:62560100, catatan:""},
+      {tanggal:"2026-05-19", keterangan:"Setoran Kontribusi HH3",                       kategori:"Kontribusi",       masuk:4630250,  keluar:0,        saldo:67190350, catatan:""},
+      {tanggal:"2026-05-20", keterangan:"DP2 custom tour ke Nuvantara",                 kategori:"Aktivitas",        masuk:0,        keluar:7000000,  saldo:60190350, catatan:""},
+      {tanggal:"2026-05-20", keterangan:"Setoran Kontribusi HH2",                       kategori:"Kontribusi",       masuk:5496000,  keluar:0,        saldo:65686350, catatan:""},
+      {tanggal:"2026-05-28", keterangan:"Bunga bank",                                   kategori:"Bunga",            masuk:52262,    keluar:0,        saldo:65738612, catatan:""},
+      {tanggal:"2026-05-28", keterangan:"Pajak atas bunga",                             kategori:"Pajak",            masuk:0,        keluar:10452,    saldo:65728160, catatan:""},
+      {tanggal:"2026-06-02", keterangan:"Hotel + pesawat pulang HH5 — Lusiana",         kategori:"Hotel/Pesawat HH5", masuk:0,       keluar:8995983,  saldo:56732177, catatan:"Voucher hotel HH5 (Rp4.354.131) & e-ticket pesawat pulang HH5 (Rp4.641.852) belum ada di Drive"},
+      {tanggal:"2026-06-11", keterangan:"Pelunasan KAI",                                kategori:"Transportasi",     masuk:0,        keluar:11948750, saldo:44783427, catatan:""},
+    ],
+    totalMasuk: 96542612, totalKeluar: 51759185, saldoAkhir: 44783427,
+  },
 };
+
+// Catatan kaki — STATIS (sengaja tidak ditarik dari sheet, hanya tabel yang sinkron).
+const CATATAN_DANA = [
+  "Posisi Akhir positif = Rekening Bersama berutang ke HH (hak terima). Negatif = HH masih harus membayar.",
+  "Posisi Akhir = Kontribusi − Biaya/Komitmen + Pembayaran Talangan − Kekurangan.",
+  "F&B seluruhnya disponsori per household — tidak termasuk Dana Bersama.",
+  "HH5 (Mariana, Olive, Nadia) diserap oleh HH2 + HH3 + HH4.",
+];
 
 const ITINERARY = [
   {day:1,date:"Kamis, 2 Juli 2026",label:"Keberangkatan",events:[
@@ -1105,7 +1142,6 @@ const SET_MENUS = [
 ];
 
 const fmt = n => "IDR " + Math.abs(Number(n)).toLocaleString("id-ID");
-const pct = (a,b) => b>0?Math.min(100,Math.round((a/b)*100)):0;
 
 const useIsNarrow = (bp=640) => {
   const [narrow,setNarrow] = useState(typeof window!=="undefined" && window.innerWidth < bp);
@@ -1210,59 +1246,50 @@ const Shell = ({user,tab,setTab,children,muted,onToggleMute}) => {
 const BudgetTab = memo(({user}) => {
   const isCoord = COORDINATORS.includes(user);
   const myHH = ALL_PAX.find(p=>p.name===user)?.hh;
-  const [d, setD] = useState(BUDGET_DEFAULT);
+  const [data, setData] = useState(BUDGET_SNAPSHOT);
+  const [live, setLive] = useState(false);
+  const [syncing, setSyncing] = useState(true);
   const [syncedAt, setSyncedAt] = useState(null);
-  const [ledger, setLedger] = useState([]);
-  const [loadedLedger, setLoadedLedger] = useState(false);
-  const [ledgerError, setLedgerError] = useState(null);
   const [revealed,setRevealed] = useState(false);
   const [pwOpen,setPwOpen] = useState(false);
   const [pw,setPw] = useState("");
   const [pwErr,setPwErr] = useState(false);
   const MASK = "••••••";
   const show = v => revealed ? fmt(v) : `IDR ${MASK}`;
+  const showSigned = v => revealed ? `${v>0?"+":v<0?"−":""}${fmt(v)}` : `IDR ${MASK}`;
+  // tampil per metrik: nol → "—" (saat terbuka), tertutup → mask
+  const metric = (v,signed) => revealed ? (v===0 ? "—" : (signed?`${v>0?"+":"−"}${fmt(v)}`:fmt(v))) : `IDR ${MASK}`;
+  const signColor = v => v>0?T.settled:v<0?T.danger:T.muted;
   const tryReveal = () => { if(pw.trim().toLowerCase()==="lihatdana"){ setRevealed(true); setPwOpen(false); setPw(""); setPwErr(false); } else setPwErr(true); };
 
+  // Auto-sync dari Google Sheets via /api/budget. Gagal/belum dikonfigurasi
+  // → tetap pakai snapshot bawaan (tab tidak pernah kosong).
   useEffect(() => {
-    const toArr = v => !v ? [] : Array.isArray(v) ? v : Object.values(v);
-    const unsubBudget = onValue(ref(db, "budget"), snap => {
-      if (snap.exists()) {
-        const val = snap.val();
-        const merged = {
-          ...BUDGET_DEFAULT,
-          ...val,
-          totals: { ...BUDGET_DEFAULT.totals, ...(val.totals || {}) },
-        };
-        merged.households = toArr(merged.households).map(hh => ({
-          ...hh,
-          members: toArr(hh.members),
-          subRows: toArr(hh.subRows),
-        }));
-        setD(merged);
-        setSyncedAt(new Date());
-      }
-    }, err => { console.warn("budget onValue error:", err.message); });
-
-    const unsubLedger = onValue(ref(db, "ledger"), snap => {
-      setLoadedLedger(true);
-      setLedgerError(null);
-      if (snap.exists()) {
-        const val = snap.val();
-        setLedger(Array.isArray(val) ? val : Object.values(val));
-      } else {
-        setLedger([]);
-      }
-    }, err => {
-      setLoadedLedger(true);
-      setLedgerError(err.message);
-    });
-
-    // fallback: jika onValue tidak fire dalam 12 detik (rules block / no network)
-    const fallback = setTimeout(() => setLoadedLedger(true), 12000);
-    return () => { unsubBudget(); unsubLedger(); clearTimeout(fallback); };
+    let alive = true;
+    (async () => {
+      try {
+        const res = await fetch("/api/budget", { headers: { Accept: "application/json" } });
+        const json = await res.json();
+        if (alive && res.ok && json && json.ok) {
+          setData(json);
+          setLive(true);
+          setSyncedAt(new Date());
+        }
+      } catch { /* keep snapshot */ }
+      finally { if (alive) setSyncing(false); }
+    })();
+    return () => { alive = false; };
   }, []);
 
-  const collection = pct(d.totals.deposit, d.totals.gross);
+  const recon = data.recon || {rows:[],net:null};
+  const net = recon.net || {kontribusi:0,biaya:0,talangan:0,kekurangan:0,posisiAkhir:0};
+  const talangan = data.talangan || {rows:[],total:0};
+  const ledger = data.ledger || {rows:[],totalMasuk:0,totalKeluar:0,saldoAkhir:0,subtitle:""};
+
+  const sourceLabel = live ? "Sinkron dari Google Sheets" : (syncing ? "Menyinkronkan…" : "Snapshot tersimpan");
+
+  const LG = "30px 92px minmax(180px,1.6fr) 1fr 110px 110px 124px"; // grid Buku Besar
+  const TG = "minmax(180px,1.5fr) 0.9fr 0.6fr 1fr minmax(180px,1.7fr)"; // grid Talangan
 
   return (
     <div className="fade-up">
@@ -1270,8 +1297,8 @@ const BudgetTab = memo(({user}) => {
         <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Dana Bersama</p>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"20px",flexWrap:"wrap"}}>
           <div>
-            <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink,marginBottom:"8px"}}>Ringkasan Keuangan</h2>
-            <p style={{fontSize:"18px",color:T.muted}}>Per {d.lastSync} · Data dari Lusiana{syncedAt && <span style={{color:T.ghost}}> · Live {syncedAt.toLocaleTimeString("id-ID")}</span>}</p>
+            <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink,marginBottom:"8px"}}>Rekonsiliasi Rekening Bersama</h2>
+            <p style={{fontSize:"18px",color:T.muted}}>Per {data.asOf || "—"} · <span style={{color:live?T.forest:T.ghost}}>{sourceLabel}</span>{syncedAt && <span style={{color:T.ghost}}> · {syncedAt.toLocaleTimeString("id-ID")}</span>}</p>
           </div>
           <div style={{flexShrink:0}}>
             <button onClick={()=>{ if(revealed){setRevealed(false);} else {setPwOpen(o=>!o);setPwErr(false);} }} style={{display:"flex",alignItems:"center",gap:"8px",background:revealed?T.cream:"none",border:`1px solid ${revealed?T.forest:T.lineD}`,padding:"9px 16px",cursor:"pointer",fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:revealed?T.forest:T.muted}}>
@@ -1292,12 +1319,12 @@ const BudgetTab = memo(({user}) => {
         </div>
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"1px",background:T.line,marginBottom:"64px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"1px",background:T.line,marginBottom:"24px"}}>
         {[
-          {label:"Total Dana",val:show(d.totals.gross),sub:"Dana bersama"},
-          {label:"Per Peserta",val:show(d.perPax),sub:"Kontribusi"},
-          {label:"Terkumpul",val:show(d.totals.deposit),sub:`${collection}% dari target`,hi:T.settled},
-          {label:"Belum Lunas",val:show(Math.max(0,-d.totals.balance)),sub:"Outstanding",hi:d.totals.balance<0?T.danger:T.settled},
+          {label:"Total Kontribusi",val:show(net.kontribusi),sub:"Setoran ke Rekening Bersama"},
+          {label:"Biaya / Komitmen",val:show(net.biaya),sub:"Realisasi trip"},
+          {label:"Saldo Kas",val:show(ledger.saldoAkhir),sub:"Bank Jago",hi:T.settled},
+          {label:"Posisi Bersih",val:showSigned(net.posisiAkhir),sub:net.posisiAkhir>=0?"RB berutang ke anggota":"Anggota berutang ke RB",hi:signColor(net.posisiAkhir)},
         ].map(k=>(
           <div key={k.label} style={{background:T.cream,padding:"32px 28px"}}>
             <p style={{fontSize:"16px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>{k.label}</p>
@@ -1306,138 +1333,154 @@ const BudgetTab = memo(({user}) => {
           </div>
         ))}
       </div>
+      <p style={{fontSize:"16px",color:T.muted,fontStyle:"italic",marginBottom:"64px"}}>Posisi Akhir = Kontribusi − Biaya/Komitmen + Talangan − Kekurangan.</p>
 
+      {/* 1 · Posisi Akhir per HH */}
       <div style={{marginBottom:"64px"}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:"12px"}}>
-          <p style={{fontSize:"16px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted}}>Tingkat Pelunasan</p>
-          <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"23px",color:T.ink}}>{collection}%</p>
-        </div>
-        <div style={{height:"1px",background:T.line,position:"relative"}}>
-          <div style={{position:"absolute",top:0,left:0,height:"2px",width:`${collection}%`,background:T.forest,marginTop:"-0.5px",transition:"width 1s ease"}}/>
-        </div>
-        <div style={{display:"flex",justifyContent:"space-between",marginTop:"8px"}}>
-          <p style={{fontSize:"16px",color:T.muted}}>Terkumpul: {show(d.totals.deposit)}</p>
-          <p style={{fontSize:"16px",color:T.muted}}>Target: {show(d.totals.gross)}</p>
-        </div>
-      </div>
-
-      <div style={{marginBottom:"64px"}}>
-        <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Posisi Per Household</p>
+        <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Posisi Akhir per Household</p>
         <div style={{borderTop:`1px solid ${T.line}`}}>
-          {d.households.map(hh=>{
-            const isOwn=hh.id===myHH, absorbed=hh.absorbed;
-            const settled=!absorbed&&hh.balance>=0;
-            const statusColor=absorbed?T.abs:settled?T.settled:T.danger;
-            const statusLabel=absorbed?"Absorbed":settled?"Settled":hh.deposit>0?"Belum Lunas":"Belum Bayar";
-            const canSee=isCoord||isOwn||settled;
+          {recon.rows.map(hh=>{
+            const isOwn=hh.code===myHH;
+            const absorbed=hh.code==="HH5";
+            const canSee=isCoord||isOwn||hh.posisiAkhir>=0;
+            const tag = absorbed ? "Diserap" : hh.posisiAkhir>0 ? "Hak Terima" : hh.posisiAkhir<0 ? "Masih Bayar" : "—";
+            const tagColor = absorbed ? T.abs : signColor(hh.posisiAkhir);
+            const metrics = [
+              {l:"Kontribusi",v:hh.kontribusi,c:T.ink},
+              {l:"Biaya/Komitmen",v:hh.biaya,c:T.mid},
+              {l:"Talangan",v:hh.talangan,c:T.mid},
+              {l:"Kekurangan",v:hh.kekurangan,c:hh.kekurangan>0?T.danger:T.mid},
+              {l:"Posisi Akhir",v:hh.posisiAkhir,c:signColor(hh.posisiAkhir),signed:true},
+            ];
             return (
-              <div key={hh.id} style={{borderBottom:`1px solid ${T.line}`,padding:"32px 0",position:"relative"}}>
+              <div key={hh.code} style={{borderBottom:`1px solid ${T.line}`,padding:"32px 0",position:"relative"}}>
                 {isOwn&&<div style={{position:"absolute",left:"-40px",top:0,bottom:0,width:"2px",background:T.gold}}/>}
-                <div style={{display:"grid",gridTemplateColumns:"1fr auto",gap:"24px",alignItems:"start"}}>
-                  <div>
-                    <div style={{display:"flex",alignItems:"center",gap:"16px",marginBottom:"6px",flexWrap:"wrap"}}>
-                      <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{hh.lead}</h3>
-                      {isOwn&&<span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.gold}`,padding:"2px 8px"}}>Anda</span>}
-                    </div>
-                    <p style={{fontSize:"17px",color:T.muted,marginBottom:canSee&&!absorbed?"20px":"0"}}>{hh.id} · {hh.pax} peserta · {hh.members.join(", ")}</p>
-                    {canSee&&!absorbed&&(
-                      <div style={{display:"grid",gridTemplateColumns:"repeat(3,160px)",gap:"24px"}}>
-                        {[
-                          {l:"Total",v:show(hh.gross),c:T.ink},
-                          {l:"Dibayar",v:show(hh.deposit),c:T.settled},
-                          {l:hh.balance>=0?"Credit":"Sisa Bayar",v:show(Math.abs(hh.balance)),c:hh.balance>=0?T.settled:T.danger},
-                        ].map(f=>(
-                          <div key={f.l}>
-                            <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{f.l}</p>
-                            <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:f.c,fontWeight:400}}>{f.v}</p>
-                            {hh.gross>0&&f.l==="Dibayar"&&<div style={{marginTop:"6px",height:"1px",background:T.line}}><div style={{height:"1px",width:`${pct(hh.deposit,hh.gross)}%`,background:T.settled}}/></div>}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {isCoord&&hh.id==="HH4"&&hh.subRows?.length>0&&(
-                      <div style={{marginTop:"20px",borderTop:`1px solid ${T.line}`,paddingTop:"16px"}}>
-                        <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Sub-unit HH4</p>
-                        {hh.subRows.map((s,i)=>(
-                          <div key={i} style={{display:"grid",gridTemplateColumns:"1fr 60px 120px 100px",gap:"16px",padding:"8px 0",borderBottom:`1px solid ${T.line}`,fontSize:"18px",alignItems:"center"}}>
-                            <span style={{color:T.mid}}>{s.members}</span>
-                            <span style={{color:T.muted,textAlign:"right"}}>{s.pax}px</span>
-                            <span style={{color:T.settled,textAlign:"right"}}>{show(s.deposit)}</span>
-                            <span style={{color:s.balance>=0?T.settled:T.danger,textAlign:"right",fontWeight:500}}>{s.balance>=0?"+":""}{revealed?fmt(s.balance):MASK}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {absorbed&&<p style={{fontSize:"17px",color:T.abs,fontStyle:"italic",marginTop:"4px"}}>{hh.note}</p>}
-                    {!canSee&&!absorbed&&<p style={{fontSize:"17px",color:T.muted,fontStyle:"italic",marginTop:"4px"}}>Detail hanya tersedia untuk household Anda.</p>}
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",gap:"16px",marginBottom:canSee&&!absorbed?"20px":"6px",flexWrap:"wrap"}}>
+                  <div style={{display:"flex",alignItems:"baseline",gap:"14px",flexWrap:"wrap"}}>
+                    <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{hh.code} <span style={{color:T.muted,fontSize:"19px"}}>— {hh.label}</span></h3>
+                    {isOwn&&<span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.gold}`,padding:"2px 8px"}}>Anda</span>}
                   </div>
-                  <p style={{fontSize:"16px",letterSpacing:"1.5px",textTransform:"uppercase",color:statusColor,fontWeight:500,marginTop:"4px",whiteSpace:"nowrap"}}>{statusLabel}</p>
+                  <p style={{fontSize:"16px",letterSpacing:"1.5px",textTransform:"uppercase",color:tagColor,fontWeight:500,whiteSpace:"nowrap"}}>{tag}</p>
                 </div>
+                {absorbed
+                  ? <p style={{fontSize:"17px",color:T.abs,fontStyle:"italic"}}>Biaya diserap oleh HH2 + HH3 + HH4. HH1 dikecualikan.</p>
+                  : canSee
+                    ? <>
+                        <div style={{display:"flex",flexWrap:"wrap",gap:"24px 32px"}}>
+                          {metrics.map(f=>(
+                            <div key={f.l} style={{flex:"1 1 120px",minWidth:"110px"}}>
+                              <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{f.l}</p>
+                              <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:f.c,fontWeight:400}}>{metric(f.v,f.signed)}</p>
+                            </div>
+                          ))}
+                        </div>
+                        {hh.status&&hh.status!=="—"&&<p style={{fontSize:"16px",color:T.muted,fontStyle:"italic",marginTop:"16px"}}>{hh.status}</p>}
+                      </>
+                    : <p style={{fontSize:"17px",color:T.muted,fontStyle:"italic"}}>Detail hanya tersedia untuk household Anda.</p>
+                }
               </div>
             );
           })}
+          {/* NET */}
+          <div style={{padding:"24px 0",display:"flex",flexWrap:"wrap",gap:"24px 32px",alignItems:"baseline"}}>
+            <p style={{flex:"1 1 100%",fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,fontWeight:500,marginBottom:"4px"}}>Net — Rekening Bersama</p>
+            {[
+              {l:"Kontribusi",v:net.kontribusi,c:T.ink},
+              {l:"Biaya/Komitmen",v:net.biaya,c:T.mid},
+              {l:"Talangan",v:net.talangan,c:T.mid},
+              {l:"Kekurangan",v:net.kekurangan,c:T.mid},
+              {l:"Posisi Akhir",v:net.posisiAkhir,c:signColor(net.posisiAkhir),signed:true},
+            ].map(f=>(
+              <div key={f.l} style={{flex:"1 1 120px",minWidth:"110px"}}>
+                <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{f.l}</p>
+                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:f.c,fontWeight:500}}>{metric(f.v,f.signed)}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div style={{marginBottom:"64px"}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:"32px"}}>
-          <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted}}>Riwayat Transaksi</p>
-          {syncedAt&&<p style={{fontSize:"16px",color:T.ghost}}>Live · {syncedAt.toLocaleTimeString("id-ID")}</p>}
-        </div>
-        {!loadedLedger
-          ? <p style={{fontSize:"18px",color:T.muted,fontStyle:"italic"}}>Memuat data transaksi…</p>
-          : ledgerError
-            ? <div style={{background:T.dangerBg,border:`1px solid #e8b4a8`,padding:"14px 18px"}}>
-                <p style={{fontSize:"16px",color:T.danger,marginBottom:"6px"}}>Gagal memuat riwayat transaksi.</p>
-                <p style={{fontSize:"15px",color:T.muted}}>Kemungkinan Firebase Rules belum mengizinkan path <code>/ledger</code>. Tambahkan <code>"ledger": {"{"}".read": true, ".write": true{"}"}</code> di Firebase Console → Realtime Database → Rules.</p>
+      {/* 2 · Rincian Pembayaran Talangan */}
+      {talangan.rows.length>0 && (
+        <div style={{marginBottom:"64px"}}>
+          <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Rincian Pembayaran Talangan oleh HH</p>
+          <div style={{overflowX:"auto"}}>
+            <div style={{minWidth:"720px"}}>
+              <div style={{display:"grid",gridTemplateColumns:TG,gap:"0 16px",padding:"0 0 10px",borderBottom:`2px solid ${T.line}`}}>
+                {[["Item","left"],["Dibayar oleh","left"],["Beban","left"],["Jumlah","right"],["Mekanisme","left"]].map(([h,a])=>(
+                  <p key={h} style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,textAlign:a}}>{h}</p>
+                ))}
               </div>
-          : ledger.length===0
-            ? <p style={{fontSize:"18px",color:T.muted,fontStyle:"italic"}}>Belum ada catatan transaksi. Data diisi oleh Lusiana (Finance) via Firebase Console.</p>
-          : <>
-            <div style={{display:"grid",gridTemplateColumns:"32px 100px 80px 1fr 120px 120px 130px",gap:"0 16px",padding:"0 0 10px",borderBottom:`2px solid ${T.line}`}}>
-              {["No","Tanggal","Tipe","Keterangan","Deposit (+)","Refund (−)","Saldo"].map(h=>(
-                <p key={h} style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,textAlign:["Deposit (+)","Refund (−)","Saldo"].includes(h)?"right":"left"}}>{h}</p>
-              ))}
-            </div>
-            {ledger.map((row,i)=>{
-              const isDeposit = row.tipe==="Deposit";
-              const isRefund  = row.tipe==="Refund";
-              const typeColor = isDeposit ? T.settled : isRefund ? T.warn : T.danger;
-              return (
-                <div key={i} style={{display:"grid",gridTemplateColumns:"32px 100px 80px 1fr 120px 120px 130px",gap:"0 16px",padding:"13px 0",borderBottom:`1px solid ${T.line}`,alignItems:"center"}}>
-                  <p style={{fontSize:"17px",color:T.ghost}}>{row.no}</p>
-                  <p style={{fontSize:"17px",color:T.muted}}>{row.tanggal}</p>
-                  <p style={{fontSize:"16px",letterSpacing:"1px",textTransform:"uppercase",color:typeColor,fontWeight:500}}>{row.tipe}</p>
-                  <div>
-                    <p style={{fontSize:"18px",color:T.ink}}>{row.keterangan}</p>
-                    {row.note&&<p style={{fontSize:"16px",color:T.ghost,marginTop:"2px",fontStyle:"italic"}}>{row.note}</p>}
-                  </div>
-                  <p style={{fontSize:"18px",color:row.deposit>0?T.settled:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.deposit>0?(revealed?`+${fmt(row.deposit)}`:`+${MASK}`):"—"}</p>
-                  <p style={{fontSize:"18px",color:row.refund>0?T.warn:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.refund>0?(revealed?`−${fmt(row.refund)}`:`−${MASK}`):"—"}</p>
-                  <p style={{fontSize:"19px",color:T.ink,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif",fontWeight:i===ledger.length-1?500:400}}>{show(row.saldo)}</p>
+              {talangan.rows.map((r,i)=>(
+                <div key={i} style={{display:"grid",gridTemplateColumns:TG,gap:"0 16px",padding:"13px 0",borderBottom:`1px solid ${T.line}`,alignItems:"center"}}>
+                  <p style={{fontSize:"18px",color:T.ink}}>{r.item}</p>
+                  <p style={{fontSize:"17px",color:T.muted}}>{r.dibayarOleh}</p>
+                  <p style={{fontSize:"17px",color:T.muted}}>{r.beban}</p>
+                  <p style={{fontSize:"18px",color:T.ink,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{show(r.jumlah)}</p>
+                  <p style={{fontSize:"16px",color:T.ghost}}>{r.mekanisme}</p>
                 </div>
-              );
-            })}
-            <div style={{display:"grid",gridTemplateColumns:"32px 100px 80px 1fr 120px 120px 130px",gap:"0 16px",padding:"16px 0 0",borderTop:`2px solid ${T.lineD}`,marginTop:"4px"}}>
-              <span/><span/><span/>
-              <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Saldo Kas</p>
-              <span/><span/>
-              <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest,textAlign:"right",fontWeight:500}}>{ledger.length>0?show(ledger[ledger.length-1].saldo):"—"}</p>
+              ))}
+              <div style={{display:"grid",gridTemplateColumns:TG,gap:"0 16px",padding:"16px 0 0",borderTop:`2px solid ${T.lineD}`,marginTop:"4px"}}>
+                <span/><span/>
+                <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,textAlign:"right"}}>Total</p>
+                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest,textAlign:"right",fontWeight:500}}>{show(talangan.total)}</p>
+                <span/>
+              </div>
             </div>
-          </>
+          </div>
+        </div>
+      )}
+
+      {/* 3 · Buku Besar Historis */}
+      <div style={{marginBottom:"64px"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:"8px",flexWrap:"wrap",gap:"8px"}}>
+          <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted}}>Buku Besar Historis</p>
+          {live&&syncedAt&&<p style={{fontSize:"16px",color:T.ghost}}>Sinkron · {syncedAt.toLocaleTimeString("id-ID")}</p>}
+        </div>
+        {ledger.subtitle&&<p style={{fontSize:"16px",color:T.muted,marginBottom:"28px"}}>{ledger.subtitle}</p>}
+        {ledger.rows.length===0
+          ? <p style={{fontSize:"18px",color:T.muted,fontStyle:"italic"}}>Belum ada catatan transaksi.</p>
+          : <div style={{overflowX:"auto"}}>
+              <div style={{minWidth:"800px"}}>
+                <div style={{display:"grid",gridTemplateColumns:LG,gap:"0 16px",padding:"0 0 10px",borderBottom:`2px solid ${T.line}`}}>
+                  {[["No","left"],["Tanggal","left"],["Keterangan","left"],["Kategori","left"],["Masuk","right"],["Keluar","right"],["Saldo","right"]].map(([h,a])=>(
+                    <p key={h} style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,textAlign:a}}>{h}</p>
+                  ))}
+                </div>
+                {ledger.rows.map((row,i)=>(
+                  <div key={i} style={{display:"grid",gridTemplateColumns:LG,gap:"0 16px",padding:"13px 0",borderBottom:`1px solid ${T.line}`,alignItems:"center"}}>
+                    <p style={{fontSize:"17px",color:T.ghost}}>{i+1}</p>
+                    <p style={{fontSize:"17px",color:T.muted}}>{row.tanggal}</p>
+                    <div>
+                      <p style={{fontSize:"18px",color:T.ink}}>{row.keterangan}</p>
+                      {row.catatan&&<p style={{fontSize:"16px",color:T.ghost,marginTop:"2px",fontStyle:"italic"}}>{row.catatan}</p>}
+                    </div>
+                    <p style={{fontSize:"16px",color:T.muted}}>{row.kategori}</p>
+                    <p style={{fontSize:"18px",color:row.masuk>0?T.settled:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.masuk>0?(revealed?`+${fmt(row.masuk)}`:`+${MASK}`):"—"}</p>
+                    <p style={{fontSize:"18px",color:row.keluar>0?T.danger:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.keluar>0?(revealed?`−${fmt(row.keluar)}`:`−${MASK}`):"—"}</p>
+                    <p style={{fontSize:"19px",color:T.ink,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif",fontWeight:i===ledger.rows.length-1?500:400}}>{show(row.saldo)}</p>
+                  </div>
+                ))}
+                <div style={{display:"grid",gridTemplateColumns:LG,gap:"0 16px",padding:"16px 0 0",borderTop:`2px solid ${T.lineD}`,marginTop:"4px"}}>
+                  <span/><span/>
+                  <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Jumlah / Saldo Kas</p>
+                  <span/>
+                  <p style={{fontSize:"17px",color:T.settled,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{revealed?`+${fmt(ledger.totalMasuk)}`:`+${MASK}`}</p>
+                  <p style={{fontSize:"17px",color:T.danger,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{revealed?`−${fmt(ledger.totalKeluar)}`:`−${MASK}`}</p>
+                  <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest,textAlign:"right",fontWeight:500}}>{show(ledger.saldoAkhir)}</p>
+                </div>
+              </div>
+            </div>
         }
       </div>
 
+      {/* Catatan — STATIS (tidak ditarik dari sheet) */}
       <div style={{borderTop:`1px solid ${T.line}`,paddingTop:"32px"}}>
         <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>Catatan</p>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px 40px"}}>
-          {["Dana Bersama mencakup Transportasi, Aktivitas (Jeep, Nuvantara) & Merchandise.",
-            "F&B seluruhnya disponsori per household — tidak termasuk di sini.",
-            "Hotel & tiket Garuda diselesaikan mandiri per household.",
-            "HH5 (Mariana, Olive, Nadia) diserap oleh HH2 + HH3 + HH4.",
-          ].map((n,i)=><p key={i} style={{fontSize:"17px",color:T.muted,lineHeight:"1.7"}}>— {n}</p>)}
+          {CATATAN_DANA.map((n,i)=><p key={i} style={{fontSize:"17px",color:T.muted,lineHeight:"1.7"}}>— {n}</p>)}
         </div>
-        {isCoord&&<p style={{marginTop:"24px",fontSize:"17px"}}><a href="https://docs.google.com/spreadsheets/d/19vHRDue6attrpewZcFNBSq3g3UvxbalaWCog6v5x0d4/edit" target="_blank" rel="noopener noreferrer" style={{color:T.forest,textDecoration:"none",borderBottom:`1px solid ${T.forest}`}}>Buka Google Sheets Lusiana ↗</a></p>}
+        {isCoord&&<p style={{marginTop:"24px",fontSize:"17px"}}><a href="https://drive.google.com/file/d/184YSBGSNJmG15wjgizN_RkiLJCUY-h9w/view" target="_blank" rel="noopener noreferrer" style={{color:T.forest,textDecoration:"none",borderBottom:`1px solid ${T.forest}`}}>Buka Sheet Rekonsiliasi ↗</a></p>}
       </div>
     </div>
   );
