@@ -674,7 +674,7 @@ const RESTAURANTS = [
         {id:"dj-sk-lilit",  name:"Sate Lilit Ayam", desc:"Balinese minced chicken satay, lemongrass sticks, steamed rice, crackers, urap kenikir", price:78000},
         {id:"dj-sk-maranggi",name:"Sate Maranggi Sapi", desc:"West Javanese marinated beef satay, char-grilled, steamed rice, sambal, shallot pickles", price:120000},
       ]},
-      {id:"dj-pizza",name:"Pizza — IDR 88.000",items:[
+      {id:"dj-pizza",name:"Pizza — Rp88.000",items:[
         {id:"dj-pz-beef",   name:"Beef Supreme", desc:"Tender beef, caramelized onions, melted mozzarella",
          price:88000, options:[{id:"style",label:"Pilihan Adonan",required:true,choices:["Sourdough","Italian Thin Crust"]}]},
         {id:"dj-pz-spinach",name:"Spinach & Cheese", desc:"Homegrown spinach, melted cheese",
@@ -693,7 +693,7 @@ const RESTAURANTS = [
         {id:"dj-ad-veg",   name:"Extra Veggies", desc:"", price:24000,
          options:[{id:"veg",label:"Pilihan Sayur",required:true,choices:["Sauteed Veggies","Creamy Spinach","Buttered Corn","Grilled Asparagus"]}]},
       ]},
-      {id:"dj-dessert",name:"Desserts — IDR 42.000",items:[
+      {id:"dj-dessert",name:"Desserts — Rp42.000",items:[
         {id:"dj-ds-brulee", name:"Honey Sweet Potato Crème Brulée", desc:"Vanilla creme brulee, honey sweet potato, caramelized sugar crust", price:42000},
         {id:"dj-ds-banana", name:"Crispy Banana Cheddar", desc:"Crispy banana, cheddar cheese, choice of syrup, icing sugar", price:42000},
         {id:"dj-ds-cheese", name:"Frosting Cheese Cake", desc:"Creamy cheesecake, cream cheese frosting, biscuit base", price:42000},
@@ -711,7 +711,7 @@ const RESTAURANTS = [
         {id:"dj-te-peach", name:"Peach Tea", desc:"",price:36000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
         {id:"dj-te-spark", name:"Lemonade Lychee Sparkler", desc:"",price:38000},
       ]},
-      {id:"dj-wellness",name:"Wellness in a Glass — IDR 38.000",items:[
+      {id:"dj-wellness",name:"Wellness in a Glass — Rp38.000",items:[
         {id:"dj-wl-yellow",name:"Yellow Splash", desc:"Mango, pineapple, orange", price:38000},
         {id:"dj-wl-berry", name:"Berry Bomb",    desc:"Grape, dragon fruit, strawberry", price:38000},
         {id:"dj-wl-herbal",name:"Herbal Burst",  desc:"Apple, ambarella, kiwi, mint", price:38000},
@@ -737,13 +737,13 @@ const RESTAURANTS = [
         {id:"dj-cf-geisha",   name:"Geisha Tubruk (Hot)", desc:"",price:85000},
         {id:"dj-cf-lactose",  name:"Free Lactose Milk (Add-on)", desc:"",price:9000},
       ]},
-      {id:"dj-milky",name:"Milky Way — IDR 42.000",items:[
+      {id:"dj-milky",name:"Milky Way — Rp42.000",items:[
         {id:"dj-mw-choco", name:"Chocolate Dream",  desc:"",price:42000},
         {id:"dj-mw-pink",  name:"Pink Potion",       desc:"",price:42000},
         {id:"dj-mw-velvet",name:"Red Velvet",        desc:"",price:42000},
         {id:"dj-mw-blue",  name:"Blue Moon Vanilla", desc:"",price:42000},
       ]},
-      {id:"dj-sparkling",name:"Sparkling Mix — IDR 36.000",items:[
+      {id:"dj-sparkling",name:"Sparkling Mix — Rp36.000",items:[
         {id:"dj-sm-apple", name:"Apple Mojito",          desc:"",price:36000},
         {id:"dj-sm-berry", name:"Berry Mojita",          desc:"",price:36000},
         {id:"dj-sm-pine",  name:"Pineapple Sunrise",     desc:"",price:36000},
@@ -751,19 +751,19 @@ const RESTAURANTS = [
         {id:"dj-sm-rose",  name:"Rosemary Orange Citrus",desc:"",price:36000},
         {id:"dj-sm-shirley",name:"Shirley Temple",       desc:"",price:36000},
       ]},
-      {id:"dj-signature",name:"Djiwana Signature — IDR 48.000",items:[
+      {id:"dj-signature",name:"Djiwana Signature — Rp48.000",items:[
         {id:"dj-sg-ginger",  name:"Daniswara Ginger Hot",   desc:"",price:48000},
         {id:"dj-sg-hanabi",  name:"Hanabi Latte",           desc:"",price:48000},
         {id:"dj-sg-javanese",name:"Iced Javanese Ciwana",   desc:"",price:48000},
         {id:"dj-sg-tropical",name:"Tropical Americano",     desc:"",price:48000},
       ]},
-      {id:"dj-caffeine",name:"Caffeine Cloud — IDR 48.000",items:[
+      {id:"dj-caffeine",name:"Caffeine Cloud — Rp48.000",items:[
         {id:"dj-cc-velvet", name:"Velvet Rouge",     desc:"",price:48000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
         {id:"dj-cc-matcha", name:"Matcha Green Tea",  desc:"",price:48000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
         {id:"dj-cc-belgian",name:"Belgian Chocolate", desc:"",price:48000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
         {id:"dj-cc-golden", name:"Golden Caramel",    desc:"",price:48000,options:[{id:"temp",label:"Suhu",required:true,choices:["Hot","Ice"]}]},
       ]},
-      {id:"dj-artisan",name:"Artisan Tea — IDR 48.000",items:[
+      {id:"dj-artisan",name:"Artisan Tea — Rp48.000",items:[
         {id:"dj-at-apple", name:"Apple Citrus",       desc:"Dried apple, strawberry, goji berry", price:48000},
         {id:"dj-at-citrus",name:"Citrus Mint",        desc:"Green tea, lemongrass, dried mint, dried orange", price:48000},
         {id:"dj-at-bajakah",name:"Red Bajakah",       desc:"Bajakah wood, green tea, dried mint", price:48000},
@@ -960,7 +960,7 @@ const RESTAURANTS = [
     isTakeaway:true,
     participants: ALL_PAX,
     categories:[
-      {id:"bp-premium",name:"Premium (Bakpia Basah) — IDR 75.000 / kotak",items:[
+      {id:"bp-premium",name:"Premium (Bakpia Basah) — Rp75.000 / kotak",items:[
         {id:"bp-pre-kh",  name:"Premium Kacang Hijau", desc:"Bakpia Basah · 15 biji · 525g · Simpan 4–5 hari",  price:75000},
         {id:"bp-pre-kumbu",name:"Premium Kumbu",        desc:"Bakpia Basah · 15 biji · 525g · Simpan 4–5 hari",  price:75000},
         {id:"bp-pre-keju",name:"Premium Keju",          desc:"Bakpia Basah · 15 biji · 525g · Simpan 6–7 hari",  price:75000},
@@ -972,7 +972,7 @@ const RESTAURANTS = [
         {id:"bp-pre-dur", name:"Premium Durian",        desc:"Bakpia Basah · 15 biji · 525g · Simpan 4–5 hari",  price:75000},
         {id:"bp-pre-gt",  name:"Premium Green Tea",     desc:"Bakpia Basah · 15 biji · 525g · Simpan 4–5 hari",  price:75000},
       ]},
-      {id:"bp-original",name:"Original (Bakpia Kering) — IDR 51.000 / kotak",items:[
+      {id:"bp-original",name:"Original (Bakpia Kering) — Rp51.000 / kotak",items:[
         {id:"bp-ori-kh",  name:"Original Kacang Hijau",desc:"Bakpia Basah · 15 biji · 450g · Simpan 4–5 hari",   price:51000},
         {id:"bp-ori-keju",name:"Original Keju",         desc:"Bakpia Kering · 15 biji · 375g · Simpan 8–10 hari", price:51000},
         {id:"bp-ori-cok", name:"Original Cokelat",      desc:"Bakpia Kering · 15 biji · 375g · Simpan 8–10 hari", price:51000},
@@ -1055,7 +1055,7 @@ const RESTAURANTS = [
     isTakeaway:true,
     participants: ALL_PAX,
     categories:[
-      {id:"wa-rollcake",name:"Roll Cake — IDR 100.000 / roll (4×30 cm)",items:[
+      {id:"wa-rollcake",name:"Roll Cake — Rp100.000 / roll (4×30 cm)",items:[
         {id:"wa-rc-blueberry",  name:"Blueberry",  desc:"Roll Cake · 4×30 cm · Wahyu Austin Pastry", price:100000},
         {id:"wa-rc-cheese",     name:"Cheese",     desc:"Roll Cake · 4×30 cm · Wahyu Austin Pastry", price:100000},
         {id:"wa-rc-chocolate",  name:"Chocolate",  desc:"Roll Cake · 4×30 cm · Wahyu Austin Pastry", price:100000},
@@ -1092,7 +1092,7 @@ const RESTAURANTS = [
         {id:"pr-sl-cin",    name:"Bolu Pisang Cinnamon",        desc:"Bolu Slice · per slice", price:27000},
         {id:"pr-sl-pis",    name:"Bolu Pisang Pistachio Kunafa",desc:"Bolu Slice · per slice", price:30000},
       ]},
-      {id:"pr-addon",name:"Pilihan Butter Add-Ons — IDR 10.000 / spoon",items:[
+      {id:"pr-addon",name:"Pilihan Butter Add-Ons — Rp10.000 / spoon",items:[
         {id:"pr-ad-cheese",   name:"Butter Cheese",     desc:"Add-on · 1 spoon", price:10000},
         {id:"pr-ad-choco",    name:"Butter Chocolate",  desc:"Add-on · 1 spoon", price:10000},
         {id:"pr-ad-cin",      name:"Butter Cinnamon",   desc:"Add-on · 1 spoon", price:10000},
@@ -1141,7 +1141,7 @@ const SET_MENUS = [
   },
 ];
 
-const fmt = n => "IDR " + Math.abs(Number(n)).toLocaleString("id-ID");
+const fmt = n => "Rp" + Math.abs(Number(n)).toLocaleString("id-ID");
 
 const useIsNarrow = (bp=640) => {
   const [narrow,setNarrow] = useState(typeof window!=="undefined" && window.innerWidth < bp);
@@ -1255,10 +1255,10 @@ const BudgetTab = memo(({user}) => {
   const [pw,setPw] = useState("");
   const [pwErr,setPwErr] = useState(false);
   const MASK = "••••••";
-  const show = v => revealed ? fmt(v) : `IDR ${MASK}`;
-  const showSigned = v => revealed ? `${v>0?"+":v<0?"−":""}${fmt(v)}` : `IDR ${MASK}`;
+  const show = v => revealed ? fmt(v) : `Rp${MASK}`;
+  const showSigned = v => revealed ? `${v>0?"+":v<0?"−":""}${fmt(v)}` : `Rp${MASK}`;
   // tampil per metrik: nol → "—" (saat terbuka), tertutup → mask
-  const metric = (v,signed) => revealed ? (v===0 ? "—" : (signed?`${v>0?"+":"−"}${fmt(v)}`:fmt(v))) : `IDR ${MASK}`;
+  const metric = (v,signed) => revealed ? (v===0 ? "—" : (signed?`${v>0?"+":"−"}${fmt(v)}`:fmt(v))) : `Rp${MASK}`;
   const signColor = v => v>0?T.settled:v<0?T.danger:T.muted;
   const tryReveal = () => { if(pw.trim().toLowerCase()==="lihatdana"){ setRevealed(true); setPwOpen(false); setPw(""); setPwErr(false); } else setPwErr(true); };
 
@@ -1797,7 +1797,7 @@ const OlehOlehTab = memo(({user}) => {
                 <span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,borderBottom:`1px solid ${T.gold}`}}>Terbuka</span>
               </div>
               <p style={{fontSize:"17px",color:T.muted}}>{r.subtitle}</p>
-              {myOrders[r.id]&&<p style={{fontSize:"16px",color:T.settled,marginTop:"4px"}}>✓ Anda sudah memesan · IDR {Number(myOrders[r.id].totalIDR).toLocaleString("id-ID")}</p>}
+              {myOrders[r.id]&&<p style={{fontSize:"16px",color:T.settled,marginTop:"4px"}}>✓ Anda sudah memesan · Rp{Number(myOrders[r.id].totalIDR).toLocaleString("id-ID")}</p>}
             </div>
             <span style={{fontSize:"21px",color:T.muted}}>→</span>
           </div>
@@ -1815,12 +1815,12 @@ const OlehOlehTab = memo(({user}) => {
             {myStores.map(o=>(
               <div key={o.name} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:`1px solid ${T.line}`}}>
                 <span style={{fontSize:"19px",color:T.ink}}>{o.name}</span>
-                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.settled}}>IDR {Number(o.totalIDR).toLocaleString("id-ID")}</span>
+                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.settled}}>Rp{Number(o.totalIDR).toLocaleString("id-ID")}</span>
               </div>
             ))}
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"16px 0 0"}}>
               <span style={{fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Total Transfer</span>
-              <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"24px",color:T.forest,fontWeight:500}}>IDR {myTotal.toLocaleString("id-ID")}</span>
+              <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"24px",color:T.forest,fontWeight:500}}>Rp{myTotal.toLocaleString("id-ID")}</span>
             </div>
             <div style={{marginTop:"20px",padding:"16px",background:T.stone,borderLeft:`3px solid ${T.gold}`}}>
               <p style={{fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Transfer ke</p>
@@ -1853,10 +1853,10 @@ const OlehOlehTab = memo(({user}) => {
                       <td style={{padding:"10px 12px 10px 0",color:T.ink}}>{pName}</td>
                       {takeawayRestos.map(r=>(
                         <td key={r.id} style={{textAlign:"right",padding:"10px 12px",color:stores[r.id]?T.settled:T.ghost,fontFamily:"'Playfair Display',Georgia,serif"}}>
-                          {stores[r.id]?`IDR ${Number(stores[r.id].totalIDR).toLocaleString("id-ID")}`:"—"}
+                          {stores[r.id]?`Rp${Number(stores[r.id].totalIDR).toLocaleString("id-ID")}`:"—"}
                         </td>
                       ))}
-                      <td style={{textAlign:"right",padding:"10px 0 10px 12px",color:T.forest,fontFamily:"'Playfair Display',Georgia,serif",fontWeight:500}}>IDR {rowTotal.toLocaleString("id-ID")}</td>
+                      <td style={{textAlign:"right",padding:"10px 0 10px 12px",color:T.forest,fontFamily:"'Playfair Display',Georgia,serif",fontWeight:500}}>Rp{rowTotal.toLocaleString("id-ID")}</td>
                     </tr>
                   );
                 })}
@@ -1866,10 +1866,10 @@ const OlehOlehTab = memo(({user}) => {
                   <td style={{padding:"12px 12px 4px 0",fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Total</td>
                   {takeawayRestos.map(r=>{
                     const storeTotal = paxWithOrders.reduce((s,[,stores])=>s+Number(stores[r.id]?.totalIDR||0),0);
-                    return <td key={r.id} style={{textAlign:"right",padding:"12px 12px 4px",color:T.forest,fontFamily:"'Playfair Display',Georgia,serif",fontWeight:500}}>{storeTotal>0?`IDR ${storeTotal.toLocaleString("id-ID")}`:"—"}</td>;
+                    return <td key={r.id} style={{textAlign:"right",padding:"12px 12px 4px",color:T.forest,fontFamily:"'Playfair Display',Georgia,serif",fontWeight:500}}>{storeTotal>0?`Rp${storeTotal.toLocaleString("id-ID")}`:"—"}</td>;
                   })}
                   <td style={{textAlign:"right",padding:"12px 0 4px 12px",fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.forest,fontWeight:500}}>
-                    IDR {paxWithOrders.reduce((s,[,stores])=>s+Object.values(stores).reduce((ss,o)=>ss+Number(o.totalIDR),0),0).toLocaleString("id-ID")}
+                    Rp{paxWithOrders.reduce((s,[,stores])=>s+Object.values(stores).reduce((ss,o)=>ss+Number(o.totalIDR),0),0).toLocaleString("id-ID")}
                   </td>
                 </tr>
               </tfoot>
@@ -1887,7 +1887,7 @@ const OlehOlehTab = memo(({user}) => {
             <div key={mm.id} style={{border:`1px solid ${T.line}`,marginBottom:"16px"}}>
               <div style={{background:T.cream,padding:"12px 20px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                 <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.ink}}>{mm.name}</span>
-                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest,fontWeight:500}}>IDR {mm.subtotal.toLocaleString("id-ID")}</span>
+                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest,fontWeight:500}}>Rp{mm.subtotal.toLocaleString("id-ID")}</span>
               </div>
               <div style={{padding:"6px 20px 16px"}}>
                 {mm.items.map(([n,q])=>(
@@ -2079,8 +2079,8 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
     setSaving(true); setSyncError(null);
     try {
       const items = Object.values(cart).map(i=>({name:i.name,qty:i.qty,notes:i.notes||"",price:i.price||0,config:i.config||""}));
-      const nettIDR  = items.reduce((s,i)=>s+(i.price||0)*i.qty,0);
-      const totalIDR = resto.taxRate ? Math.round(nettIDR*(1+resto.taxRate)) : nettIDR;
+      const nettRp = items.reduce((s,i)=>s+(i.price||0)*i.qty,0);
+      const totalRp= resto.taxRate ? Math.round(nettIDR*(1+resto.taxRate)) : nettIDR;
       const key = `order.${resto.id}.${user.replace(/\s+/g,"_")}`;
       const ok = await sSet(key, JSON.stringify({peserta:user,hh:ALL_PAX.find(p=>p.name===user)?.hh||"",items,totalIDR,submittedAt:new Date().toISOString()}));
       if(ok){
@@ -2230,17 +2230,17 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
             const selVariant = hasVariants ? item.variants.find(v=>v.label===cfg.variant) : null;
             const displayPrice = hasVariants ? (selVariant?selVariant.price:null) : item.price;
             const hasPrice = displayPrice != null && !isDisabled;
-            const priceRange = hasVariants ? `IDR ${Math.min(...item.variants.map(v=>v.price)).toLocaleString("id-ID")}–${Math.max(...item.variants.map(v=>v.price)).toLocaleString("id-ID")}` : null;
+            const priceRange = hasVariants ? `Rp${Math.min(...item.variants.map(v=>v.price)).toLocaleString("id-ID")}–${Math.max(...item.variants.map(v=>v.price)).toLocaleString("id-ID")}` : null;
             return (
               <div key={item.id} style={{display:"grid",gridTemplateColumns:"1fr auto",gap:"24px",alignItems:"start",borderBottom:`1px solid ${T.line}`,padding:"20px",margin:"0 -20px",background:isDisabled?T.stone:inCart?T.cream:"transparent",opacity:isDisabled?0.45:1,transition:"background 0.2s"}}>
                 <div>
                   <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"2px",flexWrap:"wrap"}}>
                     <p style={{fontSize:"20px",color:isDisabled?T.muted:T.ink,fontWeight:inCart?500:300,margin:0}}>{item.name}</p>
-                    {hasPrice&&resto.id!=="solaria"&&<span style={{fontSize:"16px",letterSpacing:"1px",color:T.gold,border:`1px solid ${T.goldL}`,padding:"1px 7px",fontWeight:500,whiteSpace:"nowrap"}}>IDR {displayPrice.toLocaleString("id-ID")}</span>}
+                    {hasPrice&&resto.id!=="solaria"&&<span style={{fontSize:"16px",letterSpacing:"1px",color:T.gold,border:`1px solid ${T.goldL}`,padding:"1px 7px",fontWeight:500,whiteSpace:"nowrap"}}>Rp{displayPrice.toLocaleString("id-ID")}</span>}
                     {!hasPrice&&priceRange&&!isDisabled&&<span style={{fontSize:"16px",letterSpacing:"1px",color:T.muted,border:`1px solid ${T.line}`,padding:"1px 7px",whiteSpace:"nowrap"}}>{priceRange}</span>}
                     {q&&catLabel&&<span style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.ghost,border:`1px solid ${T.line}`,padding:"1px 6px"}}>{catLabel}</span>}
                   </div>
-                  {isDisabled&&<p style={{fontSize:"16px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — IDR ${item.price}k melebihi batas IDR 200k`:"Harga pasar — hubungi koordinator"}</p>}
+                  {isDisabled&&<p style={{fontSize:"16px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — Rp${item.price}k melebihi batas Rp200k`:"Harga pasar — hubungi koordinator"}</p>}
                   {item.desc&&<p style={{fontSize:"17px",color:isDisabled?T.ghost:T.muted,fontStyle:"italic"}}>{item.desc}</p>}
 
                   {hasVariants&&!isDisabled&&(
@@ -2330,23 +2330,23 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                 <div key={id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${T.line}`,gap:"12px"}}>
                   <span style={{fontSize:"19px",color:T.ink,flex:1}}>{item.name}{item.config&&<span style={{color:T.gold}}> · {item.config}</span>}{item.notes&&<span style={{color:T.muted,fontStyle:"italic"}}> · {item.notes}</span>}</span>
                   <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.ink,minWidth:"32px",textAlign:"right"}}>×{item.qty}</span>
-                  {hasPrices&&item.price&&resto.id!=="solaria"&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.settled,minWidth:"120px",textAlign:"right"}}>IDR {(item.price*item.qty).toLocaleString("id-ID")}</span>}
+                  {hasPrices&&item.price&&resto.id!=="solaria"&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.settled,minWidth:"120px",textAlign:"right"}}>Rp{(item.price*item.qty).toLocaleString("id-ID")}</span>}
                 </div>
               ))}
               {hasPrices&&nettTotal>0&&resto.id!=="solaria"&&<>
                 {resto.taxRate&&<>
                   <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0 4px",borderTop:`1px solid ${T.line}`,marginTop:"8px"}}>
                     <span style={{fontSize:"17px",color:T.muted}}>Subtotal (nett)</span>
-                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.ink}}>IDR {nettTotal.toLocaleString("id-ID")}</span>
+                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.ink}}>Rp{nettTotal.toLocaleString("id-ID")}</span>
                   </div>
                   <div style={{display:"flex",justifyContent:"space-between",padding:"4px 0 8px"}}>
                     <span style={{fontSize:"17px",color:T.muted}}>Pajak 11% + Service 10%</span>
-                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.muted}}>IDR {taxAmt.toLocaleString("id-ID")}</span>
+                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.muted}}>Rp{taxAmt.toLocaleString("id-ID")}</span>
                   </div>
                 </>}
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 0 0",borderTop:`2px solid ${T.lineD}`}}>
                   <span style={{fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>{resto.isTakeaway?"Total":"Perkiraan Harga (Sponsor)"}</span>
-                  <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"23px",color:T.forest,fontWeight:500}}>IDR {grandTotal.toLocaleString("id-ID")}</span>
+                  <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"23px",color:T.forest,fontWeight:500}}>Rp{grandTotal.toLocaleString("id-ID")}</span>
                 </div>
               </>}
             </>;
@@ -2375,7 +2375,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                     {resto.id!=="solaria"&&grandAllTotal>0&&(
                       <div style={{background:T.cream,padding:"20px 24px"}}>
                         <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>{resto.isTakeaway?"Total Pesanan":"Perkiraan Total (Sponsor)"}</p>
-                        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest}}>IDR {grandAllTotal.toLocaleString("id-ID")}</p>
+                        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest}}>Rp{grandAllTotal.toLocaleString("id-ID")}</p>
                       </div>
                     )}
                   </div>
@@ -2414,7 +2414,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                         <div style={{display:"flex",flexWrap:"wrap",gap:"8px",marginBottom:"4px"}}>
                           {(o.items||[]).map((it,i)=><span key={i} style={{fontSize:"16px",color:T.muted}}>• {it.name}{it.config&&` [${it.config}]`} ×{it.qty}{it.notes&&` (${it.notes})`}</span>)}
                         </div>
-                        {resto.isTakeaway&&o.totalIDR>0&&<p style={{fontSize:"18px",color:T.settled,fontFamily:"'Playfair Display',Georgia,serif",marginTop:"2px"}}>Total: IDR {Number(o.totalIDR).toLocaleString("id-ID")}</p>}
+                        {resto.isTakeaway&&o.totalIDR>0&&<p style={{fontSize:"18px",color:T.settled,fontFamily:"'Playfair Display',Georgia,serif",marginTop:"2px"}}>Total: Rp{Number(o.totalIDR).toLocaleString("id-ID")}</p>}
                       </div>}
                     </div>
                     <p style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:o?T.settled:T.ghost,marginTop:"3px",whiteSpace:"nowrap"}}>{o?"✓ Terkirim":"Belum Order"}</p>
