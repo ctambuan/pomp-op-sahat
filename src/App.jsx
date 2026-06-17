@@ -70,10 +70,11 @@ const BUDGET_SNAPSHOT = {
 
 // Catatan kaki — STATIS (sengaja tidak ditarik dari sheet, hanya tabel yang sinkron).
 const CATATAN_DANA = [
-  "Posisi Akhir positif = Rekening Bersama berutang ke HH (hak terima). Negatif = HH masih harus membayar.",
-  "Posisi Akhir = Kontribusi − Biaya/Komitmen + Pembayaran Talangan − Kekurangan.",
-  "F&B seluruhnya disponsori per household — tidak termasuk Dana Bersama.",
-  "HH5 (Mariana, Olive, Nadia) diserap oleh HH2 + HH3 + HH4.",
+  "Kontribusi adalah uang yang sudah kamu setor ke Rekening Bersama sampai saat ini.",
+  "Biaya/Komitmen adalah total biaya yang menjadi tanggunganmu, terdiri dari: iuran Dana Bersama sesuai jumlah peserta, bagian biaya HH5 yang ditanggung bersama oleh HH2, HH3 & HH4, pembayaran makanan yang sudah didahulukan lewat Rekening Bersama, serta porsi tiket pulang Arlo, Alora & Lily yang ditanggung bersama oleh HH2, HH3 & HH4.",
+  "Talangan adalah biaya HH lain yang kamu bayarkan lebih dulu. Uang ini akan kamu terima kembali melalui Rekening Bersama.",
+  "Posisi Akhir negatif berarti kamu masih perlu membayar ke Rekening Bersama. Positif berarti Rekening Bersama yang berutang kepadamu.",
+  "Semua biaya makan ditanggung langsung oleh masing-masing HH dan tidak melalui Rekening Bersama.",
 ];
 
 const ITINERARY = [
@@ -1480,7 +1481,7 @@ const BudgetTab = memo(({user}) => {
       {/* Catatan — STATIS (tidak ditarik dari sheet) */}
       <div style={{background:T.white,borderRadius:"12px",boxShadow:"0 0 30px 0 rgba(33,46,77,0.06)",padding:"28px 28px"}}>
         <p style={{fontSize:"14px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>Catatan</p>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px 40px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"1fr",gap:"12px",maxWidth:"760px"}}>
           {CATATAN_DANA.map((n,i)=><p key={i} style={{fontSize:"14px",color:T.muted,lineHeight:"1.7"}}>— {n}</p>)}
         </div>
         {isCoord&&<p style={{marginTop:"24px",fontSize:"14px"}}><a href="https://drive.google.com/file/d/184YSBGSNJmG15wjgizN_RkiLJCUY-h9w/view" target="_blank" rel="noopener noreferrer" style={{color:T.forest,textDecoration:"none",borderBottom:`1px solid ${T.forest}`}}>Buka Sheet Rekonsiliasi ↗</a></p>}
