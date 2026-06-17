@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "firebase": "^12.13.0",
+    "google-auth-library": "^9.15.0",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react-dom": "^19.2.6",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
