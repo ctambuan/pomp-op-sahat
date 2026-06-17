@@ -1156,6 +1156,7 @@ const GlobalStyles = () => (
     input, select, textarea, button { border-radius: 8px; }
     @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
     .fade-up { animation: fadeUp 0.6s ease forwards; }
+    .tab-card { background: #fff; border-radius: 12px; box-shadow: 0 0 30px 0 rgba(33,46,77,0.06); padding: 28px 30px; }
   `}</style>
 );
 
@@ -1282,7 +1283,7 @@ const BudgetTab = memo(({user}) => {
 
   const sourceLabel = live ? "Sinkron dari Google Sheets" : (syncing ? "Menyinkronkan…" : "Snapshot tersimpan");
 
-  const LG = "30px 92px minmax(180px,1.6fr) 1fr 110px 110px 124px"; // grid Buku Besar
+  const LG = "92px minmax(180px,1.6fr) 1fr 110px 110px 124px"; // grid Buku Besar (tanpa kolom No)
   const TG = "minmax(180px,1.5fr) 0.9fr 0.6fr 1fr minmax(180px,1.7fr)"; // grid Talangan
 
   return (
@@ -1437,13 +1438,12 @@ const BudgetTab = memo(({user}) => {
           : <div style={{overflowX:"auto"}}>
               <div style={{minWidth:"800px"}}>
                 <div style={{display:"grid",gridTemplateColumns:LG,gap:"0 16px",padding:"0 0 10px",borderBottom:`2px solid ${T.line}`}}>
-                  {[["No","left"],["Tanggal","left"],["Keterangan","left"],["Kategori","left"],["Masuk","right"],["Keluar","right"],["Saldo","right"]].map(([h,a])=>(
+                  {[["Tanggal","left"],["Keterangan","left"],["Kategori","left"],["Masuk","right"],["Keluar","right"],["Saldo","right"]].map(([h,a])=>(
                     <p key={h} style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,textAlign:a}}>{h}</p>
                   ))}
                 </div>
                 {ledger.rows.map((row,i)=>(
                   <div key={i} style={{display:"grid",gridTemplateColumns:LG,gap:"0 16px",padding:"13px 0",borderBottom:`1px solid ${T.line}`,alignItems:"center"}}>
-                    <p style={{fontSize:"14px",color:T.ghost}}>{i+1}</p>
                     <p style={{fontSize:"14px",color:T.muted}}>{row.tanggal}</p>
                     <div>
                       <p style={{fontSize:"15px",color:T.ink}}>{row.keterangan}</p>
@@ -1456,7 +1456,7 @@ const BudgetTab = memo(({user}) => {
                   </div>
                 ))}
                 <div style={{display:"grid",gridTemplateColumns:LG,gap:"0 16px",padding:"16px 0 0",borderTop:`2px solid ${T.lineD}`,marginTop:"4px"}}>
-                  <span/><span/>
+                  <span/>
                   <p style={{fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Jumlah / Saldo Kas</p>
                   <span/>
                   <p style={{fontSize:"14px",color:T.settled,textAlign:"right",fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif"}}>{revealed?`+${fmt(ledger.totalMasuk)}`:`+${MASK}`}</p>
@@ -1488,7 +1488,7 @@ const ItineraryTab = memo(() => {
   const narrow = useIsNarrow();
   const d = ITINERARY.find(x=>x.day===day);
   return (
-    <div className="fade-up">
+    <div className="fade-up tab-card">
       <div style={{marginBottom:"56px"}}>
         <p style={{fontSize:"14px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Jadwal Perjalanan</p>
         <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"26px",fontWeight:400,color:T.ink}}>Itinerary v20</h2>
@@ -1632,7 +1632,7 @@ const MakanTab = memo(({user}) => {
   const items = FOOD_ORDER.map(id => RESTAURANTS.find(r=>r&&r.id===id) || SET_MENUS.find(s=>s&&s.id===id)).filter(Boolean);
 
   return (
-    <div className="fade-up">
+    <div className="fade-up tab-card">
       <div style={{marginBottom:"32px"}}>
         <p style={{fontSize:"14px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pre-Order F&B</p>
         <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"26px",fontWeight:400,color:T.ink}}>Pesan Makanan</h2>
@@ -1769,7 +1769,7 @@ const OlehOlehTab = memo(({user}) => {
   }).filter(mm=>mm.items.length>0);
 
   return (
-    <div className="fade-up">
+    <div className="fade-up tab-card">
       <div style={{marginBottom:"32px"}}>
         <p style={{fontSize:"14px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pre-Order F&B</p>
         <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"26px",fontWeight:400,color:T.ink}}>Oleh-Oleh</h2>
@@ -2128,7 +2128,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
   );
 
   return (
-    <div className="fade-up">
+    <div className="fade-up tab-card">
       <button onClick={onBack} style={{background:"none",border:"none",cursor:"pointer",fontSize:"14px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,padding:"0 0 32px",display:"flex",alignItems:"center",gap:"8px"}}>← Kembali</button>
 
       <div style={{marginBottom:"48px"}}>
@@ -2763,7 +2763,7 @@ const SizeTab = memo(({user}) => {
   if(loading) return (<div style={{textAlign:"center",padding:"80px 0",color:T.muted}}><p style={{fontSize:"14px",letterSpacing:"2px",textTransform:"uppercase"}}>Memuat data dari Firebase…</p></div>);
 
   return (
-    <div className="fade-up">
+    <div className="fade-up tab-card">
       <div style={{marginBottom:"40px"}}>
         <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pengumpulan Ukuran</p>
         <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"28px",fontWeight:400,color:T.ink}}>Ukuran Pakaian</h2>
