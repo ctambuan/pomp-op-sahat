@@ -1148,11 +1148,12 @@ const useIsNarrow = (bp=640) => {
 
 const GlobalStyles = () => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: ${T.stone}; font-family: 'Jost', sans-serif; font-weight: 300; color: ${T.ink}; -webkit-font-smoothing: antialiased; }
+    body { background: ${T.stone}; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 400; color: ${T.ink}; -webkit-font-smoothing: antialiased; }
     ::selection { background: ${T.forest}; color: white; }
-    input, select, button, textarea { font-family: 'Jost', sans-serif; }
+    input, select, button, textarea { font-family: inherit; }
+    input, select, textarea, button { border-radius: 8px; }
     @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
     .fade-up { animation: fadeUp 0.6s ease forwards; }
   `}</style>
@@ -1166,7 +1167,7 @@ const PasswordScreen = memo(({onSuccess}) => {
       <GlobalStyles/>
       <div className="fade-up" style={{width:"100%",maxWidth:"400px",textAlign:"center"}}>
         <p style={{fontSize:"16px",letterSpacing:"4px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Yogyakarta · 2–5 Juli 2026</p>
-        <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"42px",fontWeight:400,color:T.ink,marginBottom:"8px",letterSpacing:"-0.5px",lineHeight:1.1}}>Pomp Op Sahat</h1>
+        <h1 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"42px",fontWeight:400,color:T.ink,marginBottom:"8px",letterSpacing:"-0.5px",lineHeight:1.1}}>Pomp Op Sahat</h1>
         <p style={{fontSize:"18px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"56px"}}>Hyatt Regency Yogyakarta</p>
         <div style={{marginBottom:err?"8px":"24px"}}>
           <input ref={inputRef} type="password" value={val} onChange={e=>{setVal(e.target.value);setErr(false);}} onKeyDown={e=>e.key==="Enter"&&submit()}
@@ -1187,7 +1188,7 @@ const NameScreen = memo(({onSuccess}) => {
       <GlobalStyles/>
       <div className="fade-up" style={{width:"100%",maxWidth:"400px",textAlign:"center"}}>
         <p style={{fontSize:"16px",letterSpacing:"4px",textTransform:"uppercase",color:T.muted,marginBottom:"32px"}}>Selamat datang</p>
-        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"36px",fontWeight:400,color:T.ink,marginBottom:"48px"}}>Siapa Anda?</h2>
+        <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"36px",fontWeight:400,color:T.ink,marginBottom:"48px"}}>Siapa Anda?</h2>
         <select value={sel} onChange={e=>setSel(e.target.value)} style={{width:"100%",padding:"16px 0",border:"none",borderBottom:`1px solid ${T.lineD}`,background:"transparent",fontSize:"20px",color:sel?T.ink:T.muted,outline:"none",cursor:"pointer",appearance:"none",textAlign:"center"}}>
           <option value="">Pilih nama Anda</option>
           {ALL_PAX.map(p=><option key={p.name} value={p.name}>{p.name} ({p.hh})</option>)}
@@ -1209,7 +1210,7 @@ const Shell = ({user,tab,setTab,children,muted,onToggleMute}) => {
         <div style={{maxWidth:"960px",margin:"0 auto",padding:"0 40px"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"20px 0 16px",borderBottom:`1px solid ${T.line}`}}>
             <div>
-              <h1 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"23px",fontWeight:400,color:T.ink,letterSpacing:"-0.3px"}}>Pomp Op Sahat</h1>
+              <h1 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"23px",fontWeight:400,color:T.ink,letterSpacing:"-0.3px"}}>Pomp Op Sahat</h1>
               <p style={{fontSize:"16px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted,marginTop:"3px"}}>Yogyakarta · Hyatt Regency · 2–5 Juli 2026 · 23 Peserta</p>
             </div>
             <div style={{display:"flex",alignItems:"center",gap:"16px"}}>
@@ -1290,7 +1291,7 @@ const BudgetTab = memo(({user}) => {
         <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Dana Bersama</p>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"20px",flexWrap:"wrap"}}>
           <div>
-            <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink,marginBottom:"8px"}}>Rekonsiliasi Rekening Bersama</h2>
+            <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"34px",fontWeight:400,color:T.ink,marginBottom:"8px"}}>Rekonsiliasi Rekening Bersama</h2>
             <p style={{fontSize:"18px",color:T.muted}}>Per {data.asOf || "—"} · <span style={{color:live?T.forest:T.ghost}}>{sourceLabel}</span>{syncedAt && <span style={{color:T.ghost}}> · {syncedAt.toLocaleTimeString("id-ID")}</span>}</p>
           </div>
           <div style={{flexShrink:0}}>
@@ -1312,17 +1313,17 @@ const BudgetTab = memo(({user}) => {
         </div>
       </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"1px",background:T.line,marginBottom:"24px"}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"16px",marginBottom:"24px"}}>
         {[
           {label:"Total Kontribusi",val:show(net.kontribusi),sub:"Setoran ke Rekening Bersama"},
           {label:"Biaya / Komitmen",val:show(net.biaya),sub:"Realisasi trip"},
           {label:"Saldo Kas",val:show(ledger.saldoAkhir),sub:"Bank Jago",hi:T.settled},
           {label:"Posisi Bersih",val:showSigned(net.posisiAkhir),sub:net.posisiAkhir>=0?"RB berutang ke anggota":"Anggota berutang ke RB",hi:signColor(net.posisiAkhir)},
         ].map(k=>(
-          <div key={k.label} style={{background:T.cream,padding:"32px 28px"}}>
-            <p style={{fontSize:"16px",letterSpacing:"2.5px",textTransform:"uppercase",color:T.muted,marginBottom:"16px"}}>{k.label}</p>
-            <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"26px",fontWeight:400,color:k.hi||T.ink,lineHeight:1,marginBottom:"8px"}}>{k.val}</p>
-            <p style={{fontSize:"17px",color:T.muted}}>{k.sub}</p>
+          <div key={k.label} style={{background:T.white,padding:"28px 28px",borderRadius:"12px",boxShadow:"0 0 30px 0 rgba(33,46,77,0.06)"}}>
+            <p style={{fontSize:"13px",fontWeight:600,letterSpacing:"1px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>{k.label}</p>
+            <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"28px",fontWeight:700,color:k.hi||T.ink,lineHeight:1.1,marginBottom:"6px",letterSpacing:"-0.5px"}}>{k.val}</p>
+            <p style={{fontSize:"14px",color:T.muted,fontWeight:500}}>{k.sub}</p>
           </div>
         ))}
       </div>
@@ -1350,7 +1351,7 @@ const BudgetTab = memo(({user}) => {
                 {isOwn&&<div style={{position:"absolute",left:"-40px",top:0,bottom:0,width:"2px",background:T.gold}}/>}
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",gap:"16px",marginBottom:canSee&&!absorbed?"20px":"6px",flexWrap:"wrap"}}>
                   <div style={{display:"flex",alignItems:"baseline",gap:"14px",flexWrap:"wrap"}}>
-                    <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{hh.code} <span style={{color:T.muted,fontSize:"19px"}}>— {hh.label}</span></h3>
+                    <h3 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{hh.code} <span style={{color:T.muted,fontSize:"19px"}}>— {hh.label}</span></h3>
                     {isOwn&&<span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.gold}`,padding:"2px 8px"}}>Anda</span>}
                   </div>
                   <p style={{fontSize:"16px",letterSpacing:"1.5px",textTransform:"uppercase",color:tagColor,fontWeight:500,whiteSpace:"nowrap"}}>{tag}</p>
@@ -1363,7 +1364,7 @@ const BudgetTab = memo(({user}) => {
                           {metrics.map(f=>(
                             <div key={f.l} style={{flex:"1 1 120px",minWidth:"110px"}}>
                               <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{f.l}</p>
-                              <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:f.c,fontWeight:400}}>{metric(f.v,f.signed)}</p>
+                              <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"20px",color:f.c,fontWeight:400}}>{metric(f.v,f.signed)}</p>
                             </div>
                           ))}
                         </div>
@@ -1386,7 +1387,7 @@ const BudgetTab = memo(({user}) => {
             ].map(f=>(
               <div key={f.l} style={{flex:"1 1 120px",minWidth:"110px"}}>
                 <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>{f.l}</p>
-                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:f.c,fontWeight:500}}>{metric(f.v,f.signed)}</p>
+                <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",color:f.c,fontWeight:500}}>{metric(f.v,f.signed)}</p>
               </div>
             ))}
           </div>
@@ -1409,14 +1410,14 @@ const BudgetTab = memo(({user}) => {
                   <p style={{fontSize:"18px",color:T.ink}}>{r.item}</p>
                   <p style={{fontSize:"17px",color:T.muted}}>{r.dibayarOleh}</p>
                   <p style={{fontSize:"17px",color:T.muted}}>{r.beban}</p>
-                  <p style={{fontSize:"18px",color:T.ink,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{show(r.jumlah)}</p>
+                  <p style={{fontSize:"18px",color:T.ink,textAlign:"right",fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif"}}>{show(r.jumlah)}</p>
                   <p style={{fontSize:"16px",color:T.ghost}}>{r.mekanisme}</p>
                 </div>
               ))}
               <div style={{display:"grid",gridTemplateColumns:TG,gap:"0 16px",padding:"16px 0 0",borderTop:`2px solid ${T.lineD}`,marginTop:"4px"}}>
                 <span/><span/>
                 <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,textAlign:"right"}}>Total</p>
-                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest,textAlign:"right",fontWeight:500}}>{show(talangan.total)}</p>
+                <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",color:T.forest,textAlign:"right",fontWeight:500}}>{show(talangan.total)}</p>
                 <span/>
               </div>
             </div>
@@ -1449,18 +1450,18 @@ const BudgetTab = memo(({user}) => {
                       {row.catatan&&<p style={{fontSize:"16px",color:T.ghost,marginTop:"2px",fontStyle:"italic"}}>{row.catatan}</p>}
                     </div>
                     <p style={{fontSize:"16px",color:T.muted}}>{row.kategori}</p>
-                    <p style={{fontSize:"18px",color:row.masuk>0?T.settled:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.masuk>0?(revealed?`+${fmt(row.masuk)}`:`+${MASK}`):"—"}</p>
-                    <p style={{fontSize:"18px",color:row.keluar>0?T.danger:T.ghost,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{row.keluar>0?(revealed?`−${fmt(row.keluar)}`:`−${MASK}`):"—"}</p>
-                    <p style={{fontSize:"19px",color:T.ink,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif",fontWeight:i===ledger.rows.length-1?500:400}}>{show(row.saldo)}</p>
+                    <p style={{fontSize:"18px",color:row.masuk>0?T.settled:T.ghost,textAlign:"right",fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif"}}>{row.masuk>0?(revealed?`+${fmt(row.masuk)}`:`+${MASK}`):"—"}</p>
+                    <p style={{fontSize:"18px",color:row.keluar>0?T.danger:T.ghost,textAlign:"right",fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif"}}>{row.keluar>0?(revealed?`−${fmt(row.keluar)}`:`−${MASK}`):"—"}</p>
+                    <p style={{fontSize:"19px",color:T.ink,textAlign:"right",fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontWeight:i===ledger.rows.length-1?500:400}}>{show(row.saldo)}</p>
                   </div>
                 ))}
                 <div style={{display:"grid",gridTemplateColumns:LG,gap:"0 16px",padding:"16px 0 0",borderTop:`2px solid ${T.lineD}`,marginTop:"4px"}}>
                   <span/><span/>
                   <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Jumlah / Saldo Kas</p>
                   <span/>
-                  <p style={{fontSize:"17px",color:T.settled,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{revealed?`+${fmt(ledger.totalMasuk)}`:`+${MASK}`}</p>
-                  <p style={{fontSize:"17px",color:T.danger,textAlign:"right",fontFamily:"'Playfair Display',Georgia,serif"}}>{revealed?`−${fmt(ledger.totalKeluar)}`:`−${MASK}`}</p>
-                  <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest,textAlign:"right",fontWeight:500}}>{show(ledger.saldoAkhir)}</p>
+                  <p style={{fontSize:"17px",color:T.settled,textAlign:"right",fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif"}}>{revealed?`+${fmt(ledger.totalMasuk)}`:`+${MASK}`}</p>
+                  <p style={{fontSize:"17px",color:T.danger,textAlign:"right",fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif"}}>{revealed?`−${fmt(ledger.totalKeluar)}`:`−${MASK}`}</p>
+                  <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",color:T.forest,textAlign:"right",fontWeight:500}}>{show(ledger.saldoAkhir)}</p>
                 </div>
               </div>
             </div>
@@ -1490,25 +1491,25 @@ const ItineraryTab = memo(() => {
     <div className="fade-up">
       <div style={{marginBottom:"56px"}}>
         <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Jadwal Perjalanan</p>
-        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Itinerary v20</h2>
+        <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Itinerary v20</h2>
         <p style={{fontSize:"18px",color:T.muted,marginTop:"8px"}}>2–5 Juli 2026 · 23 Peserta · Hyatt Regency Yogyakarta</p>
       </div>
       <div style={{display:"flex",borderBottom:`1px solid ${T.line}`,marginBottom:"48px"}}>
         {ITINERARY.map(it=>(
           <button key={it.day} onClick={()=>setDay(it.day)} style={{background:"none",border:"none",padding:"0 32px 16px 0",cursor:"pointer",textAlign:"left"}}>
             <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:day===it.day?T.forest:T.ghost,marginBottom:"4px"}}>{`Hari ${it.day}`}</p>
-            <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:day===it.day?T.forest:T.muted,fontWeight:day===it.day?500:400}}>{it.label}</p>
+            <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",color:day===it.day?T.forest:T.muted,fontWeight:day===it.day?500:400}}>{it.label}</p>
             {day===it.day&&<div style={{height:"2px",background:T.forest,marginTop:"14px",marginRight:"32px"}}/>}
           </button>
         ))}
       </div>
       {d&&<>
-        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",fontStyle:"italic",color:T.muted,marginBottom:"40px"}}>{d.date}</p>
+        <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"20px",fontStyle:"italic",color:T.muted,marginBottom:"40px"}}>{d.date}</p>
         <div style={{borderTop:`1px solid ${T.line}`}}>
           {d.events.map((ev,i)=>(
             <div key={i} style={{display:"grid",gridTemplateColumns:narrow?"52px 16px 1fr":"80px 20px 1fr",gap:narrow?"0 14px":"0 24px",borderBottom:`1px solid ${T.line}`,padding:narrow?"22px 0":"28px 0",alignItems:"start"}}>
               <div style={{textAlign:"right",paddingTop:"2px"}}>
-                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.muted,fontStyle:"italic"}}>{ev.time}</p>
+                <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"22px",color:T.muted,fontStyle:"italic"}}>{ev.time}</p>
               </div>
               <div style={{display:"flex",flexDirection:"column",alignItems:"center",paddingTop:"6px"}}>
                 <span style={{fontSize:"20px",color:TYPE_COLOR[ev.type]||T.ghost,lineHeight:1}}>{TYPE_ICON[ev.type]||"◇"}</span>
@@ -1516,7 +1517,7 @@ const ItineraryTab = memo(() => {
               </div>
               <div>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"16px",flexWrap:"wrap"}}>
-                  <h4 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{ev.act}</h4>
+                  <h4 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{ev.act}</h4>
                   {ev.sponsor&&<span style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold,whiteSpace:"nowrap",marginTop:"4px"}}>♡ {ev.sponsor}</span>}
                 </div>
                 <p style={{fontSize:"17px",color:T.muted,marginTop:"4px"}}>{ev.loc}</p>
@@ -1527,14 +1528,14 @@ const ItineraryTab = memo(() => {
                     return narrow ? (
                       <div key={c.mobil} style={{padding:"12px 0",borderBottom:`1px solid ${T.line}`}}>
                         <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",gap:"12px",marginBottom:"5px"}}>
-                          <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.forest}}>{c.mobil}</span>
+                          <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"20px",color:T.forest}}>{c.mobil}</span>
                           <span style={{fontSize:"14px",letterSpacing:"1px",textTransform:"uppercase",color:koperColor,whiteSpace:"nowrap"}}>{c.bagasi}</span>
                         </div>
                         <p style={{fontSize:"18px",color:T.ink,lineHeight:1.55,margin:0}}>{c.pax}</p>
                       </div>
                     ) : (
                       <div key={c.mobil} style={{display:"grid",gridTemplateColumns:"60px 1fr auto",gap:"12px",alignItems:"baseline",padding:"9px 0",borderBottom:`1px solid ${T.line}`}}>
-                        <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"19px",color:T.forest}}>{c.mobil}</span>
+                        <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"19px",color:T.forest}}>{c.mobil}</span>
                         <span style={{fontSize:"18px",color:T.ink,lineHeight:1.45}}>{c.pax}</span>
                         <span style={{fontSize:"14px",letterSpacing:"1px",textTransform:"uppercase",color:koperColor,whiteSpace:"nowrap"}}>{c.bagasi}</span>
                       </div>
@@ -1609,10 +1610,10 @@ const DeadlineCountdown = memo(({target, label, openText="Pre-order ditutup dala
           {units.map((u,i)=>(
             <div key={u.l} style={{display:"flex",alignItems:"flex-start",gap:"18px"}}>
               <div style={{textAlign:"center",minWidth:"42px"}}>
-                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"30px",fontWeight:500,color:accent,lineHeight:1}}>{String(u.n).padStart(2,"0")}</p>
+                <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"30px",fontWeight:500,color:accent,lineHeight:1}}>{String(u.n).padStart(2,"0")}</p>
                 <p style={{fontSize:"14px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginTop:"6px"}}>{u.l}</p>
               </div>
-              {i<units.length-1&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"26px",color:T.ghost,lineHeight:1.1}}>:</span>}
+              {i<units.length-1&&<span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"26px",color:T.ghost,lineHeight:1.1}}>:</span>}
             </div>
           ))}
         </div>
@@ -1634,7 +1635,7 @@ const MakanTab = memo(({user}) => {
     <div className="fade-up">
       <div style={{marginBottom:"32px"}}>
         <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pre-Order F&B</p>
-        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Pesan Makanan</h2>
+        <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Pesan Makanan</h2>
         <p style={{fontSize:"18px",color:T.muted,marginTop:"8px"}}>Seluruh hidangan disponsori per household. Diurut sesuai waktu makan. Pilih restoran untuk melihat menu & memesan; hidangan buffet sudah ditentukan dan tidak perlu dipesan.</p>
       </div>
 
@@ -1646,7 +1647,7 @@ const MakanTab = memo(({user}) => {
           if(buffet) return (
             <div key={m.id} style={{borderBottom:`1px solid ${T.line}`,padding:"28px 0"}}>
               <div style={{display:"flex",alignItems:"center",gap:"14px",flexWrap:"wrap",marginBottom:"6px"}}>
-                <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{m.name}</h3>
+                <h3 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{m.name}</h3>
                 <span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,border:`1px solid ${T.goldL}`,padding:"2px 8px"}}>Buffet · tanpa pesan</span>
                 {m.sponsor&&<span style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>♡ {m.sponsor}</span>}
               </div>
@@ -1669,7 +1670,7 @@ const MakanTab = memo(({user}) => {
               onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
               <div>
                 <div style={{display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap",marginBottom:"6px"}}>
-                  <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{m.name}</h3>
+                  <h3 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{m.name}</h3>
                   <span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.settled,borderBottom:`1px solid ${T.settled}`}}>Terbuka</span>
                   {m.sponsor&&<span style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>♡ {m.sponsor}</span>}
                 </div>
@@ -1771,7 +1772,7 @@ const OlehOlehTab = memo(({user}) => {
     <div className="fade-up">
       <div style={{marginBottom:"32px"}}>
         <p style={{fontSize:"16px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pre-Order F&B</p>
-        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Oleh-Oleh</h2>
+        <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"34px",fontWeight:400,color:T.ink}}>Oleh-Oleh</h2>
         <p style={{fontSize:"18px",color:T.muted,marginTop:"8px"}}>Dibayar sendiri. Pilih merchant untuk memesan, lalu transfer ke koordinator dan unggah bukti di bawah.</p>
       </div>
 
@@ -1786,7 +1787,7 @@ const OlehOlehTab = memo(({user}) => {
             onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
             <div>
               <div style={{display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap",marginBottom:"6px"}}>
-                <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{r.name}</h3>
+                <h3 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",fontWeight:400,color:T.ink}}>{r.name}</h3>
                 <span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.gold,borderBottom:`1px solid ${T.gold}`}}>Terbuka</span>
               </div>
               <p style={{fontSize:"17px",color:T.muted}}>{r.subtitle}</p>
@@ -1808,12 +1809,12 @@ const OlehOlehTab = memo(({user}) => {
             {myStores.map(o=>(
               <div key={o.name} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:`1px solid ${T.line}`}}>
                 <span style={{fontSize:"19px",color:T.ink}}>{o.name}</span>
-                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.settled}}>Rp{Number(o.totalIDR).toLocaleString("id-ID")}</span>
+                <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",color:T.settled}}>Rp{Number(o.totalIDR).toLocaleString("id-ID")}</span>
               </div>
             ))}
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"16px 0 0"}}>
               <span style={{fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Total Transfer</span>
-              <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"24px",color:T.forest,fontWeight:500}}>Rp{myTotal.toLocaleString("id-ID")}</span>
+              <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"24px",color:T.forest,fontWeight:500}}>Rp{myTotal.toLocaleString("id-ID")}</span>
             </div>
             <div style={{marginTop:"20px",padding:"16px",background:T.stone,borderLeft:`3px solid ${T.gold}`}}>
               <p style={{fontSize:"16px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Transfer ke</p>
@@ -1845,11 +1846,11 @@ const OlehOlehTab = memo(({user}) => {
                     <tr key={pName} style={{borderBottom:`1px solid ${T.line}`}}>
                       <td style={{padding:"10px 12px 10px 0",color:T.ink}}>{pName}</td>
                       {takeawayRestos.map(r=>(
-                        <td key={r.id} style={{textAlign:"right",padding:"10px 12px",color:stores[r.id]?T.settled:T.ghost,fontFamily:"'Playfair Display',Georgia,serif"}}>
+                        <td key={r.id} style={{textAlign:"right",padding:"10px 12px",color:stores[r.id]?T.settled:T.ghost,fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif"}}>
                           {stores[r.id]?`Rp${Number(stores[r.id].totalIDR).toLocaleString("id-ID")}`:"—"}
                         </td>
                       ))}
-                      <td style={{textAlign:"right",padding:"10px 0 10px 12px",color:T.forest,fontFamily:"'Playfair Display',Georgia,serif",fontWeight:500}}>Rp{rowTotal.toLocaleString("id-ID")}</td>
+                      <td style={{textAlign:"right",padding:"10px 0 10px 12px",color:T.forest,fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontWeight:500}}>Rp{rowTotal.toLocaleString("id-ID")}</td>
                     </tr>
                   );
                 })}
@@ -1859,9 +1860,9 @@ const OlehOlehTab = memo(({user}) => {
                   <td style={{padding:"12px 12px 4px 0",fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>Total</td>
                   {takeawayRestos.map(r=>{
                     const storeTotal = paxWithOrders.reduce((s,[,stores])=>s+Number(stores[r.id]?.totalIDR||0),0);
-                    return <td key={r.id} style={{textAlign:"right",padding:"12px 12px 4px",color:T.forest,fontFamily:"'Playfair Display',Georgia,serif",fontWeight:500}}>{storeTotal>0?`Rp${storeTotal.toLocaleString("id-ID")}`:"—"}</td>;
+                    return <td key={r.id} style={{textAlign:"right",padding:"12px 12px 4px",color:T.forest,fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontWeight:500}}>{storeTotal>0?`Rp${storeTotal.toLocaleString("id-ID")}`:"—"}</td>;
                   })}
-                  <td style={{textAlign:"right",padding:"12px 0 4px 12px",fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.forest,fontWeight:500}}>
+                  <td style={{textAlign:"right",padding:"12px 0 4px 12px",fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"22px",color:T.forest,fontWeight:500}}>
                     Rp{paxWithOrders.reduce((s,[,stores])=>s+Object.values(stores).reduce((ss,o)=>ss+Number(o.totalIDR),0),0).toLocaleString("id-ID")}
                   </td>
                 </tr>
@@ -1879,14 +1880,14 @@ const OlehOlehTab = memo(({user}) => {
           {merchantAgg.map(mm=>(
             <div key={mm.id} style={{border:`1px solid ${T.line}`,marginBottom:"16px"}}>
               <div style={{background:T.cream,padding:"12px 20px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.ink}}>{mm.name}</span>
-                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest,fontWeight:500}}>Rp{mm.subtotal.toLocaleString("id-ID")}</span>
+                <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",color:T.ink}}>{mm.name}</span>
+                <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",color:T.forest,fontWeight:500}}>Rp{mm.subtotal.toLocaleString("id-ID")}</span>
               </div>
               <div style={{padding:"6px 20px 16px"}}>
                 {mm.items.map(([n,q])=>(
                   <div key={n} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${T.line}`}}>
                     <span style={{fontSize:"18px",color:T.ink}}>{n}</span>
-                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest,whiteSpace:"nowrap"}}>{q}×</span>
+                    <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",color:T.forest,whiteSpace:"nowrap"}}>{q}×</span>
                   </div>
                 ))}
               </div>
@@ -2134,7 +2135,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:"16px",marginBottom:"8px"}}>
           <div>
             <div style={{display:"flex",alignItems:"center",gap:"16px",marginBottom:"6px"}}>
-              <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"32px",fontWeight:400,color:T.ink}}>{resto.name}</h2>
+              <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"32px",fontWeight:400,color:T.ink}}>{resto.name}</h2>
               <span style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",padding:"3px 8px",border:`1px solid ${locked?"#c88":T.settled}`,color:locked?T.danger:T.settled}}>{locked?"Ditutup":"Terbuka"}</span>
             </div>
             <p style={{fontSize:"17px",color:T.muted}}>{resto.subtitle} · {resto.note}</p>
@@ -2196,7 +2197,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
             value={searchQuery}
             onChange={e=>setSearchQuery(e.target.value)}
             placeholder="Cari menu…"
-            style={{width:"100%",padding:"10px 36px 10px 38px",border:`1px solid ${searchQuery?T.forest:T.lineD}`,background:searchQuery?T.cream:"transparent",fontSize:"19px",color:T.ink,outline:"none",fontFamily:"'Jost',sans-serif",fontWeight:300,letterSpacing:"0.3px",transition:"all 0.2s",boxSizing:"border-box"}}
+            style={{width:"100%",padding:"10px 36px 10px 38px",border:`1px solid ${searchQuery?T.forest:T.lineD}`,background:searchQuery?T.cream:"transparent",fontSize:"19px",color:T.ink,outline:"none",fontFamily:"'Inter',-apple-system,sans-serif",fontWeight:400,letterSpacing:"0.3px",transition:"all 0.2s",boxSizing:"border-box"}}
           />
           {searchQuery&&(
             <button onClick={()=>setSearchQuery("")} style={{position:"absolute",right:"12px",top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:"22px",color:T.muted,lineHeight:1,padding:"2px 4px"}}>×</button>
@@ -2265,7 +2266,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                 <div style={{display:"flex",alignItems:"center",gap:"16px",paddingTop:"2px"}}>
                   {inCart&&!isDisabled&&<>
                     <button onClick={()=>rem(item.id)} style={{background:"none",border:"none",cursor:"pointer",fontSize:"21px",color:T.muted,lineHeight:1,fontFamily:"serif",padding:"4px 8px"}}>−</button>
-                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.ink,minWidth:"24px",textAlign:"center"}}>{inCart.qty}</span>
+                    <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",color:T.ink,minWidth:"24px",textAlign:"center"}}>{inCart.qty}</span>
                   </>}
                   {isDisabled
                     ? <span style={{fontSize:"17px",color:T.ghost,fontStyle:"italic",padding:"4px 10px",minWidth:"32px",textAlign:"center"}}>N/A</span>
@@ -2322,24 +2323,24 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
               {cartEntries.map(([id,item])=>(
                 <div key={id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 0",borderBottom:`1px solid ${T.line}`,gap:"12px"}}>
                   <span style={{fontSize:"19px",color:T.ink,flex:1}}>{item.name}{item.config&&<span style={{color:T.gold}}> · {item.config}</span>}{item.notes&&<span style={{color:T.muted,fontStyle:"italic"}}> · {item.notes}</span>}</span>
-                  <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.ink,minWidth:"32px",textAlign:"right"}}>×{item.qty}</span>
-                  {hasPrices&&item.price&&resto.id!=="solaria"&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.settled,minWidth:"120px",textAlign:"right"}}>Rp{(item.price*item.qty).toLocaleString("id-ID")}</span>}
+                  <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",color:T.ink,minWidth:"32px",textAlign:"right"}}>×{item.qty}</span>
+                  {hasPrices&&item.price&&resto.id!=="solaria"&&<span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"20px",color:T.settled,minWidth:"120px",textAlign:"right"}}>Rp{(item.price*item.qty).toLocaleString("id-ID")}</span>}
                 </div>
               ))}
               {hasPrices&&nettTotal>0&&resto.id!=="solaria"&&<>
                 {resto.taxRate&&<>
                   <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0 4px",borderTop:`1px solid ${T.line}`,marginTop:"8px"}}>
                     <span style={{fontSize:"17px",color:T.muted}}>Subtotal (nett)</span>
-                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.ink}}>Rp{nettTotal.toLocaleString("id-ID")}</span>
+                    <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"20px",color:T.ink}}>Rp{nettTotal.toLocaleString("id-ID")}</span>
                   </div>
                   <div style={{display:"flex",justifyContent:"space-between",padding:"4px 0 8px"}}>
                     <span style={{fontSize:"17px",color:T.muted}}>Pajak 11% + Service 10%</span>
-                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"20px",color:T.muted}}>Rp{taxAmt.toLocaleString("id-ID")}</span>
+                    <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"20px",color:T.muted}}>Rp{taxAmt.toLocaleString("id-ID")}</span>
                   </div>
                 </>}
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 0 0",borderTop:`2px solid ${T.lineD}`}}>
                   <span style={{fontSize:"17px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted}}>{resto.isTakeaway?"Total":"Perkiraan Harga (Sponsor)"}</span>
-                  <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"23px",color:T.forest,fontWeight:500}}>Rp{grandTotal.toLocaleString("id-ID")}</span>
+                  <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"23px",color:T.forest,fontWeight:500}}>Rp{grandTotal.toLocaleString("id-ID")}</span>
                 </div>
               </>}
             </>;
@@ -2363,12 +2364,12 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                 <div style={{display:"grid",gridTemplateColumns:resto.id!=="solaria"?"1fr 1fr":"1fr",gap:"1px",background:T.line,marginBottom:"32px"}}>
                     <div style={{background:T.cream,padding:"20px 24px"}}>
                       <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Total Item Dipesan</p>
-                      <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"28px",color:T.ink}}>{totalBoxes} <span style={{fontSize:"19px",color:T.muted}}>item</span></p>
+                      <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"28px",color:T.ink}}>{totalBoxes} <span style={{fontSize:"19px",color:T.muted}}>item</span></p>
                     </div>
                     {resto.id!=="solaria"&&grandAllTotal>0&&(
                       <div style={{background:T.cream,padding:"20px 24px"}}>
                         <p style={{fontSize:"15px",letterSpacing:"2px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>{resto.isTakeaway?"Total Pesanan":"Perkiraan Total (Sponsor)"}</p>
-                        <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest}}>Rp{grandAllTotal.toLocaleString("id-ID")}</p>
+                        <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",color:T.forest}}>Rp{grandAllTotal.toLocaleString("id-ID")}</p>
                       </div>
                     )}
                   </div>
@@ -2383,7 +2384,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                 {sorted.map(([name,qty])=>(
                   <div key={name} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 0",borderBottom:`1px solid ${T.line}`}}>
                     <span style={{fontSize:"19px",color:T.ink}}>{name}</span>
-                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:T.forest}}>{qty}×</span>
+                    <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",color:T.forest}}>{qty}×</span>
                   </div>
                 ))}
               </div>;
@@ -2407,7 +2408,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                         <div style={{display:"flex",flexWrap:"wrap",gap:"8px",marginBottom:"4px"}}>
                           {(o.items||[]).map((it,i)=><span key={i} style={{fontSize:"16px",color:T.muted}}>• {it.name}{it.config&&` [${it.config}]`} ×{it.qty}{it.notes&&` (${it.notes})`}</span>)}
                         </div>
-                        {resto.isTakeaway&&o.totalIDR>0&&<p style={{fontSize:"18px",color:T.settled,fontFamily:"'Playfair Display',Georgia,serif",marginTop:"2px"}}>Total: Rp{Number(o.totalIDR).toLocaleString("id-ID")}</p>}
+                        {resto.isTakeaway&&o.totalIDR>0&&<p style={{fontSize:"18px",color:T.settled,fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",marginTop:"2px"}}>Total: Rp{Number(o.totalIDR).toLocaleString("id-ID")}</p>}
                       </div>}
                     </div>
                     <p style={{fontSize:"15px",letterSpacing:"1.5px",textTransform:"uppercase",color:o?T.settled:T.ghost,marginTop:"3px",whiteSpace:"nowrap"}}>{o?"✓ Terkirim":"Belum Order"}</p>
@@ -2630,10 +2631,10 @@ const SizeCountdown = memo(() => {
           {units.map((u,i)=>(
             <div key={u.l} style={{display:"flex",alignItems:"flex-start",gap:"18px"}}>
               <div style={{textAlign:"center",minWidth:"42px"}}>
-                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"30px",fontWeight:500,color:accent,lineHeight:1}}>{String(u.n).padStart(2,"0")}</p>
+                <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"30px",fontWeight:500,color:accent,lineHeight:1}}>{String(u.n).padStart(2,"0")}</p>
                 <p style={{fontSize:"14px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginTop:"6px"}}>{u.l}</p>
               </div>
-              {i<units.length-1&&<span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"26px",color:T.ghost,lineHeight:1.1}}>:</span>}
+              {i<units.length-1&&<span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"26px",color:T.ghost,lineHeight:1.1}}>:</span>}
             </div>
           ))}
         </div>
@@ -2765,7 +2766,7 @@ const SizeTab = memo(({user}) => {
     <div className="fade-up">
       <div style={{marginBottom:"40px"}}>
         <p style={{fontSize:"15px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"12px"}}>Pengumpulan Ukuran</p>
-        <h2 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"36px",fontWeight:400,color:T.ink}}>Ukuran Pakaian</h2>
+        <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"36px",fontWeight:400,color:T.ink}}>Ukuran Pakaian</h2>
         <p style={{fontSize:"17px",color:T.muted,marginTop:"8px"}}>Baju, celana, topi/blangkon & sepatu untuk seluruh peserta. Orang tua dapat mengisikan untuk anggota keluarga.</p>
         <p style={{fontSize:"16px",color:pastDeadline?T.danger:T.warn,marginTop:"10px",letterSpacing:"0.3px"}}>{pastDeadline?`Pengumpulan ukuran telah ditutup (deadline ${SIZE_DEADLINE_LABEL}).`:`Deadline pengisian: ${SIZE_DEADLINE_LABEL} · dapat diubah & submit ulang kapan saja sebelum deadline.`}</p>
       </div>
@@ -2807,7 +2808,7 @@ const SizeTab = memo(({user}) => {
         {SIZE_GARMENTS.map(g=>(
           <div key={g.id} style={{marginBottom:"36px",paddingBottom:"32px",borderBottom:`1px solid ${T.line}`}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",flexWrap:"wrap",gap:"8px",marginBottom:"14px"}}>
-              <h3 style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",fontWeight:400,color:T.ink}}>{g.label}</h3>
+              <h3 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"22px",fontWeight:400,color:T.ink}}>{g.label}</h3>
               <div style={{display:"flex",gap:"16px"}}>
                 <button onClick={()=>{setOpenChart(openChart===g.id?null:g.id);}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"15px",letterSpacing:"1px",textTransform:"uppercase",color:T.muted,borderBottom:`1px solid ${openChart===g.id?T.forest:"transparent"}`,padding:"2px 0"}}>Panduan ukuran</button>
                 <button onClick={()=>{setOpenHelper(openHelper===g.id?null:g.id);setHelperMode("cm");setHelperResult(null);setHelperCm("");setHelperBrand("");setHelperBrandSize("");}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"15px",letterSpacing:"1px",textTransform:"uppercase",color:T.gold,borderBottom:`1px solid ${openHelper===g.id?T.gold:"transparent"}`,padding:"2px 0"}}>Bantu pilih ukuran</button>
@@ -2825,7 +2826,7 @@ const SizeTab = memo(({user}) => {
                       {g.chartCols.map((c,i)=><span key={c} style={{fontSize:"14px",letterSpacing:"1px",textTransform:"uppercase",color:T.muted,paddingBottom:"4px",borderBottom:`1px solid ${T.lineD}`,textAlign:i===0?"left":"right"}}>{c}</span>)}
                       {grp.items.map(it=>(<Fragment key={it.v}>
                         <span style={{color:T.ink,paddingTop:"3px"}}>{it.v}</span>
-                        {it.row.map((cell,j)=><span key={j} style={{color:T.mid,textAlign:"right",paddingTop:"3px",fontFamily:"'Playfair Display',Georgia,serif"}}>{cell}</span>)}
+                        {it.row.map((cell,j)=><span key={j} style={{color:T.mid,textAlign:"right",paddingTop:"3px",fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif"}}>{cell}</span>)}
                       </Fragment>))}
                     </div>
                   </div>
@@ -2870,7 +2871,7 @@ const SizeTab = memo(({user}) => {
                   {helperResult.size
                     ? <div style={{display:"flex",alignItems:"center",gap:"14px",flexWrap:"wrap"}}>
                         <span style={{fontSize:"15px",color:T.muted}}>Saran ukuran:</span>
-                        <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"22px",color:T.forest,fontWeight:500}}>{g.id==="sepatu"?`EU ${helperResult.size}`:helperResult.size}</span>
+                        <span style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"22px",color:T.forest,fontWeight:500}}>{g.id==="sepatu"?`EU ${helperResult.size}`:helperResult.size}</span>
                         <button onClick={()=>setDraft(d=>({...d,[g.id]:helperResult.size}))} style={{background:"none",border:`1px solid ${T.forest}`,color:T.forest,padding:"6px 16px",cursor:"pointer",fontSize:"15px",letterSpacing:"1px",textTransform:"uppercase"}}>Pakai ini</button>
                       </div>
                     : <p style={{fontSize:"16px",color:T.danger}}>{helperResult.note}</p>}
@@ -2908,7 +2909,7 @@ const SizeTab = memo(({user}) => {
             {SIZE_GARMENTS.map(g=>(
               <div key={g.id}>
                 <p style={{fontSize:"14px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.muted,marginBottom:"5px"}}>{g.label.split(" ")[0]}</p>
-                <p style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:"21px",color:draft[g.id]?T.ink:T.ghost}}>{draft[g.id]?(g.id==="sepatu"?`EU ${draft[g.id]}`:draft[g.id]):"—"}</p>
+                <p style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"21px",color:draft[g.id]?T.ink:T.ghost}}>{draft[g.id]?(g.id==="sepatu"?`EU ${draft[g.id]}`:draft[g.id]):"—"}</p>
               </div>
             ))}
           </div>
