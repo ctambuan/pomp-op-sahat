@@ -1255,6 +1255,7 @@ const BudgetTab = memo(({user}) => {
   const [live, setLive] = useState(false);
   const [syncing, setSyncing] = useState(true);
   const [syncedAt, setSyncedAt] = useState(null);
+  const [syncError, setSyncError] = useState(null);
   const [revealed,setRevealed] = useState(false);
   const [pwOpen,setPwOpen] = useState(false);
   const [pw,setPw] = useState("");
@@ -1268,20 +1269,31 @@ const BudgetTab = memo(({user}) => {
   const tryReveal = () => { if(pw.trim().toLowerCase()==="lihatdana"){ setRevealed(true); setPwOpen(false); setPw(""); setPwErr(false); } else setPwErr(true); };
 
   // Auto-sync dari Google Sheets via /api/budget. Gagal/belum dikonfigurasi
-  // → tetap pakai snapshot bawaan (tab tidak pernah kosong).
+  // → tetap pakai snapshot bawaan (tab tidak pernah kosong), tapi kegagalan
+  // TIDAK disembunyikan: tampilkan peringatan agar data basi tidak terlihat
+  // sama dengan data live.
   useEffect(() => {
     let alive = true;
     (async () => {
       try {
         const res = await fetch("/api/budget", { headers: { Accept: "application/json" } });
-        const json = await res.json();
-        if (alive && res.ok && json && json.ok) {
+        let json = null;
+        try { json = await res.json(); } catch { /* non-JSON (mis. halaman login) */ }
+        if (!alive) return;
+        if (res.ok && json && json.ok) {
           setData(json);
           setLive(true);
+          setSyncError(null);
           setSyncedAt(new Date());
+        } else if (!res.ok) {
+          // 403 = deployment ter-proteksi · 503 = service account belum diset · dst.
+          setSyncError(`HTTP ${res.status}${res.status === 403 ? " — endpoint /api/budget diblokir (cek Deployment Protection di Vercel)" : ""}`);
+        } else {
+          setSyncError(json && json.reason ? `API: ${json.reason}` : "respons tidak valid");
         }
-      } catch { /* keep snapshot */ }
-      finally { if (alive) setSyncing(false); }
+      } catch (e) {
+        if (alive) setSyncError(e && e.message ? e.message : "jaringan gagal");
+      } finally { if (alive) setSyncing(false); }
     })();
     return () => { alive = false; };
   }, []);
@@ -1291,7 +1303,8 @@ const BudgetTab = memo(({user}) => {
   const talangan = data.talangan || {rows:[],total:0};
   const ledger = data.ledger || {rows:[],totalMasuk:0,totalKeluar:0,saldoAkhir:0,subtitle:""};
 
-  const sourceLabel = live ? "Sinkron dari Google Sheets" : (syncing ? "Menyinkronkan…" : "Snapshot tersimpan");
+  const stale = !live && !syncing; // menampilkan snapshot bawaan, bukan data live
+  const sourceLabel = live ? "Sinkron dari Google Sheets" : (syncing ? "Menyinkronkan…" : "Snapshot tersimpan (tidak live)");
 
   const LG = "92px minmax(180px,1.6fr) 1fr 110px 110px 124px"; // grid Buku Besar (tanpa kolom No)
   const TG = "minmax(180px,1.5fr) 0.9fr 0.6fr 1fr minmax(180px,1.7fr)"; // grid Talangan
@@ -1303,7 +1316,7 @@ const BudgetTab = memo(({user}) => {
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"20px",flexWrap:"wrap"}}>
           <div>
             <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"26px",fontWeight:400,color:T.ink,marginBottom:"8px"}}>Rekonsiliasi Rekening Bersama</h2>
-            <p style={{fontSize:"15px",color:T.muted}}>Per {data.asOf || "—"} · <span style={{color:live?T.forest:T.ghost}}>{sourceLabel}</span>{syncedAt && <span style={{color:T.ghost}}> · {syncedAt.toLocaleTimeString("id-ID")}</span>}</p>
+            <p style={{fontSize:"15px",color:T.muted}}>Per {data.asOf || "—"} · <span style={{color:live?T.forest:stale?T.warn:T.ghost}}>{sourceLabel}</span>{syncedAt && <span style={{color:T.ghost}}> · {syncedAt.toLocaleTimeString("id-ID")}</span>}</p>
           </div>
           <div style={{flexShrink:0}}>
             <button onClick={()=>{ if(revealed){setRevealed(false);} else {setPwOpen(o=>!o);setPwErr(false);} }} style={{display:"flex",alignItems:"center",gap:"8px",background:revealed?T.cream:"none",border:`1px solid ${revealed?T.forest:T.lineD}`,padding:"9px 16px",cursor:"pointer",fontSize:"13px",letterSpacing:"1.5px",textTransform:"uppercase",color:revealed?T.forest:T.muted}}>
@@ -1323,6 +1336,16 @@ const BudgetTab = memo(({user}) => {
           </div>
         </div>
       </div>
+
+      {stale && (
+        <div role="alert" style={{display:"flex",gap:"12px",alignItems:"flex-start",background:T.warnBg,border:`1px solid ${T.warn}`,padding:"14px 18px",marginBottom:"24px"}}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.warn} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,marginTop:"1px"}}><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div>
+            <p style={{fontSize:"14px",color:T.ink,fontWeight:500,marginBottom:"2px"}}>Angka di bawah belum tentu terbaru.</p>
+            <p style={{fontSize:"13px",color:T.muted,lineHeight:1.5}}>Sinkronisasi dari Google Sheets gagal, jadi yang ditampilkan adalah snapshot tersimpan{data.asOf ? ` (per ${data.asOf})` : ""} — perubahan terbaru di sheet mungkin belum tampil.{syncError ? ` Penyebab: ${syncError}.` : ""}</p>
+          </div>
+        </div>
+      )}
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:"16px",marginBottom:"24px"}}>
         {[
