@@ -1155,6 +1155,7 @@ const GlobalStyles = () => (
     input, select, button, textarea { font-family: inherit; }
     input, select, textarea, button { border-radius: 8px; }
     @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
     .fade-up { animation: fadeUp 0.6s ease forwards; }
     .tab-card { background: #fff; border-radius: 12px; box-shadow: 0 0 30px 0 rgba(33,46,77,0.06); padding: 28px 30px; }
     /* Nav tab bisa di-scroll horizontal (anti-overflow di HP) */
@@ -1271,32 +1272,39 @@ const BudgetTab = memo(({user}) => {
   // Auto-sync dari Google Sheets via /api/budget. Gagal/belum dikonfigurasi
   // → tetap pakai snapshot bawaan (tab tidak pernah kosong), tapi kegagalan
   // TIDAK disembunyikan: tampilkan peringatan agar data basi tidak terlihat
-  // sama dengan data live.
-  useEffect(() => {
-    let alive = true;
-    (async () => {
-      try {
-        const res = await fetch("/api/budget", { headers: { Accept: "application/json" } });
-        let json = null;
-        try { json = await res.json(); } catch { /* non-JSON (mis. halaman login) */ }
-        if (!alive) return;
-        if (res.ok && json && json.ok) {
-          setData(json);
-          setLive(true);
-          setSyncError(null);
-          setSyncedAt(new Date());
-        } else if (!res.ok) {
-          // 403 = deployment ter-proteksi · 503 = service account belum diset · dst.
-          setSyncError(`HTTP ${res.status}${res.status === 403 ? " — endpoint /api/budget diblokir (cek Deployment Protection di Vercel)" : ""}`);
-        } else {
-          setSyncError(json && json.reason ? `API: ${json.reason}` : "respons tidak valid");
-        }
-      } catch (e) {
-        if (alive) setSyncError(e && e.message ? e.message : "jaringan gagal");
-      } finally { if (alive) setSyncing(false); }
-    })();
-    return () => { alive = false; };
+  // sama dengan data live. `force` menambah cache-buster + no-store agar
+  // tombol "Segarkan" selalu mengambil data terbaru dari sheet.
+  const aliveRef = useRef(true);
+  const runSync = useCallback(async (force = false) => {
+    try {
+      const url = force ? `/api/budget?t=${Date.now()}` : "/api/budget";
+      const res = await fetch(url, {
+        headers: { Accept: "application/json" },
+        cache: force ? "no-store" : "default",
+      });
+      let json = null;
+      try { json = await res.json(); } catch { /* non-JSON */ }
+      if (!aliveRef.current) return;
+      if (res.ok && json && json.ok) {
+        setData(json);
+        setLive(true);
+        setSyncError(null);
+        setSyncedAt(new Date());
+      } else if (!res.ok) {
+        setSyncError(`HTTP ${res.status}`);
+      } else {
+        setSyncError(json && json.reason ? `API: ${json.reason}` : "respons tidak valid");
+      }
+    } catch (e) {
+      if (aliveRef.current) setSyncError(e && e.message ? e.message : "jaringan gagal");
+    } finally { if (aliveRef.current) setSyncing(false); }
   }, []);
+
+  useEffect(() => {
+    aliveRef.current = true;
+    (async () => { await runSync(false); })();
+    return () => { aliveRef.current = false; };
+  }, [runSync]);
 
   const recon = data.recon || {rows:[],net:null};
   const net = recon.net || {kontribusi:0,biaya:0,talangan:0,kekurangan:0,posisiAkhir:0};
@@ -1316,7 +1324,11 @@ const BudgetTab = memo(({user}) => {
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:"20px",flexWrap:"wrap"}}>
           <div>
             <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"26px",fontWeight:400,color:T.ink,marginBottom:"8px"}}>Rekonsiliasi Rekening Bersama</h2>
-            <p style={{fontSize:"15px",color:T.muted}}>Per {data.asOf || "—"} · <span style={{color:live?T.forest:stale?T.warn:T.ghost}}>{sourceLabel}</span>{syncedAt && <span style={{color:T.ghost}}> · {syncedAt.toLocaleTimeString("id-ID")}</span>}</p>
+            <p style={{fontSize:"15px",color:T.muted}}>Per {data.asOf || "—"} · <span style={{color:live?T.forest:stale?T.warn:T.ghost}}>{sourceLabel}</span>{syncedAt && <span style={{color:T.ghost}}> · {syncedAt.toLocaleTimeString("id-ID")}</span>}
+              <button onClick={()=>{ setSyncing(true); runSync(true); }} disabled={syncing} title="Ambil data terbaru dari Google Sheets" aria-label="Segarkan data" style={{marginLeft:"10px",background:"none",border:"none",padding:0,cursor:syncing?"default":"pointer",color:syncing?T.ghost:T.forest,verticalAlign:"middle",opacity:syncing?0.5:1}}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={syncing?{animation:"spin 0.9s linear infinite"}:undefined}><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              </button>
+            </p>
           </div>
           <div style={{flexShrink:0}}>
             <button onClick={()=>{ if(revealed){setRevealed(false);} else {setPwOpen(o=>!o);setPwErr(false);} }} style={{display:"flex",alignItems:"center",gap:"8px",background:revealed?T.cream:"none",border:`1px solid ${revealed?T.forest:T.lineD}`,padding:"9px 16px",cursor:"pointer",fontSize:"13px",letterSpacing:"1.5px",textTransform:"uppercase",color:revealed?T.forest:T.muted}}>

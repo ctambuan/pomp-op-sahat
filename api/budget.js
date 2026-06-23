@@ -199,8 +199,10 @@ export default async function handler(req, res) {
   try {
     const wb = await downloadWorkbook(fileId);
     const data = parse(wb);
-    // Cache di edge 5 menit, sajikan basi sambil revalidate 10 menit.
-    res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=600");
+    // Cache pendek di edge (30 dtk) supaya perubahan sheet cepat tampil,
+    // dengan revalidasi latar 60 dtk. Tombol "Segarkan" di UI menambah
+    // cache-buster + no-store untuk pengambilan langsung dari sheet.
+    res.setHeader("Cache-Control", "s-maxage=30, stale-while-revalidate=60");
     res.status(200).json(data);
   } catch (err) {
     const code = err.code === "not_configured" ? 503 : 502;
