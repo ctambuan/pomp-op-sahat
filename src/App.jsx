@@ -301,7 +301,7 @@ const RESTAURANTS = [
   {
     id:"ayom",name:"Ayom Jogja",subtitle:"D2 · Makan Malam · 3 Juli 2026, 17.00",
     note:"Restoran tepi sawah, Sukunan Banyuraden Gamping Sleman · 23 pax · Sponsor: HH3 Monang · Harga sudah termasuk pajak & service",
-    deadline:"25 Juni 2026",
+    deadline:"1 Juli 2026",
     participants: ALL_PAX,
     categories:[
       {id:"pembuka",name:"Pembuka",items:[
@@ -460,7 +460,7 @@ const RESTAURANTS = [
     id:"summer-palace",name:"Summer Palace",subtitle:"D4 · Makan Siang · 5 Juli 2026, 12.00",
     note:"Hotel Tentrem, Jl. A.M. Sangaji No.72A, Yogyakarta · 23 pax · Sponsor: HH1 Agustianto",
     taxRate:0.21,
-    deadline:"25 Juni 2026",
+    deadline:"1 Juli 2026",
     participants: ALL_PAX,
     categories:[
       {id:"sp-appetizer",name:"Appetizer",items:[
@@ -780,7 +780,7 @@ const RESTAURANTS = [
   {
     id:"kemangi",name:"Kemangi Bistro",subtitle:"D1 Welcome Dinner (2 Juli 19.00) & D2 Breakfast (3 Juli 07.00)",
     note:"Kemangi Bistro, Hyatt Regency \u00b7 23 pax \u00b7 Sponsor: HH4 Gerard \u00b7 Harga belum termasuk 21% pajak & service",
-    deadline:"25 Juni 2026",
+    deadline:"1 Juli 2026",
     taxRate:0.21,
     participants: ALL_PAX,
     categories:[
@@ -1627,6 +1627,9 @@ const compressImage = (file, maxDim=1600, quality=0.8) => new Promise((resolve,r
 // ═══════════════════════════════════════════════════════════════════════════
 const FB_DEADLINE = new Date("2026-06-25T23:59:59+07:00");
 const FB_DEADLINE_LABEL = "25 Juni 2026, 23:59 WIB";
+// Deadline pesan makanan diperpanjang untuk restoran terbuka (kecuali Solaria & Djiwana yang tetap 25 Juni)
+const FB_DEADLINE_MAKAN = new Date("2026-07-01T23:59:59+07:00");
+const FB_DEADLINE_MAKAN_LABEL = "1 Juli 2026, 23:59 WIB";
 const FOOD_ORDER = ["solaria","kemangi","mbah-mo","ayom","desa-palagan","djiwana","summer-palace"];
 
 const DeadlineCountdown = memo(({target, label, openText="Pre-order ditutup dalam", closedText="Pre-order telah ditutup"}) => {
@@ -1684,7 +1687,7 @@ const MakanTab = memo(({user}) => {
         <p style={{fontSize:"15px",color:T.muted,marginTop:"8px"}}>Seluruh hidangan disponsori per household. Diurut sesuai waktu makan. Pilih restoran untuk melihat menu & memesan; hidangan buffet sudah ditentukan dan tidak perlu dipesan.</p>
       </div>
 
-      <DeadlineCountdown target={FB_DEADLINE} label={FB_DEADLINE_LABEL}/>
+      <DeadlineCountdown target={FB_DEADLINE_MAKAN} label={FB_DEADLINE_MAKAN_LABEL}/>
 
       <div>
         {items.map(m=>{
