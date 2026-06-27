@@ -2038,8 +2038,13 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
     try {
       const lockVal = await sGet(`lock.${resto.id}`);
       setLocked(lockVal==="true");
+      // Baca order untuk SEMUA peserta (ALL_PAX), bukan hanya resto.participants.
+      // Form pesan menampilkan setiap restoran ke semua orang, sehingga order bisa
+      // tersimpan untuk nama di luar resto.participants (mis. Nadia Tambunan di Solaria).
+      // Membaca hanya resto.participants menyembunyikan order tersebut — lihat issue
+      // "order submitted but it didn't show". ALL_PAX menjamin tiap order termuat.
       const entries = await Promise.all(
-        resto.participants.map(async p => {
+        ALL_PAX.map(async p => {
           const key = `order.${resto.id}.${p.name.replace(/\s+/g,"_")}`;
           try { const v = await sGet(key); return [p.name, v]; } catch { return [p.name, null]; }
         })
@@ -2049,7 +2054,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
       setAllOrders(grouped);
       setLastSync(new Date());
     } catch { setSyncError("Gagal memuat data. Cek koneksi."); }
-  }, [resto.id, resto.participants]);
+  }, [resto.id]);
 
   const withTimeoutR = (promise, ms=10000) => Promise.race([promise, new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),ms))]);
 
@@ -2062,7 +2067,9 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
         const lockVal = await withTimeoutR(sGet(`lock.${resto.id}`));
         setLocked(lockVal==="true");
         const entries = await withTimeoutR(Promise.all(
-          resto.participants.map(async p => {
+          // ALL_PAX (bukan resto.participants) agar order dari nama di luar daftar
+          // peserta restoran tetap termuat & tampil — lihat catatan di refresh().
+          ALL_PAX.map(async p => {
             const key = `order.${resto.id}.${p.name.replace(/\s+/g,"_")}`;
             try { const v = await sGet(key); return [p.name, v]; } catch { return [p.name, null]; }
           })
@@ -2169,8 +2176,17 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
     a.click();
   };
 
+  // Roster status = peserta restoran + siapa pun yang sudah memesan namun berada di
+  // luar resto.participants (mis. order Solaria atas nama Nadia Tambunan). Dengan begitu
+  // order yang "tersubmit tapi tidak tampil" tetap muncul di rekap koordinator.
+  const orderRoster=[
+    ...resto.participants,
+    ...Object.keys(allOrders)
+      .filter(name=>!resto.participants.some(p=>p.name===name))
+      .map(name=>ALL_PAX.find(p=>p.name===name)||{name,hh:"—"}),
+  ];
   const ordered=Object.keys(allOrders).length;
-  const total=resto.participants.length;
+  const total=orderRoster.length;
   const showRecap=isCoord||(submitted&&tab==="recap");
 
   if(loading) return (
@@ -2445,15 +2461,17 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
           <div>
             <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Status Per Peserta — {ordered}/{total}</p>
             <div style={{borderTop:`1px solid ${T.line}`}}>
-              {resto.participants.map(p=>{
+              {orderRoster.map(p=>{
                 const o=allOrders[p.name];
                 const isMe=p.name===user;
+                const isExtra=!resto.participants.some(rp=>rp.name===p.name);
                 return (
                   <div key={p.name} style={{display:"grid",gridTemplateColumns:"1fr auto",gap:"16px",alignItems:"start",borderBottom:`1px solid ${T.line}`,padding:"16px 0",background:isMe?T.cream:"transparent"}}>
                     <div>
                       <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"4px",flexWrap:"wrap"}}>
                         <span style={{fontSize:"16px",color:T.ink,fontWeight:o?500:300}}>{p.name}</span>
                         {isMe&&<span style={{fontSize:"13px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.gold}}>Anda</span>}
+                        {isExtra&&<span style={{fontSize:"13px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.danger,border:`1px solid ${T.danger}`,padding:"1px 6px"}}>Di luar daftar</span>}
                         <span style={{fontSize:"14px",color:T.muted}}>({p.hh})</span>
                       </div>
                       {o&&<div>
