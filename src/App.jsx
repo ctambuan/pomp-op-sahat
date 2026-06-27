@@ -950,7 +950,7 @@ const RESTAURANTS = [
   {
     id:"bakpia",name:"Bakpia Pathok 25",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
     note:"Bakpia Pathok 25, Yogyakarta · 23 pax · Dikoordinir, bayar langsung 5 Juli",
-    deadline:"25 Juni 2026",
+    deadline:"1 Juli 2026",
     isTakeaway:true,
     participants: ALL_PAX,
     categories:[
@@ -979,7 +979,7 @@ const RESTAURANTS = [
   {
     id:"juwara",name:"Juwara Satoe",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
     note:"Bakpia Juwara Satoe, Yogyakarta · 23 pax · Dikoordinir, bayar langsung 5 Juli",
-    deadline:"25 Juni 2026",
+    deadline:"1 Juli 2026",
     isTakeaway:true,
     participants: ALL_PAX,
     categories:[
@@ -1045,7 +1045,7 @@ const RESTAURANTS = [
   {
     id:"wahyu-austin",name:"Wahyu Austin Pastry",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
     note:"Roll Cake 4×30 cm · 23 pax · Dikoordinir, bayar langsung 5 Juli",
-    deadline:"25 Juni 2026",
+    deadline:"1 Juli 2026",
     isTakeaway:true,
     participants: ALL_PAX,
     categories:[
@@ -1064,7 +1064,7 @@ const RESTAURANTS = [
   {
     id:"putu-radja",name:"Putu Radja Bolu Pisang",subtitle:"D4 · Oleh-oleh Takeaway · 5 Juli 2026",
     note:"Putu Radja, Yogyakarta · 23 pax · Dikoordinir, bayar langsung 5 Juli",
-    deadline:"25 Juni 2026",
+    deadline:"1 Juli 2026",
     isTakeaway:true,
     participants: ALL_PAX,
     categories:[
@@ -1625,11 +1625,9 @@ const compressImage = (file, maxDim=1600, quality=0.8) => new Promise((resolve,r
 // ═══════════════════════════════════════════════════════════════════════════
 // PRE-ORDER F&B — Pesan Makanan & Oleh-Oleh (dua tab terpisah)
 // ═══════════════════════════════════════════════════════════════════════════
-const FB_DEADLINE = new Date("2026-06-25T23:59:59+07:00");
-const FB_DEADLINE_LABEL = "25 Juni 2026, 23:59 WIB";
-// Deadline pesan makanan diperpanjang untuk restoran terbuka (kecuali Solaria & Djiwana yang tetap 25 Juni)
-const FB_DEADLINE_MAKAN = new Date("2026-07-01T23:59:59+07:00");
-const FB_DEADLINE_MAKAN_LABEL = "1 Juli 2026, 23:59 WIB";
+// Deadline pre-order F&B diperpanjang ke 1 Juli (Solaria & Djiwana tetap 25 Juni via label per-restoran)
+const FB_DEADLINE = new Date("2026-07-01T23:59:59+07:00");
+const FB_DEADLINE_LABEL = "1 Juli 2026, 23:59 WIB";
 const FOOD_ORDER = ["solaria","kemangi","mbah-mo","ayom","desa-palagan","djiwana","summer-palace"];
 
 const DeadlineCountdown = memo(({target, label, openText="Pre-order ditutup dalam", closedText="Pre-order telah ditutup"}) => {
@@ -1687,7 +1685,7 @@ const MakanTab = memo(({user}) => {
         <p style={{fontSize:"15px",color:T.muted,marginTop:"8px"}}>Seluruh hidangan disponsori per household. Diurut sesuai waktu makan. Pilih restoran untuk melihat menu & memesan; hidangan buffet sudah ditentukan dan tidak perlu dipesan.</p>
       </div>
 
-      <DeadlineCountdown target={FB_DEADLINE_MAKAN} label={FB_DEADLINE_MAKAN_LABEL}/>
+      <DeadlineCountdown target={FB_DEADLINE} label={FB_DEADLINE_LABEL}/>
 
       <div>
         {items.map(m=>{
