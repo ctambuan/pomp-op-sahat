@@ -1215,6 +1215,8 @@ const NameScreen = memo(({onSuccess}) => {
 
 const Shell = ({user,tab,setTab,children,muted,onToggleMute}) => {
   const TABS = [{id:"itinerary",label:"Itinerary"},{id:"size",label:"Ukuran Pakaian"},{id:"makan",label:"Pesan Makanan"},{id:"oleholeh",label:"Oleh-Oleh"},{id:"budget",label:"Dana"}];
+  // Tab "Pesan WA" hanya untuk koordinator — siaran ke grup WhatsApp.
+  if (COORDINATORS.includes(user)) TABS.push({id:"broadcast",label:"Pesan WA"});
   return (
     <div style={{minHeight:"100vh",background:T.stone}}>
       <GlobalStyles/>
@@ -3016,6 +3018,80 @@ const SizeTab = memo(({user}) => {
   );
 });
 
+// Tab "Pesan WA" — koordinator menulis pesan bebas lalu kirim ke grup WhatsApp
+// lewat /api/whatsapp (Fonnte). Token & ID grup ada di server, jadi front-end
+// cukup mengirim teksnya.
+const BroadcastTab = memo(({user}) => {
+  const isCoord = COORDINATORS.includes(user);
+  const [msg,setMsg] = useState("");
+  const [sending,setSending] = useState(false);
+  const [result,setResult] = useState(null); // {ok:boolean, text:string}
+
+  if (!isCoord) {
+    return <div style={{...CARD}}>
+      <p style={{fontSize:"15px",color:T.muted,fontStyle:"italic",padding:"20px 0"}}>Halaman ini khusus koordinator.</p>
+    </div>;
+  }
+
+  const REASONS = {
+    not_configured: "Server belum dikonfigurasi (FONNTE_TOKEN / FONNTE_GROUP_ID belum diisi di Vercel).",
+    empty_message: "Pesan masih kosong.",
+    message_too_long: "Pesan terlalu panjang (maksimal 4000 karakter).",
+    method_not_allowed: "Metode tidak diizinkan.",
+  };
+
+  const send = async () => {
+    const text = msg.trim();
+    if (!text || sending) return;
+    setSending(true); setResult(null);
+    try {
+      const res = await fetch("/api/whatsapp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text }),
+      });
+      let json = null; try { json = await res.json(); } catch { /* non-JSON */ }
+      if (res.ok && json && json.ok) {
+        setResult({ ok:true, text:"Pesan terkirim ke grup WhatsApp." });
+        setMsg("");
+      } else {
+        const reason = (json && json.reason) || `HTTP ${res.status}`;
+        setResult({ ok:false, text: REASONS[reason] || `Gagal mengirim: ${reason}` });
+      }
+    } catch (e) {
+      setResult({ ok:false, text: `Gagal mengirim: ${e&&e.message?e.message:"jaringan"}` });
+    } finally { setSending(false); }
+  };
+
+  return (
+    <div style={{...CARD,maxWidth:"640px"}}>
+      <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"8px"}}>Pesan WhatsApp</p>
+      <h2 style={{fontFamily:"'Inter',-apple-system,BlinkMacSystemFont,sans-serif",fontSize:"22px",fontWeight:400,color:T.ink,marginBottom:"6px"}}>Siaran ke Grup</h2>
+      <p style={{fontSize:"14px",color:T.muted,marginBottom:"24px"}}>Tulis pesan, lalu kirim ke grup WhatsApp peserta.</p>
+      <textarea
+        value={msg}
+        onChange={e=>{setMsg(e.target.value);setResult(null);}}
+        placeholder="Tulis pesan untuk grup…"
+        rows={6}
+        maxLength={4000}
+        style={{width:"100%",boxSizing:"border-box",padding:"14px 16px",border:`1px solid ${T.lineD}`,borderRadius:"8px",background:T.white,fontSize:"15px",fontFamily:"inherit",color:T.ink,outline:"none",resize:"vertical",lineHeight:1.5}}
+      />
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:"16px"}}>
+        <span style={{fontSize:"13px",color:T.ghost}}>{msg.length}/4000</span>
+        <button
+          onClick={send}
+          disabled={sending||!msg.trim()}
+          style={{background:(sending||!msg.trim())?T.ghost:T.forest,color:"#fff",border:"none",borderRadius:"8px",padding:"11px 24px",fontSize:"14px",fontWeight:500,letterSpacing:"1px",cursor:(sending||!msg.trim())?"default":"pointer",transition:"all 0.15s"}}>
+          {sending?"Mengirim…":"Kirim ke Grup"}
+        </button>
+      </div>
+      {result && (
+        <p style={{marginTop:"18px",fontSize:"14px",fontWeight:500,color:result.ok?T.settled:T.danger}}>{result.text}</p>
+      )}
+    </div>
+  );
+});
+
 const SESSION_KEY = "pos_session";
 const IDLE_MS = 15 * 60 * 1000; // 15 menit idle / tidak diakses
 const loadSession = () => {
@@ -3087,6 +3163,7 @@ export default function App() {
             {tab==="size"      && <SizeTab user={user}/>}
             {tab==="makan"     && <MakanTab user={user}/>}
             {tab==="oleholeh"  && <OlehOlehTab user={user}/>}
+            {tab==="broadcast" && <BroadcastTab user={user}/>}
           </Shell>
         </ErrorBoundary>
       )}
