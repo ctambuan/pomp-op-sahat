@@ -1624,6 +1624,99 @@ const compressImage = (file, maxDim=1600, quality=0.8) => new Promise((resolve,r
   reader.readAsDataURL(file);
 });
 
+// Render a recap (per-menu tally) into a downloadable PNG using a plain canvas —
+// no external deps, same approach as compressImage above. `stats` are optional
+// summary boxes; each `section` may carry a heading bar + value and a list of
+// rows ({label, value}). Long labels word-wrap inside the content column.
+const downloadRecapImage = ({ filename, title, subtitle, stats = [], sections = [] }) => {
+  const W = 760, PADX = 44, CONTENT = W - PADX * 2, VAL_W = 96, GAP = 24, DPR = 2;
+  const font = (s, w = 400) => `${w} ${s}px Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
+  const run = () => {
+    const meas = document.createElement("canvas").getContext("2d");
+    const wrap = (text, maxW, s, w = 400) => {
+      meas.font = font(s, w);
+      const words = String(text).split(/\s+/);
+      const lines = []; let cur = "";
+      for (const word of words) {
+        const test = cur ? cur + " " + word : word;
+        if (meas.measureText(test).width > maxW && cur) { lines.push(cur); cur = word; }
+        else cur = test;
+      }
+      if (cur) lines.push(cur);
+      return lines.length ? lines : [""];
+    };
+
+    // ── layout pass: build draw ops + measure total height ──
+    const ops = []; let y = 40;
+    ops.push({ t: "text", x: PADX, y, s: 30, w: 700, c: T.ink, text: title }); y += 38;
+    if (subtitle) { ops.push({ t: "text", x: PADX, y, s: 13, w: 500, c: T.muted, text: subtitle, ls: 2, upper: true }); y += 26; }
+    y += 8;
+    if (stats.length) {
+      const boxH = 70, bw = (CONTENT - (stats.length - 1)) / stats.length, boxY = y;
+      stats.forEach((st, i) => {
+        const bx = PADX + i * (bw + 1);
+        ops.push({ t: "rect", x: bx, y: boxY, w: bw, h: boxH, c: T.stone });
+        ops.push({ t: "text", x: bx + 18, y: boxY + 28, s: 12, w: 500, c: T.muted, text: st.label, ls: 1.5, upper: true });
+        ops.push({ t: "text", x: bx + 18, y: boxY + 54, s: 22, w: 600, c: st.color || T.ink, text: st.value });
+      });
+      y = boxY + boxH + GAP;
+    }
+    sections.forEach(sec => {
+      const ind = sec.heading ? 18 : 0;
+      if (sec.heading) {
+        const barH = 46;
+        ops.push({ t: "rect", x: PADX, y, w: CONTENT, h: barH, c: T.stone });
+        ops.push({ t: "text", x: PADX + 18, y: y + 29, s: 17, w: 600, c: T.ink, text: sec.heading });
+        if (sec.headingValue) ops.push({ t: "rtext", x: PADX + CONTENT - 18, y: y + 29, s: 17, w: 600, c: T.forest, text: sec.headingValue });
+        y += barH;
+      }
+      (sec.rows || []).forEach(r => {
+        const lines = wrap(r.label, CONTENT - VAL_W - ind * 2, 16);
+        const rowH = Math.max(40, 16 + lines.length * 22);
+        lines.forEach((ln, i) => ops.push({ t: "text", x: PADX + ind, y: y + 24 + i * 22, s: 16, w: 400, c: T.ink, text: ln }));
+        if (r.value != null) ops.push({ t: "rtext", x: PADX + CONTENT - ind, y: y + 24, s: 17, w: 600, c: T.forest, text: String(r.value) });
+        y += rowH;
+        ops.push({ t: "line", x1: PADX + ind, x2: PADX + CONTENT - ind, y });
+      });
+      y += GAP;
+    });
+    ops.push({ t: "text", x: PADX, y: y + 8, s: 12, w: 400, c: T.ghost, text: `Pomp Op Sahat · diunduh ${new Date().toLocaleString("id-ID", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}` });
+    const H = y + 36;
+
+    // ── draw pass ──
+    const cv = document.createElement("canvas");
+    cv.width = W * DPR; cv.height = H * DPR;
+    const ctx = cv.getContext("2d");
+    ctx.scale(DPR, DPR);
+    ctx.fillStyle = T.cream; ctx.fillRect(0, 0, W, H);
+    ctx.textBaseline = "alphabetic";
+    ops.forEach(op => {
+      if (op.t === "rect") { ctx.fillStyle = op.c; ctx.fillRect(op.x, op.y, op.w, op.h); return; }
+      if (op.t === "line") { ctx.strokeStyle = T.line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(op.x1, op.y + 0.5); ctx.lineTo(op.x2, op.y + 0.5); ctx.stroke(); return; }
+      ctx.fillStyle = op.c; ctx.font = font(op.s, op.w);
+      let text = op.upper ? op.text.toUpperCase() : op.text;
+      if (op.ls) {
+        ctx.textAlign = "left"; let cx = op.x;
+        for (const ch of text) { ctx.fillText(ch, cx, op.y); cx += ctx.measureText(ch).width + op.ls; }
+      } else {
+        ctx.textAlign = op.t === "rtext" ? "right" : "left";
+        ctx.fillText(text, op.x, op.y);
+      }
+    });
+
+    cv.toBlob(blob => {
+      if (!blob) return;
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    }, "image/png");
+  };
+  // Ensure Inter is loaded before measuring/drawing so text metrics are correct.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(run); else run();
+};
+
 // ═══════════════════════════════════════════════════════════════════════════
 // PRE-ORDER F&B — Pesan Makanan & Oleh-Oleh (dua tab terpisah)
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1818,6 +1911,20 @@ const OlehOlehTab = memo(({user}) => {
     return {id:r.id,name:r.name,subtotal,items:Object.entries(tally).sort((a,b)=>b[1]-a[1])};
   }).filter(mm=>mm.items.length>0);
 
+  const downloadMerchantImage = () => {
+    if(!merchantAgg.length) return;
+    downloadRecapImage({
+      filename:"Rekap_OlehOleh_Per_Merchant.png",
+      title:"Rekap Pesanan Per Merchant",
+      subtitle:"Oleh-Oleh · Gabungan seluruh peserta",
+      sections:merchantAgg.map(mm=>({
+        heading:mm.name,
+        headingValue:`Rp${mm.subtotal.toLocaleString("id-ID")}`,
+        rows:mm.items.map(([n,q])=>({label:n,value:`${q}×`})),
+      })),
+    });
+  };
+
   return (
     <div className="fade-up">
       <div style={{marginBottom:"32px"}}>
@@ -1925,7 +2032,10 @@ const OlehOlehTab = memo(({user}) => {
       {/* ── COORDINATOR: REKAP TOTAL PER MERCHANT (tanpa nama) ── */}
       {isCoord&&merchantAgg.length>0&&(
         <div style={{...CARD,marginBottom:"16px"}}>
-          <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"6px"}}>Rekap Pesanan Per Merchant</p>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"16px",flexWrap:"wrap",marginBottom:"6px"}}>
+            <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted}}>Rekap Pesanan Per Merchant</p>
+            <button onClick={downloadMerchantImage} style={{background:"none",border:`1px solid ${T.line}`,padding:"6px 14px",cursor:"pointer",fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,whiteSpace:"nowrap"}}>↓ Unduh Gambar</button>
+          </div>
           <p style={{fontSize:"14px",color:T.muted,marginBottom:"24px",fontStyle:"italic"}}>Gabungan seluruh peserta, tanpa nama — referensi koordinator memesan langsung ke toko.</p>
           {merchantAgg.map(mm=>(
             <div key={mm.id} style={{border:`1px solid ${T.line}`,marginBottom:"16px"}}>
@@ -2169,6 +2279,24 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
     a.click();
   };
 
+  const downloadMenuImage = () => {
+    const tally={};
+    Object.values(allOrders).forEach(o=>(o.items||[]).forEach(i=>{const k=i.config?`${i.name} [${i.config}]`:i.name;tally[k]=(tally[k]||0)+Number(i.qty);}));
+    const sorted=Object.entries(tally).sort((a,b)=>b[1]-a[1]);
+    if(!sorted.length) return;
+    const totalBoxes=Object.values(allOrders).reduce((s,o)=>s+(o.items||[]).reduce((ss,i)=>ss+Number(i.qty),0),0);
+    const grandAllTotal=Object.values(allOrders).reduce((s,o)=>s+Number(o.totalIDR||0),0);
+    const stats=[{label:"Total Item Dipesan",value:`${totalBoxes} item`}];
+    if(resto.id!=="solaria"&&grandAllTotal>0) stats.push({label:resto.isTakeaway?"Total Pesanan":"Perkiraan Total",value:`Rp${grandAllTotal.toLocaleString("id-ID")}`,color:T.forest});
+    downloadRecapImage({
+      filename:`Rekap_${resto.name.replace(/\s+/g,"_")}.png`,
+      title:resto.name,
+      subtitle:`Rekap Per Menu · ${resto.subtitle}`,
+      stats,
+      sections:[{rows:sorted.map(([n,q])=>({label:n,value:`${q}×`}))}],
+    });
+  };
+
   const ordered=Object.keys(allOrders).length;
   const total=resto.participants.length;
   const showRecap=isCoord||(submitted&&tab==="recap");
@@ -2407,7 +2535,10 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
         {!showRecap&&<p style={{fontSize:"15px",color:T.muted,fontStyle:"italic",padding:"20px 0"}}>Submit order Anda terlebih dahulu untuk melihat rekap semua peserta.</p>}
         {showRecap&&<>
           <div style={{marginBottom:"48px"}}>
-            <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Rekap Per Menu</p>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"16px",flexWrap:"wrap",marginBottom:"24px"}}>
+              <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted}}>Rekap Per Menu</p>
+              <button onClick={downloadMenuImage} style={{background:"none",border:`1px solid ${T.line}`,padding:"6px 14px",cursor:"pointer",fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,whiteSpace:"nowrap"}}>↓ Unduh Gambar</button>
+            </div>
             {(()=>{
               const grandAllTotal = Object.values(allOrders).reduce((s,o)=>s+Number(o.totalIDR||0),0);
               const totalBoxes = Object.values(allOrders).reduce((s,o)=>s+(o.items||[]).reduce((ss,i)=>ss+Number(i.qty),0),0);
