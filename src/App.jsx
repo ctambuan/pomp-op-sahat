@@ -914,8 +914,8 @@ const RESTAURANTS = [
         {id:"km-hj-wildlychee",name:"Wild Lychee",desc:"Lychee, plain yogurt, lime juice, vanilla syrup, lemon leaf",price:55000},
       ]},
       {id:"km-juice",name:"Fresh Squeezed Juice",items:[
-        {id:"km-fj-60",name:"Fresh Juice",desc:"Pilih satu",price:60000,options:[{id:"fruit",label:"Pilihan",required:true,choices:["Orange","Avocado","Carrot","Pineapple","Mixed"]}]},
-        {id:"km-fj-50",name:"Fresh Juice",desc:"Pilih satu",price:50000,options:[{id:"fruit",label:"Pilihan",required:true,choices:["Papaya","Honeydew","Guava","Strawberry","Watermelon","Red Dragon Fruit"]}]},
+        {id:"km-fj-60",name:"Fresh Juice Premium",desc:"Pilih satu",price:60000,options:[{id:"fruit",label:"Pilihan",required:true,choices:["Orange","Avocado","Carrot","Pineapple","Mixed"]}]},
+        {id:"km-fj-50",name:"Fresh Juice Reguler",desc:"Pilih satu",price:50000,options:[{id:"fruit",label:"Pilihan",required:true,choices:["Papaya","Honeydew","Guava","Strawberry","Watermelon","Red Dragon Fruit"]}]},
       ]},
       {id:"km-cold",name:"Mocktails / Milkshakes / Smoothies",items:[
         {id:"km-cd-lycheeberry",name:"Lychee Berry (Mocktail)",desc:"Lychee strawberry syrup, vanilla ice cream, marshmallows, soda",price:52000},
@@ -986,34 +986,34 @@ const RESTAURANTS = [
       {id:"js-bb",name:"Bakpia Basah",items:[
         {id:"js-bb-kh",    name:"Kacang Hijau",    desc:"Bakpia Basah · isi 15 pcs",           price:20000},
         {id:"js-bb-kumbu", name:"Kumbu Hitam",     desc:"Bakpia Basah · isi 15 pcs",           price:20000},
-        {id:"js-bb-cok",   name:"Coklat",          desc:"Bakpia Basah · isi 15 pcs",           price:25000},
-        {id:"js-bb-keju",  name:"Keju",            desc:"Bakpia Basah · isi 15 pcs",           price:25000},
+        {id:"js-bb-cok",   name:"Coklat (Bakpia Basah)",          desc:"Bakpia Basah · isi 15 pcs",           price:25000},
+        {id:"js-bb-keju",  name:"Keju (Bakpia Basah)",            desc:"Bakpia Basah · isi 15 pcs",           price:25000},
         {id:"js-bb-kk",    name:"Kit Kat",         desc:"Bakpia Basah · isi 5 pcs",            price:25000},
         {id:"js-bb-dur",   name:"Durian",          desc:"Bakpia Basah · isi 15 pcs",           price:30000},
         {id:"js-bb-cokkeju",name:"Coklat Keju",   desc:"Bakpia Basah · isi 15 pcs",           price:30000},
         {id:"js-bb-nas",   name:"Nanas",           desc:"Bakpia Basah · isi 15 pcs",           price:30000},
-        {id:"js-bb-mix",   name:"Mix",             desc:"Bakpia Basah · isi 24 pcs",           price:45000},
+        {id:"js-bb-mix",   name:"Mix (Bakpia Basah)",             desc:"Bakpia Basah · isi 24 pcs",           price:45000},
       ]},
       {id:"js-premium",name:"Premium Series ★",items:[
         {id:"js-pr-pb",  name:"Peanut Butter ★ NEW", desc:"Bakpia Basah Premium · isi 15 pcs", price:39000},
         {id:"js-pr-ovo", name:"Ovomaltine ★ NEW",    desc:"Bakpia Basah Premium · isi 12 pcs", price:45000},
       ]},
       {id:"js-bk",name:"Bakpia Kering",items:[
-        {id:"js-bk-khori", name:"Kacang Hijau Ori",  desc:"Bakpia Kering · isi 10 pcs",        price:20000},
+        {id:"js-bk-khori", name:"Kacang Hijau Ori (Bakpia Kering)",  desc:"Bakpia Kering · isi 10 pcs",        price:20000},
         {id:"js-bk-khasin",name:"Kacang Hijau Asin", desc:"Bakpia Kering · isi 10 pcs",        price:25000},
         {id:"js-bk-pan",   name:"Pandan",             desc:"Bakpia Kering · isi 10 pcs",        price:25000},
-        {id:"js-bk-keju",  name:"Keju",               desc:"Bakpia Kering · isi 10 pcs",        price:30000},
+        {id:"js-bk-keju",  name:"Keju (Bakpia Kering)",               desc:"Bakpia Kering · isi 10 pcs",        price:30000},
         {id:"js-bk-gula",  name:"Gula Tarik",         desc:"Bakpia Kering · isi 10 pcs",        price:30000},
-        {id:"js-bk-cok",   name:"Coklat",             desc:"Bakpia Kering · isi 10 pcs",        price:30000},
+        {id:"js-bk-cok",   name:"Coklat (Bakpia Kering)",             desc:"Bakpia Kering · isi 10 pcs",        price:30000},
         {id:"js-bk-sambal",name:"Mini Sambal",        desc:"Bakpia Kering · isi 16 pcs",        price:30000},
         {id:"js-bk-nastar",name:"Nastar",             desc:"Bakpia Kering · isi 10 pcs",        price:30000},
         {id:"js-bk-sesame",name:"Black Sesame",       desc:"Bakpia Kering · isi 10 pcs",        price:30000},
         {id:"js-bk-happy", name:"Happy Package",      desc:"Bakpia Kering · isi 20 pcs",        price:45000},
       ]},
       {id:"js-bln",name:"Bakpia Bulan",items:[
-        {id:"js-bln-khori",  name:"Kacang Hijau Ori",          desc:"Bakpia Bulan · isi 6 pcs",  price:30000},
+        {id:"js-bln-khori",  name:"Kacang Hijau Ori (Bakpia Bulan)",          desc:"Bakpia Bulan · isi 6 pcs",  price:30000},
         {id:"js-bln-kumbu",  name:"Kumbu Hitam Ori",           desc:"Bakpia Bulan · isi 6 pcs",  price:30000},
-        {id:"js-bln-mix",    name:"Mix",                       desc:"Bakpia Bulan · isi 6 pcs",  price:35000},
+        {id:"js-bln-mix",    name:"Mix (Bakpia Bulan)",                       desc:"Bakpia Bulan · isi 6 pcs",  price:35000},
         {id:"js-bln-cokkeju",name:"Coklat Kacang Keju ★ NEW",desc:"Bakpia Bulan · isi 6 pcs",price:40000},
         {id:"js-bln-khts",   name:"Kacang Hijau Telur Asin",   desc:"Bakpia Bulan · isi 6 pcs",  price:40000},
         {id:"js-bln-kumts",  name:"Kumbu Hitam Telur Asin",    desc:"Bakpia Bulan · isi 6 pcs",  price:40000},
@@ -1034,8 +1034,8 @@ const RESTAURANTS = [
       {id:"js-bl",name:"Bluder Butter",items:[
         {id:"js-bl-ori",   name:"Ori",               desc:"Bluder Butter · per pcs",            price:10000},
         {id:"js-bl-kismis",name:"Kismis",            desc:"Bluder Butter · per pcs",            price:12000},
-        {id:"js-bl-keju",  name:"Keju",              desc:"Bluder Butter · per pcs",            price:12000},
-        {id:"js-bl-cok",   name:"Coklat",            desc:"Bluder Butter · per pcs",            price:12000},
+        {id:"js-bl-keju",  name:"Keju (Bluder Butter)",              desc:"Bluder Butter · per pcs",            price:12000},
+        {id:"js-bl-cok",   name:"Coklat (Bluder Butter)",            desc:"Bluder Butter · per pcs",            price:12000},
         {id:"js-bl-kh",    name:"Kacang Hijau ★ NEW",desc:"Bluder Butter · per pcs",       price:12000},
         {id:"js-bl-lotus", name:"Lotus Biscoff",     desc:"Bluder Butter · per pcs",            price:16000},
       ]},
@@ -1069,22 +1069,22 @@ const RESTAURANTS = [
     participants: ALL_PAX,
     categories:[
       {id:"pr-whole",name:"Bolu Whole",items:[
-        {id:"pr-wh-ori",    name:"Bolu Pisang Original",        desc:"Bolu Whole · 1 loaf",  price:99000},
-        {id:"pr-wh-kelapa", name:"Bolu Pisang Kelapa",          desc:"Bolu Whole · 1 loaf",  price:110000},
-        {id:"pr-wh-cok",    name:"Bolu Pisang Coklat",          desc:"Bolu Whole · 1 loaf",  price:130000},
-        {id:"pr-wh-keju",   name:"Bolu Pisang Keju",            desc:"Bolu Whole · 1 loaf",  price:130000},
-        {id:"pr-wh-straw",  name:"Bolu Pisang Strawberry",      desc:"Bolu Whole · 1 loaf",  price:130000},
-        {id:"pr-wh-cin",    name:"Bolu Pisang Cinnamon",        desc:"Bolu Whole · 1 loaf",  price:145000},
-        {id:"pr-wh-pis",    name:"Bolu Pisang Pistachio Kunafa",desc:"Bolu Whole · 1 loaf",  price:165000},
+        {id:"pr-wh-ori",    name:"Bolu Pisang Original (Whole)",        desc:"Bolu Whole · 1 loaf",  price:99000},
+        {id:"pr-wh-kelapa", name:"Bolu Pisang Kelapa (Whole)",          desc:"Bolu Whole · 1 loaf",  price:110000},
+        {id:"pr-wh-cok",    name:"Bolu Pisang Coklat (Whole)",          desc:"Bolu Whole · 1 loaf",  price:130000},
+        {id:"pr-wh-keju",   name:"Bolu Pisang Keju (Whole)",            desc:"Bolu Whole · 1 loaf",  price:130000},
+        {id:"pr-wh-straw",  name:"Bolu Pisang Strawberry (Whole)",      desc:"Bolu Whole · 1 loaf",  price:130000},
+        {id:"pr-wh-cin",    name:"Bolu Pisang Cinnamon (Whole)",        desc:"Bolu Whole · 1 loaf",  price:145000},
+        {id:"pr-wh-pis",    name:"Bolu Pisang Pistachio Kunafa (Whole)",desc:"Bolu Whole · 1 loaf",  price:165000},
       ]},
       {id:"pr-slice",name:"Bolu Slice",items:[
-        {id:"pr-sl-ori",    name:"Bolu Pisang Original",        desc:"Bolu Slice · per slice", price:20000},
-        {id:"pr-sl-kelapa", name:"Bolu Pisang Kelapa",          desc:"Bolu Slice · per slice", price:20000},
-        {id:"pr-sl-keju",   name:"Bolu Pisang Keju",            desc:"Bolu Slice · per slice", price:25000},
-        {id:"pr-sl-straw",  name:"Bolu Pisang Strawberry",      desc:"Bolu Slice · per slice", price:25000},
-        {id:"pr-sl-cok",    name:"Bolu Pisang Coklat",          desc:"Bolu Slice · per slice", price:27000},
-        {id:"pr-sl-cin",    name:"Bolu Pisang Cinnamon",        desc:"Bolu Slice · per slice", price:27000},
-        {id:"pr-sl-pis",    name:"Bolu Pisang Pistachio Kunafa",desc:"Bolu Slice · per slice", price:30000},
+        {id:"pr-sl-ori",    name:"Bolu Pisang Original (Slice)",        desc:"Bolu Slice · per slice", price:20000},
+        {id:"pr-sl-kelapa", name:"Bolu Pisang Kelapa (Slice)",          desc:"Bolu Slice · per slice", price:20000},
+        {id:"pr-sl-keju",   name:"Bolu Pisang Keju (Slice)",            desc:"Bolu Slice · per slice", price:25000},
+        {id:"pr-sl-straw",  name:"Bolu Pisang Strawberry (Slice)",      desc:"Bolu Slice · per slice", price:25000},
+        {id:"pr-sl-cok",    name:"Bolu Pisang Coklat (Slice)",          desc:"Bolu Slice · per slice", price:27000},
+        {id:"pr-sl-cin",    name:"Bolu Pisang Cinnamon (Slice)",        desc:"Bolu Slice · per slice", price:27000},
+        {id:"pr-sl-pis",    name:"Bolu Pisang Pistachio Kunafa (Slice)",desc:"Bolu Slice · per slice", price:30000},
       ]},
       {id:"pr-addon",name:"Pilihan Butter Add-Ons — Rp10.000 / spoon",items:[
         {id:"pr-ad-cheese",   name:"Butter Cheese",     desc:"Add-on · 1 spoon", price:10000},
@@ -2182,14 +2182,25 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
         setAllOrders(grouped);
         setLastSync(new Date());
         if (grouped[user]) {
-          const myItems = {};
-          (grouped[user].items||[]).forEach(it=>{ myItems[it.name]={name:it.name,qty:it.qty,notes:it.notes||""}; });
+          // Pulihkan keranjang LENGKAP dengan price & config — kalau hanya
+          // name/qty yang dipulihkan, submit ulang akan menyimpan price:0 &
+          // config:"" (total jadi Rp0, opsi/varian hilang). Cocokkan via id
+          // dulu (stabil & unik); fallback ke name untuk order lama tanpa id.
+          const byId = {}, byName = {};
+          (grouped[user].items||[]).forEach(it=>{
+            const entry = {name:it.name, qty:it.qty, notes:it.notes||"", price:(it.price||null), config:it.config||""};
+            if(it.id) byId[it.id] = entry;
+            byName[it.name] = entry;
+          });
           const cartById = {};
-          resto.categories.forEach(c=>c.items.forEach(item=>{ if(myItems[item.name]) cartById[item.id]=myItems[item.name]; }));
+          resto.categories.forEach(c=>c.items.forEach(item=>{
+            const entry = byId[item.id] || byName[item.name];
+            if(entry) cartById[item.id] = {...entry, name:item.name};
+          }));
           setCart(cartById);
           const cfgById = {};
           (grouped[user].items||[]).forEach(it=>{
-            const match = resto.categories.flatMap(c=>c.items).find(i=>i.name===it.name);
+            const match = resto.categories.flatMap(c=>c.items).find(i=>(it.id&&i.id===it.id)||i.name===it.name);
             if(match && it.config){
               const parts = it.config.split(" · ");
               const cfg = {opts:{}};
@@ -2233,7 +2244,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
     if(!cartCount||saving) return;
     setSaving(true); setSyncError(null);
     try {
-      const items = Object.values(cart).map(i=>({name:i.name,qty:i.qty,notes:i.notes||"",price:i.price||0,config:i.config||""}));
+      const items = Object.entries(cart).map(([id,i])=>({id,name:i.name,qty:i.qty,notes:i.notes||"",price:i.price||0,config:i.config||""}));
       const nettIDR = items.reduce((s,i)=>s+(i.price||0)*i.qty,0);
       const totalIDR = resto.taxRate ? Math.round(nettIDR*(1+resto.taxRate)) : nettIDR;
       const key = `order.${resto.id}.${user.replace(/\s+/g,"_")}`;
@@ -2414,7 +2425,7 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
                     {!hasPrice&&priceRange&&!isDisabled&&<span style={{fontSize:"14px",letterSpacing:"1px",color:T.muted,border:`1px solid ${T.line}`,padding:"1px 7px",whiteSpace:"nowrap"}}>{priceRange}</span>}
                     {q&&catLabel&&<span style={{fontSize:"13px",letterSpacing:"1.5px",textTransform:"uppercase",color:T.ghost,border:`1px solid ${T.line}`,padding:"1px 6px"}}>{catLabel}</span>}
                   </div>
-                  {isDisabled&&<p style={{fontSize:"14px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200?`Tidak tersedia — Rp${item.price}k melebihi batas Rp200k`:"Harga pasar — hubungi koordinator"}</p>}
+                  {isDisabled&&<p style={{fontSize:"14px",color:T.ghost,letterSpacing:"1px",textTransform:"uppercase",marginBottom:"2px"}}>{item.price&&item.price>=200000?`Tidak tersedia — Rp${(item.price/1000).toLocaleString("id-ID")}k melebihi batas Rp200k`:"Harga pasar — hubungi koordinator"}</p>}
                   {item.desc&&<p style={{fontSize:"14px",color:isDisabled?T.ghost:T.muted,fontStyle:"italic"}}>{item.desc}</p>}
 
                   {hasVariants&&!isDisabled&&(
