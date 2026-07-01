@@ -2375,19 +2375,29 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
   },[cart,cartCount,resto.id,user,refresh,saving]);
 
   const deleteOrder = useCallback(async () => {
-    setDeleting(true);
+    if(deleting) return;
+    setDeleting(true); setSyncError(null);
     try {
       const key = `order.${resto.id}.${user.replace(/\s+/g,"_")}`;
-      await sSet(key, "");
-      setCart({});
-      setNotes({});
-      setItemConfig({});
-      setSubmitted(false);
-      setDeleteConfirm(false);
-      await refresh();
-    } catch { /* abaikan */ }
+      const ok = await sSet(key, "");
+      // Verifikasi ke server: pembatalan yang gagal (mis. jaringan HP putus)
+      // JANGAN dianggap sukses — kalau tidak, order "kembali muncul" saat
+      // reload karena data lama masih ada di Firebase. Baca ulang untuk pastikan
+      // key benar-benar kosong sebelum membersihkan tampilan.
+      const stillThere = ok ? await sGet(key) : true;
+      if (ok && !stillThere) {
+        setCart({});
+        setNotes({});
+        setItemConfig({});
+        setAllOrders(prev => { const n = {...prev}; delete n[user]; return n; });
+        setSubmitted(false);
+        setDeleteConfirm(false);
+      } else {
+        setSyncError("Gagal membatalkan pesanan — cek koneksi lalu coba lagi.");
+      }
+    } catch { setSyncError("Gagal membatalkan pesanan — cek koneksi lalu coba lagi."); }
     setDeleting(false);
-  },[resto.id,user,refresh]);
+  },[resto.id,user,deleting]);
 
   const toggleLock = async () => { const nl=!locked; await sSet(`lock.${resto.id}`,String(nl)); setLocked(nl); };
 
