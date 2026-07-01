@@ -1743,10 +1743,11 @@ const downloadPesertaGridImage = ({ filename, title, subtitle, cells }) => {
       y += 22; ops.push({ align: "center", x: innerW / 2, y, s: 16, w: 700, c: T.ink, text: cell.name });
       y += 6;
       (cell.groups || []).forEach(g => {
-        y += 22; ops.push({ align: "left", x: 0, y, s: 13, w: 600, c: T.forest, text: g.heading });
+        const ind = g.heading ? 10 : 0; // indent rows only when there's a merchant heading
+        if (g.heading) { y += 22; ops.push({ align: "left", x: 0, y, s: 13, w: 600, c: T.forest, text: g.heading }); }
         (g.rows || []).forEach(r => {
-          const lines = wrap(`${r.qty}× ${r.label}`, innerW - 10, 14);
-          lines.forEach((ln, i) => { y += i === 0 ? 19 : 17; ops.push({ align: "left", x: 10, y, s: 14, w: 400, c: T.ink, text: ln }); });
+          const lines = wrap(`${r.qty}× ${r.label}`, innerW - ind, 14);
+          lines.forEach((ln, i) => { y += i === 0 ? 19 : 17; ops.push({ align: "left", x: ind, y, s: 14, w: 400, c: T.ink, text: ln }); });
         });
         y += 8;
       });
@@ -2418,6 +2419,26 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
     });
   };
 
+  const downloadPesertaImage = () => {
+    const cells = resto.participants
+      .filter(p=>allOrders[p.name]&&(allOrders[p.name].items||[]).length)
+      .map(p=>{
+        const o = allOrders[p.name];
+        return {
+          name:p.name,
+          total: resto.isTakeaway ? `Rp${Number(o.totalIDR||0).toLocaleString("id-ID")}` : null,
+          groups:[{ rows:(o.items||[]).map(i=>({label:i.config?`${i.name} [${i.config}]`:i.name, qty:Number(i.qty)})) }],
+        };
+      });
+    if(!cells.length) return;
+    downloadPesertaGridImage({
+      filename:`Rekap_${resto.name.replace(/\s+/g,"_")}_Per_Peserta.png`,
+      title:resto.name,
+      subtitle:`Rekap Per Peserta · ${resto.subtitle}`,
+      cells,
+    });
+  };
+
   const ordered=Object.keys(allOrders).length;
   const total=resto.participants.length;
   const showRecap=isCoord||(submitted&&tab==="recap");
@@ -2695,7 +2716,10 @@ const RestaurantView = memo(({resto,user,isCoord,onBack}) => {
             })()}
           </div>
           <div>
-            <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Status Per Peserta — {ordered}/{total}</p>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"16px",flexWrap:"wrap",marginBottom:"24px"}}>
+              <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted}}>Status Per Peserta — {ordered}/{total}</p>
+              <button onClick={downloadPesertaImage} style={{background:"none",border:`1px solid ${T.line}`,padding:"6px 14px",cursor:"pointer",fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,whiteSpace:"nowrap"}}>↓ Unduh Gambar</button>
+            </div>
             <div style={{borderTop:`1px solid ${T.line}`}}>
               {resto.participants.map(p=>{
                 const o=allOrders[p.name];
