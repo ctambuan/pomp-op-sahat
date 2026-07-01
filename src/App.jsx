@@ -1955,6 +1955,10 @@ const OlehOlehTab = memo(({user}) => {
 
   // eslint-disable-next-line react-hooks/set-state-in-effect -- muat data awal saat mount
   useEffect(()=>{ reload(); },[reload]);
+  // Auto-refresh 30 dtk (sama seperti tab Makan & Ukuran) agar pembatalan /
+  // order baru peserta ikut hilang/tampil di layar koordinator tanpa harus
+  // keluar-masuk tab.
+  useEffect(()=>{ const id=setInterval(reload,30000); return ()=>clearInterval(id); },[reload]);
 
   const onFile = async e => {
     const file = e.target.files?.[0];
