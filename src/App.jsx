@@ -1717,6 +1717,93 @@ const downloadRecapImage = ({ filename, title, subtitle, stats = [], sections = 
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(run); else run();
 };
 
+// Render a 2-column grid of per-participant order recaps into a PNG. Each
+// participant is one bordered cell: name (bold, centered) on the first line,
+// then their order grouped by merchant, then the participant's total. Same
+// plain-canvas approach as downloadRecapImage (no external deps). Cells in a
+// row share the taller cell's height; an odd count leaves the last row half.
+const downloadPesertaGridImage = ({ filename, title, subtitle, cells }) => {
+  const W = 800, PADX = 40, COLGAP = 20, COLS = 2, DPR = 2;
+  const colW = (W - PADX * 2 - COLGAP * (COLS - 1)) / COLS;
+  const CP = 18, innerW = colW - CP * 2;
+  const font = (s, w = 400) => `${w} ${s}px Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
+  const run = () => {
+    const meas = document.createElement("canvas").getContext("2d");
+    const wrap = (text, maxW, s, w = 400) => {
+      meas.font = font(s, w);
+      const words = String(text).split(/\s+/);
+      const lines = []; let cur = "";
+      for (const word of words) { const t = cur ? cur + " " + word : word; if (meas.measureText(t).width > maxW && cur) { lines.push(cur); cur = word; } else cur = t; }
+      if (cur) lines.push(cur);
+      return lines.length ? lines : [""];
+    };
+    // ── build draw-ops + inner height for one cell (relative to cell origin) ──
+    const buildCell = (cell) => {
+      const ops = []; let y = 0;
+      y += 22; ops.push({ align: "center", x: innerW / 2, y, s: 16, w: 700, c: T.ink, text: cell.name });
+      y += 6;
+      (cell.groups || []).forEach(g => {
+        y += 22; ops.push({ align: "left", x: 0, y, s: 13, w: 600, c: T.forest, text: g.heading });
+        (g.rows || []).forEach(r => {
+          const lines = wrap(`${r.qty}× ${r.label}`, innerW - 10, 14);
+          lines.forEach((ln, i) => { y += i === 0 ? 19 : 17; ops.push({ align: "left", x: 10, y, s: 14, w: 400, c: T.ink, text: ln }); });
+        });
+        y += 8;
+      });
+      if (cell.total != null) {
+        y += 6; ops.push({ line: true, y });
+        y += 20;
+        ops.push({ align: "left", x: 0, y, s: 13, w: 600, c: T.muted, text: "Total" });
+        ops.push({ align: "right", x: innerW, y, s: 15, w: 700, c: T.forest, text: cell.total });
+      }
+      return { ops, height: y };
+    };
+    const built = cells.map(buildCell);
+    // ── header + row layout (measure total height) ──
+    let Y = 40;
+    const header = [];
+    header.push({ x: PADX, y: Y, s: 28, w: 700, c: T.ink, text: title }); Y += 34;
+    if (subtitle) { header.push({ x: PADX, y: Y, s: 13, w: 500, c: T.muted, text: subtitle, ls: 2, upper: true }); Y += 24; }
+    Y += 12;
+    const ROWGAP = 16, rows = [];
+    for (let i = 0; i < built.length; i += COLS) {
+      const group = built.slice(i, i + COLS);
+      const rowH = Math.max(...group.map(b => b.height)) + CP * 2;
+      rows.push({ y: Y, rowH, cells: group });
+      Y += rowH + ROWGAP;
+    }
+    const footY = Y + 4, H = footY + 28;
+    // ── draw ──
+    const cv = document.createElement("canvas"); cv.width = W * DPR; cv.height = H * DPR;
+    const ctx = cv.getContext("2d"); ctx.scale(DPR, DPR);
+    ctx.fillStyle = T.stone; ctx.fillRect(0, 0, W, H);
+    ctx.textBaseline = "alphabetic";
+    header.forEach(op => {
+      ctx.fillStyle = op.c; ctx.font = font(op.s, op.w);
+      const text = op.upper ? op.text.toUpperCase() : op.text;
+      if (op.ls) { ctx.textAlign = "left"; let cx = op.x; for (const ch of text) { ctx.fillText(ch, cx, op.y); cx += ctx.measureText(ch).width + op.ls; } }
+      else { ctx.textAlign = "left"; ctx.fillText(text, op.x, op.y); }
+    });
+    rows.forEach(row => {
+      row.cells.forEach((b, j) => {
+        const x = PADX + j * (colW + COLGAP);
+        ctx.fillStyle = T.white; ctx.fillRect(x, row.y, colW, row.rowH);
+        ctx.strokeStyle = T.line; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, row.y + 0.5, colW, row.rowH);
+        const ox = x + CP, oy = row.y + CP;
+        b.ops.forEach(op => {
+          if (op.line) { ctx.strokeStyle = T.line; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(ox, oy + op.y + 0.5); ctx.lineTo(ox + innerW, oy + op.y + 0.5); ctx.stroke(); return; }
+          ctx.fillStyle = op.c; ctx.font = font(op.s, op.w); ctx.textAlign = op.align;
+          ctx.fillText(String(op.text), ox + op.x, oy + op.y);
+        });
+      });
+    });
+    ctx.fillStyle = T.ghost; ctx.font = font(12, 400); ctx.textAlign = "left";
+    ctx.fillText(`Pomp Op Sahat · diunduh ${new Date().toLocaleString("id-ID", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}`, PADX, footY + 12);
+    cv.toBlob(blob => { if (!blob) return; const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = filename; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); }, "image/png");
+  };
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(run); else run();
+};
+
 // ═══════════════════════════════════════════════════════════════════════════
 // PRE-ORDER F&B — Pesan Makanan & Oleh-Oleh (dua tab terpisah)
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1925,6 +2012,26 @@ const OlehOlehTab = memo(({user}) => {
     });
   };
 
+  const downloadPesertaImage = () => {
+    if(!paxWithOrders.length) return;
+    const cells = paxWithOrders
+      .slice().sort((a,b)=>a[0].localeCompare(b[0]))
+      .map(([pName,stores])=>({
+        name:pName,
+        total:`Rp${Object.values(stores).reduce((s,o)=>s+Number(o.totalIDR||0),0).toLocaleString("id-ID")}`,
+        groups:Object.values(stores).map(o=>({
+          heading:o.name,
+          rows:(o.items||[]).map(i=>({label:i.config?`${i.name} [${i.config}]`:i.name, qty:Number(i.qty)})),
+        })),
+      }));
+    downloadPesertaGridImage({
+      filename:"Rekap_OlehOleh_Per_Peserta.png",
+      title:"Rekap Pesanan Per Peserta",
+      subtitle:"Oleh-Oleh · Rincian pesanan tiap peserta",
+      cells,
+    });
+  };
+
   return (
     <div className="fade-up">
       <div style={{marginBottom:"32px"}}>
@@ -1986,7 +2093,10 @@ const OlehOlehTab = memo(({user}) => {
       {/* ── COORDINATOR: REKAP PER PESERTA (dengan total) ── */}
       {isCoord&&paxWithOrders.length>0&&(
         <div style={{...CARD,marginBottom:"16px"}}>
-          <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted,marginBottom:"24px"}}>Rekap Per Peserta</p>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"16px",flexWrap:"wrap",marginBottom:"24px"}}>
+            <p style={{fontSize:"13px",letterSpacing:"3px",textTransform:"uppercase",color:T.muted}}>Rekap Per Peserta</p>
+            <button onClick={downloadPesertaImage} style={{background:"none",border:`1px solid ${T.line}`,padding:"6px 14px",cursor:"pointer",fontSize:"13px",letterSpacing:"2px",textTransform:"uppercase",color:T.forest,whiteSpace:"nowrap"}}>↓ Unduh Gambar</button>
+          </div>
           <div style={{overflowX:"auto"}}>
             <table style={{width:"100%",borderCollapse:"collapse",fontSize:"14px"}}>
               <thead>
